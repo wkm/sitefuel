@@ -1,0 +1,20 @@
+# deployment settings for the 'simplehtml' test
+processormappings:
+  html: .html
+  css:  .css
+  png:  .png
+
+global:
+  max
+
+html:
+  cleantextualdelimiters     # gives us cleanquotes and cleandashes
+
+css:
+  stripwhitespace
+
+png:
+  bruteforce                 # try very, very hard to get smaller PNGs
+
+javascript:
+  max
