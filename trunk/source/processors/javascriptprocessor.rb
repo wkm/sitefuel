@@ -1,5 +1,5 @@
 #
-# File::      cssprocessor.rb
+# File::      javascriptprocessor.rb
 # Author::    wkm
 # Copyright:: 2009
 # License::   GPL
@@ -7,24 +7,24 @@
 
 module SiteFuel
   module Processor
-
     require 'rubygems'
-    require 'cssmin'
+    require 'jsmin'
 
     require 'processors/abstractprocessor.rb'
 
-    class CSSProcessor < AbstractProcessor
+    class JavaScriptProcessor < AbstractProcessor
       attr_accessor :document
 
       def self.process(filename)
-        css = CSSProcessor.new
-        css.document = File.read(filename)
+        js = JavaScriptProcessor.new
+        js.document = File.read(filename)
 
-        return css
+        return js
       end
 
+      # use the +JSMin+ library to compact a javascript file
       def compact
-        @document = CSSMin.minify(@document)
+        @document = JSMin.minify(@document)
       end
 
       def generate
@@ -32,6 +32,5 @@ module SiteFuel
       end
 
     end
-    
   end
 end

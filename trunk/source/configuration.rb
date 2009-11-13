@@ -26,7 +26,7 @@ module SiteFuel
       yamlconfig = YAML::load_file(configfile)
       
       Configuration.new(yamlconfig)
-    end
+    endx`
 
     # builds a sitefuel configuration from a parsed YAML file
     def initialize(yamlconfig)

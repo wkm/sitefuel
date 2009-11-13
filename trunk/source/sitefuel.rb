@@ -21,9 +21,14 @@
 module SiteFuel
 
 require 'processors/htmlprocessor.rb'
+require 'processors/cssprocessor.rb'
 
 html = Processor::HTMLProcessor::process('../tests/simplehtml/index.html')
 html.stripwhitespace
 p html.generate
+
+css = Processor::CSSProcessor::process('../tests/simplehtml/style.css')
+css.compact
+p css.generate
 
 end
