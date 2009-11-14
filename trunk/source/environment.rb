@@ -4,6 +4,8 @@
 # Copyright:: 2009
 # License::   GPL
 #
+# Load all of the gems used by sitefuel and ensure their version.
+#
 
 require 'rubygems'
 

@@ -20,6 +20,8 @@
 
 module SiteFuel
 
+require 'environment.rb'
+
 require 'processors/htmlprocessor.rb'
 require 'processors/cssprocessor.rb'
 

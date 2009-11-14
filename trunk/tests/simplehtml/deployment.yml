@@ -5,16 +5,21 @@ processormappings:
   png:  .png
 
 global:
-  max
+  filterset: full
 
 html:
-  cleantextualdelimiters     # gives us cleanquotes and cleandashes
+  filterset:
+    - whitespace
+    - beautifytext
 
 css:
-  stripwhitespace
+  filterset:
+    - whitespace
 
 png:
-  bruteforce                 # try very, very hard to get smaller PNGs
+  filterset:
+    # try very hard to get smaller PNGs:
+    - bruteforce
 
 javascript:
-  max
+  
