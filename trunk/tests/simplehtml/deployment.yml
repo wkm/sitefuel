@@ -20,6 +20,3 @@ png:
   filterset:
     # try very hard to get smaller PNGs:
     - bruteforce
-
-javascript:
-  
