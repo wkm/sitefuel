@@ -15,6 +15,9 @@ module SiteFuel
 
     # defines the base functions every processor must implement to
     # interface with the rest of the sitefuel interface
+    #
+    # note that a processor is declared to sitefuel by creating a class
+    # which inherits AbstractProcessor. sitefuel looks at
     class AbstractProcessor
 
       # list the filtersets and the filters they map to
@@ -22,7 +25,7 @@ module SiteFuel
       #  HTMLProcessor.filtersets # => {:full=>[:whitespace,
       def filtersets
         {
-          :full => [filters :whitespace],
+          :full => [filters(:whitespace)],
           :whitespace => []
         }
       end
@@ -60,6 +63,11 @@ module SiteFuel
       def processedsize
         raise NotImplemented
         return 0
+      end
+
+      # gives the processed file content
+      def generate
+        raise NotImplemented
       end
       
     end

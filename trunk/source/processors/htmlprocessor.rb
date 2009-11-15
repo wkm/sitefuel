@@ -27,16 +27,18 @@ module SiteFuel
         return html
       end
 
-      # Strips the whitespace out of a loaded HTML document.
-      def stripwhitespace
-        return if @document == nil
-        @document.traverse_text do |txt|
-          if txt.content =~ /^\s+$/ then
-            txt.content = ''
-          else
-            txt.content = txt.content.gsub(/\s+/, ' ')
-          end
-        end
+      def apply
+        traversetext
+      end
+
+      def traversetext
+
+      end
+
+      # beautify text by 
+      def beautifytext
+        beautifyquotes
+        beautifydashes
       end
 
       def generate

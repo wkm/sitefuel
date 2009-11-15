@@ -7,8 +7,14 @@
 # Load all of the gems used by sitefuel and ensure their version.
 #
 
-require 'rubygems'
+module SiteFuel
 
-gem 'hpricot',   '~> 0.8'   # html parsing
-gem 'jsmin',     '~> 1.0'   # javascript minify
-gem 'cssmin',    '~> 1.0'   # css minify
+  require 'rubygems'
+
+  gem 'hpricot',   '~> 0.8'   # html parsing
+  gem 'jsmin',     '~> 1.0'   # javascript minify
+  gem 'cssmin',    '~> 1.0'   # css minify
+  gem 'haml',      '~> 2.2'   # for HAML and SASS support
+
+  $SiteFuelVersion = [0, 0, 1]
+end
