@@ -1,5 +1,5 @@
 #
-# File::      htmlprocessor.rb
+# File::      HTMLProcessor.rb
 # Author::    wkm
 # Copyright:: 2009
 # License::   GPL
@@ -14,7 +14,7 @@ module SiteFuel
     require 'rubygems'
     require 'hpricot'
 
-    require 'processors/abstractprocessor.rb'
+    require 'processors/AbstractProcessor.rb'
 
     class HTMLProcessor < AbstractProcessor
 

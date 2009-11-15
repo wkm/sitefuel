@@ -1,5 +1,5 @@
 #
-# File::      abstractprocessor.rb
+# File::      AbstractProcessor.rb
 # Author::    wkm
 # Copyright:: 2009
 #

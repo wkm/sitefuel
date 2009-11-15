@@ -1,5 +1,5 @@
 #
-# File::      cssprocessor.rb
+# File::      CSSProcessor.rb
 # Author::    wkm
 # Copyright:: 2009
 # License::   GPL
@@ -11,7 +11,7 @@ module SiteFuel
     require 'rubygems'
     require 'cssmin'
 
-    require 'processors/abstractprocessor.rb'
+    require 'processors/AbstractProcessor.rb'
 
     class CSSProcessor < AbstractProcessor
       attr_accessor :document

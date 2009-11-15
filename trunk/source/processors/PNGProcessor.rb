@@ -1,5 +1,5 @@
 #
-# File::      pngprocessor.rb
+# File::      PNGProcessor.rb
 # Author::    wkm
 # Copyright:: 2009
 # License::   GPL

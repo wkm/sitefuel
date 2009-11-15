@@ -1,5 +1,5 @@
 #
-# File::       sassprocessor.rb
+# File::       SASSProcessor.rb
 # Author::     wkm
 # Copyright::  2009
 # License::    GPL
@@ -12,8 +12,8 @@ module SiteFuel
     require 'rubygems'
     require 'haml'
 
-    require 'processors/abstractprocessor.rb'
-    require 'processors/cssprocessor.rb'
+    require 'processors/AbstractProcessor.rb'
+    require 'processors/CSSProcessor.rb'
 
     class SassProcessor < AbstractProcessor
       

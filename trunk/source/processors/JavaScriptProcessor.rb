@@ -1,5 +1,5 @@
 #
-# File::      javascriptprocessor.rb
+# File::      JavaScriptProcessor.rb
 # Author::    wkm
 # Copyright:: 2009
 # License::   GPL
@@ -10,7 +10,7 @@ module SiteFuel
     require 'rubygems'
     require 'jsmin'
 
-    require 'processors/abstractprocessor.rb'
+    require 'processors/AbstractProcessor.rb'
 
     class JavaScriptProcessor < AbstractProcessor
       attr_accessor :document
