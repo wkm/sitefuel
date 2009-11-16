@@ -31,11 +31,14 @@ module SiteFuel
     attr_accessor :deploymentconfiguration
 
     def actions
-      [:deploy, :process]
+      [ :deploy, :process ]
     end
 
     def verbosity(level = 1)
-      
+      case level
+      when 1:
+
+      end
     end
 
     def findfiles(path)

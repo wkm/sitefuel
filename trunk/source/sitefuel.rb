@@ -80,12 +80,22 @@ def parse_command_line(runtime)
   rescue OptionParser::InvalidOption => iopt
     puts iopt
     puts_and_exit $HELP_HINT_LINE
+  else
+    # TODO: add better handling for the various exceptions (unncessary
+    #       argument, missing argument, etc.)
+    puts_and_exit 'couldn\'t parse command line', $HELP_HINT_LINE
   end
+  
   
   # note that --help will have already been intercepted but 'help' still needs
   # special treatment
   puts_and_exit 'no command given', $HELP_HINT_LINE if commands.length < 1
   puts_and_exit opts if commands[0].downcase == 'help'
+
+  # ensure the command we're given is, in fact, a known action
+  if not runtime.actions.include? commands[0].to_sym
+    puts_and_exit "unrecognized action '#{commands[0]}'", $HELP_HINT_LINE
+  end
 
 end
 
