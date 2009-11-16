@@ -16,5 +16,6 @@ module SiteFuel
   gem 'cssmin',    '~> 1.0'   # css minify
   gem 'haml',      '~> 2.2'   # for HAML and SASS support
 
-  $SiteFuelVersion = [0, 0, 1]
+  $SiteFuelVersion = [0, 0, 1].freeze
+  
 end

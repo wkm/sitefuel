@@ -29,10 +29,8 @@ module SiteFuel
   # add source/ to the load path
   $:.unshift File.join(File.dirname(__FILE__), "source")
 
-  
   require 'SiteFuelRuntime.rb'
 
   runtime = SiteFuelRuntime.new
   runtime.run
-  
 end
