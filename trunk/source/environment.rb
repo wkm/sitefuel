@@ -17,5 +17,6 @@ module SiteFuel
   gem 'haml',      '~> 2.2'   # for HAML and SASS support
 
   $SiteFuelVersion = [0, 0, 1].freeze
+  $SiteFuelVersionText = $SiteFuelVersion.join('.').freeze
   
 end

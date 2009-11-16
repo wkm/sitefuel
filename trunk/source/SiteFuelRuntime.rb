@@ -30,52 +30,12 @@ module SiteFuel
     #
     attr_accessor :deploymentconfiguration
 
-
-    # parse the command line arguments and set the appropriate internal
-    # values
-    def process_command_line
-      opts = OptionParser.new
-
-
-      opts.banner = "SiteFuel #{$SiteFuelVersion.join('.')}\n\nA ruby framework for deploying sites from version control.\n\nUsage: sitefuel COMMAND ARGUMENTS [OPTIONS]"
-      opts.separator ""
-      opts.separator "Specific options:"
-      
-      opts.on('-v', '--version', 'Gives the version of sitefuel') {|| puts 'sitefuel ' + $SiteFuelVersion.join('.')}
-      opts.on('--[no-]verbose', 'Cause sitefuel to be verbose, listing actions as they are preformed') {|| puts 'cause sitefuel to be verbose listing actions as they are preformed' }
-
-      opts.separator ''
-      opts.separator 'Common options:'
-      opts.on('-oARG', '-o=ARG', '-o PLACE', '--output=ARG', '--output PLACE', String, 
-              'Where to put a deployed site') do |out|
-        puts "putting in #{out}"
-      end
-
-      opts.on('-h', '--help', '-?', '--about', 'Show this message') do
-        puts opts
-        exit
-      end
-
-      opts.separator ''
-      opts.separator 'More information: http://sitefuel.org'
-      opts.separator 'Getting started: http://sitefuel.org/getstarted'
-
-      rest = opts.parse(*ARGV)
-      puts "rest: #{rest.join(', ')}"
-      
-    end
-
     def actions
       [:deploy, :process]
     end
 
     def verbosity(level = 1)
       
-    end
-
-    def run
-      process_command_line
-      findfiles(Dir.getwd)
     end
 
     def findfiles(path)
