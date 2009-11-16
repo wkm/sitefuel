@@ -30,7 +30,7 @@ $:.unshift File.join(File.dirname(__FILE__), "source")
 require 'SiteFuelRuntime.rb'
 
 def puts_and_exit(*args)
-  puts *args
+  puts(*args)
   exit
 end
 
