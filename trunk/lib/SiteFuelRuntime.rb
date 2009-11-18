@@ -98,10 +98,10 @@ module SiteFuel
       files.each do |filename|
         processor = @processors[filename]
         if processor == nil
-          puts '--       '+filename
+          puts '%s %s' %['--'.ljust(8), filename.abbrev(65)]
         else
           processor.generate
-          puts '%s %s %4.2f' % [bold(processor.processor_name.ljust(8)), filename.abbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
+          puts '%s %s %4.2f' % [bold(processor.class.processor_name.ljust(8)), filename.abbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
         end
       end
     end
