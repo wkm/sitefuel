@@ -25,6 +25,7 @@ module SiteFuel
   require 'processors/HTMLProcessor.rb'
   require 'processors/CSSProcessor.rb'
   require 'processors/SASSProcessor.rb'
+  require 'mixins/StringFormatting.rb'
 
   class SiteFuelRuntime
 
@@ -70,7 +71,7 @@ module SiteFuel
           puts '--       '+filename
         else
           processor.generate
-          puts '%s %s %4.2f' % [bold(processor.processor_name.ljust(8)), skeleton(filename, 65), processor.processed_size.prec_f/processor.original_size.prec_f]
+          puts '%s %s %4.2f' % [bold(processor.processor_name.ljust(8)), filename.abbrev(65), processor.processed_size.prec_f/processor.original_size.prec_f]
         end
       end
     end
@@ -105,18 +106,9 @@ module SiteFuel
       }
     end
 
-    # TODO: move into String
-    def skeleton(string, length)
-      if string.length < length
-        return string.ljust(length)
-      else
-        string[0..(length/2-2).floor] + "..." + string[(string.length - length/2-1) .. (string.length)]
-      end
-    end
-
     def verbosity(level = 1)
       case level
-      when 1:
+      when 1
 
       end
     end
