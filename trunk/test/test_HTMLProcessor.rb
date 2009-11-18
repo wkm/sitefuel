@@ -14,7 +14,7 @@ require 'processors/HTMLProcessor.rb'
 
 include SiteFuel::Processor
 
-class HTMLProcessorTest < Test::Unit::TestCase
+class TestHTMLProcessor < Test::Unit::TestCase
   def test_file_extensions # hello
     html = HTMLProcessor.new
 
