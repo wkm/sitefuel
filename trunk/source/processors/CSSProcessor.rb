@@ -21,13 +21,18 @@ module SiteFuel
         CSSProcessor.new(filename)
       end
 
+      def file_patterns
+        [".css"]
+      end
+
+      # setup a link to a CSS file
       def initialize(filename)
         @document = File.read(filename)
         @original_size = File.size(filename)
         @resource_name = filename
       end
 
-      def compact
+      def filter_minify
         @document = CSSMin.minify(@document)
         @processed_size = @document.length
       end

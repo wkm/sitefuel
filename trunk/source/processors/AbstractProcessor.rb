@@ -24,11 +24,12 @@ module SiteFuel
     end
 
     # defines the base functions every processor must implement to
-    # interface with the rest of the sitefuel interface
-    #
-    # note that a processor is declared to sitefuel by creating a class
-    # which inherits AbstractProcessor. sitefuel looks at
+    # interface with the sitefuel architecture
     class AbstractProcessor
+
+      #
+      # PROCESSOR INFORMATION
+      #
 
       # gives the display name for the processor
       def processor_name
@@ -37,9 +38,35 @@ module SiteFuel
 
       # gives the file patterns that trigger the processor by default; this
       # behavior can be over-ridden by configuration files.
+      #
+      # * strings are assumed to be extensions and are tested for a literal match
+      # * regexes are tested against the entire file name
+      #
       def file_patterns
         []
       end
+
+      # gives +true+ if filename matches one of #file_patterns.
+      def processes_file?(filename)
+        file_patterns.map { |patt|
+          case patt
+          when String
+              regex = "^.*"+Regexp.escape(patt)+"$"
+              return true if filename.downcase.match(regex) != nil
+          when Regexp
+              return true if filename.match(patt) != nil
+          end
+        }
+        
+        # if we got this far nothing matched
+        return false
+      end
+
+
+
+      #
+      # FILTER SUPPORT
+      #
 
       # lists all the filters implemented by a processor
       def filters
@@ -52,7 +79,7 @@ module SiteFuel
         if respond_to?("filter_" + name.to_s)
           self.send("filter_"+name.to_s)
         else
-          UnknownFilter(self, name)
+          raise UnknownFilter(self, name)
         end
       end
 

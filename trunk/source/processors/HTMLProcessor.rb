@@ -22,14 +22,20 @@ module SiteFuel
       attr_reader :original_size, :processed_size, :resource_name
 
       def self.process(filename)
-        HTMLProcessor.new(filename)
+        html = HTMLProcessor.new
+        html.open_resource(filename)
       end
 
-      def initialize(filename)
+      def open_resouce(filename)
         @document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
         @original_size = File.size(filename)
         @resouce_name = filename
-        p filters
+      end
+
+      # gives the file patterns which this processor will match
+      def file_patterns
+        # TODO: add rhtml, php, etc.
+        [".html", ".htm"]
       end
 
       def filter_whitespace
