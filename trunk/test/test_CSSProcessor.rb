@@ -27,4 +27,9 @@ class TestCSSProcessor < Test::Unit::TestCase
     assert css.processes_file?("test.CSS")
     assert css.processes_file?("test.CsS")
   end
+
+  def test_name
+    css = CSSProcessor.new
+    assert_equal "CSS", css.processor_name
+  end
 end

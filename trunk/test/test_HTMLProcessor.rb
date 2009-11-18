@@ -34,4 +34,9 @@ class TestHTMLProcessor < Test::Unit::TestCase
     assert html.processes_file?("test.hTm")
     
   end
+
+  def test_name
+    html = HTMLProcessor.new
+    assert_equal "HTML", html.processor_name
+  end
 end

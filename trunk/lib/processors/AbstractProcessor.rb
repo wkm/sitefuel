@@ -33,7 +33,7 @@ module SiteFuel
 
       # gives the display name for the processor
       def processor_name
-        self.class.to_s.sub(/.*::(.*)Processor/, '\1')
+        self.class.to_s.sub(/.*\b(.*)Processor/, '\1')
       end
 
       # gives the file patterns that trigger the processor by default; this
@@ -47,12 +47,12 @@ module SiteFuel
       end
 
       # gives +true+ if filename matches one of #file_patterns.
-      def processes_file?(filename)
+      def file_pattern_match?(filename)
         file_patterns.map { |patt|
           case patt
           when String
-              regex = "^.*"+Regexp.escape(patt)+"$"
-              return true if filename.downcase.match(regex) != nil
+              regex = Regexp.new("^.*"+Regexp.escape(patt)+"$", Regexp::IGNORECASE)
+              return true if filename.match(regex) != nil
           when Regexp
               return true if filename.match(patt) != nil
           end
@@ -60,6 +60,12 @@ module SiteFuel
         
         # if we got this far nothing matched
         return false
+      end
+
+      # uses #file_pattern_match? to decide if the file can be processed
+      # eventually this may use other metrics (like mime types)
+      def processes_file?(filename)
+        file_pattern_match? filename
       end
 
 
@@ -101,6 +107,7 @@ module SiteFuel
           raise UnknownFilter.new(self, name)
         end
       end
+
 
       # gives the canonical name of the resource
       def resource_name
