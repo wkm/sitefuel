@@ -19,7 +19,7 @@ module SiteFuel
     class HTMLProcessor < AbstractProcessor
 
       attr_accessor :document
-      attr_reader :originalsize, :processedsize, :resourcename
+      attr_reader :original_size, :processed_size, :resource_name
 
       def self.process(filename)
         HTMLProcessor.new(filename)
@@ -27,8 +27,8 @@ module SiteFuel
 
       def initialize(filename)
         @document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
-        @originalsize = File.size(filename)
-        @resoucename = filename
+        @original_size = File.size(filename)
+        @resouce_name = filename
       end
 
       def stripwhitespace
@@ -52,7 +52,7 @@ module SiteFuel
       def generate
         stripwhitespace
         text = @document.to_s
-        @processedsize = text.length
+        @processed_size = text.length
         return text
       end
     end

@@ -49,22 +49,22 @@ module SiteFuel
       end
 
       # gives the canonical name of the resource
-      def resourcename
+      def resource_name
         raise NotImplemented
       end
 
-      def processorname
+      def processor_name
         self.class.to_s.sub(/.*::(.*)Processor/, '\1')
       end
 
       # gives the original size of a resource before being processed
-      def originalsize
+      def original_size
         raise NotImplemented
         return 0
       end
 
       # gives the size of the resouce now that it's been processed
-      def processedsize
+      def processed_size
         raise NotImplemented
         return 0
       end

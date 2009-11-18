@@ -15,7 +15,7 @@ module SiteFuel
 
     class CSSProcessor < AbstractProcessor
       attr_accessor :document
-      attr_reader :originalsize, :processedsize
+      attr_reader :original_size, :processed_size
 
       def self.process(filename)
         CSSProcessor.new(filename)
@@ -23,13 +23,13 @@ module SiteFuel
 
       def initialize(filename)
         @document = File.read(filename)
-        @originalsize = File.size(filename)
-        @resourcename = filename
+        @original_size = File.size(filename)
+        @resource_name = filename
       end
 
       def compact
         @document = CSSMin.minify(@document)
-        @processedsize = @document.length
+        @processed_size = @document.length
       end
 
       def generate

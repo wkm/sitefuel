@@ -27,6 +27,12 @@ module SiteFuel
         @document = JSMin.minify(@document)
       end
 
+      # override AbstractProcessor#processor_name so output shows up as +JS+
+      # instead of +JavaScript+.
+      def processor_name
+        "JS"
+      end
+
       def generate
         return @document
       end

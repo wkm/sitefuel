@@ -63,7 +63,7 @@ module SiteFuel
           puts '--       '+filename
         else
           processor.generate
-          puts '%s %s %4.2f' % [processor.processorname.ljust(8), skeleton(filename, 65), processor.processedsize.prec_f/processor.originalsize.prec_f]
+          puts '%s %s %4.2f' % [processor.processor_name.ljust(8), skeleton(filename, 65), processor.processed_size.prec_f/processor.original_size.prec_f]
         end
       end
     end
