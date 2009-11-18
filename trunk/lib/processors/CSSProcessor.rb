@@ -18,7 +18,8 @@ module SiteFuel
       attr_reader :original_size, :processed_size
 
       def self.process(filename)
-        CSSProcessor.new(filename)
+        css = CSSProcessor.new()
+        css.open_resouce(filename)
       end
 
       def file_patterns
@@ -26,7 +27,7 @@ module SiteFuel
       end
 
       # setup a link to a CSS file
-      def initialize(filename)
+      def open_resouce(filename)
         @document = File.read(filename)
         @original_size = File.size(filename)
         @resource_name = filename

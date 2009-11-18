@@ -7,7 +7,7 @@
 # Unit tests for the HTMLProcessor
 #
 
-$:.unshift File.join(File.dirname(__FILE__),'..','source')
+$:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
 require 'processors/HTMLProcessor.rb'
@@ -22,6 +22,9 @@ class TestHTMLProcessor < Test::Unit::TestCase
     assert_equal false, html.processes_file?("testhtml")
     assert_equal false, html.processes_file?("testhtm")
     assert_equal false, html.processes_file?("testHTML")
+
+    assert_equal false, html.processes_file?("test.html.foo")
+    assert_equal false, html.processes_file?("test.htm.foo")
 
     # positive tests
     assert html.processes_file?("test.html")
