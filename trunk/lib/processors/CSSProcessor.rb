@@ -31,6 +31,8 @@ module SiteFuel
         @document = File.read(filename)
         @original_size = File.size(filename)
         @resource_name = filename
+
+        return self
       end
 
       def filter_minify
@@ -39,7 +41,7 @@ module SiteFuel
       end
 
       def generate
-        compact
+        run_filter :minify
         return @document
       end
 

@@ -26,10 +26,13 @@ module SiteFuel
         html.open_resource(filename)
       end
 
+      # setup a link to the HTML file
       def open_resource(filename)
         @document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
         @original_size = File.size(filename)
         @resouce_name = filename
+        
+        return self
       end
 
       # gives the file patterns which this processor will match
