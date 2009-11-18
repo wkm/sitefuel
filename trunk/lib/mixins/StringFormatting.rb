@@ -18,6 +18,4 @@ class String
       self[0..(len/2-2).floor] + "..." + self[(length - len/2+2) .. (length)]
     end
   end
-
-  p "the quick brown dog".abbrev 12
 end
