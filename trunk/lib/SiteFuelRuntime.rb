@@ -84,6 +84,7 @@ module SiteFuel
     # TODO this would probably be much more efficient if it wasn't recursive,
     # I suspect all of these File.join()s can be nicely streamlined to only
     # happen once. /wkm
+    # TODO this whole function is stooooopid. It should just be Dir["**/*"]
     def find_all_files_nested(path)
       entries = Dir.entries(path)
 
