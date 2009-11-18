@@ -15,28 +15,26 @@ require 'processors/HTMLProcessor.rb'
 include SiteFuel::Processor
 
 class TestHTMLProcessor < Test::Unit::TestCase
-  def test_file_extensions # hello
-    html = HTMLProcessor.new
-
+  def test_file_extensions
+    
     # negative tests
-    assert_equal false, html.processes_file?("testhtml")
-    assert_equal false, html.processes_file?("testhtm")
-    assert_equal false, html.processes_file?("testHTML")
+    assert_equal false, HTMLProcessor.processes_file?("testhtml")
+    assert_equal false, HTMLProcessor.processes_file?("testhtm")
+    assert_equal false, HTMLProcessor.processes_file?("testHTML")
 
-    assert_equal false, html.processes_file?("test.html.foo")
-    assert_equal false, html.processes_file?("test.htm.foo")
+    assert_equal false, HTMLProcessor.processes_file?("test.html.foo")
+    assert_equal false, HTMLProcessor.processes_file?("test.htm.foo")
 
     # positive tests
-    assert html.processes_file?("test.html")
-    assert html.processes_file?("test.htm")
-    assert html.processes_file?("test.HTML")
-    assert html.processes_file?("test.HtMl")
-    assert html.processes_file?("test.hTm")
+    assert HTMLProcessor.processes_file?("test.html")
+    assert HTMLProcessor.processes_file?("test.htm")
+    assert HTMLProcessor.processes_file?("test.HTML")
+    assert HTMLProcessor.processes_file?("test.HtMl")
+    assert HTMLProcessor.processes_file?("test.hTm")
     
   end
 
   def test_name
-    html = HTMLProcessor.new
-    assert_equal "HTML", html.processor_name
+    assert_equal "HTML", HTMLProcessor.processor_name
   end
 end

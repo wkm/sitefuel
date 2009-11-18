@@ -45,6 +45,37 @@ module SiteFuel
       [ :deploy, :process ]
     end
 
+    # gives the array of processors available to this runtime
+    def processors
+      [ Processor::HTMLProcessor, Processor::CSSProcessor ]
+    end
+
+    # gives the processor to use for a given file
+    def choose_processor(filename)
+      matchingprocs = processors.delete_if {|proc| not proc.processes_file?(filename) }
+
+      case
+      when matchingprocs.length > 1
+        chosen = matchingprocs.first
+        raise Processor::MultipleApplicableProcessors(filename, matchingprocs, chosen)
+      when matchingprocs.length == 1
+        return matchingprocs.first
+      else
+        return nil
+      end
+    end
+
+    # like #choose_processor but prints a message if there are clashing
+    # processors
+    def choose_processor!(filename)
+      begin
+        choose_processor(filename)
+      rescue Processor::MultipleApplicableProcessors => execp
+        puts excep
+        excep.chosen_processor
+      end
+    end
+
     # create a deployment
     def deploy
       return nil if @deploy_from == nil
@@ -54,12 +85,11 @@ module SiteFuel
 
       @processors = {}
       files.each do |filename|
-        case filename
-        when /.*\.html$/i:
-            @processors[filename] = Processor::HTMLProcessor.process(filename)
-
-        when /.*\.css$/i:
-            @processors[filename] = Processor::CSSProcessor.process(filename)
+        processor = choose_processor!(filename)
+        if processor == nil
+          @processors[filename] = nil
+        else
+          @processors[filename] = processor.process(filename)
         end
       end
 

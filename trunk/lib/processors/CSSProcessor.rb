@@ -22,7 +22,7 @@ module SiteFuel
         css.open_resource(filename)
       end
 
-      def file_patterns
+      def self.file_patterns
         [".css"]
       end
 

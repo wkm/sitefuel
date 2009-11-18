@@ -23,6 +23,22 @@ module SiteFuel
       end
     end
 
+    # raised when multipe processors trigger off of a single file
+    class MultipleApplicableProcessors < StandardError
+      attr_reader :filename, :processors, :chosen_processor
+
+      def initialize(filename, processors, chosen_processor)
+        @filename = filename
+        @processors = processors
+        @chosen_processor = chosen_processor
+      end
+
+      def to_s
+        "MultipleApplicableProcessors: File '%s' triggered processors: %s. Using %s" %
+        [@filename, @processors.join(','), @chosen_processor]
+      end
+    end
+
     # defines the base functions every processor must implement to
     # interface with the sitefuel architecture
     class AbstractProcessor
@@ -32,8 +48,8 @@ module SiteFuel
       #
 
       # gives the display name for the processor
-      def processor_name
-        self.class.to_s.sub(/.*\b(.*)Processor/, '\1')
+      def self.processor_name
+        self.to_s.sub(/.*\b(.*)Processor/, '\1')
       end
 
       # gives the file patterns that trigger the processor by default; this
@@ -42,12 +58,12 @@ module SiteFuel
       # * strings are assumed to be extensions and are tested for a literal match
       # * regexes are tested against the entire file name
       #
-      def file_patterns
+      def self.file_patterns
         []
       end
 
       # gives +true+ if filename matches one of #file_patterns.
-      def file_pattern_match?(filename)
+      def self.file_pattern_match?(filename)
         file_patterns.map { |patt|
           case patt
           when String
@@ -64,10 +80,12 @@ module SiteFuel
 
       # uses #file_pattern_match? to decide if the file can be processed
       # eventually this may use other metrics (like mime types)
-      def processes_file?(filename)
+      def self.processes_file?(filename)
         file_pattern_match? filename
       end
 
+
+      
 
       #
       # FILTER SET SUPPORT
@@ -94,8 +112,8 @@ module SiteFuel
       #
 
       # lists all the filters implemented by a processor
-      def filters
-        names = self.methods.sort.delete_if { |method| not method =~ /^filter_.*$/ }
+      def self.filters
+        names = instance_methods.sort.delete_if { |method| not method =~ /^filter_.*$/ }
         names.map { |filter_name| filter_name.sub(/^filter_(.*)$/, '\1').to_sym }
       end
 
