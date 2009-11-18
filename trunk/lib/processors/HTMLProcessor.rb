@@ -26,7 +26,7 @@ module SiteFuel
         html.open_resource(filename)
       end
 
-      def open_resouce(filename)
+      def open_resource(filename)
         @document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
         @original_size = File.size(filename)
         @resouce_name = filename

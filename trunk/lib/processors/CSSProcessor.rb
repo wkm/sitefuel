@@ -19,7 +19,7 @@ module SiteFuel
 
       def self.process(filename)
         css = CSSProcessor.new()
-        css.open_resouce(filename)
+        css.open_resource(filename)
       end
 
       def file_patterns
@@ -27,7 +27,7 @@ module SiteFuel
       end
 
       # setup a link to a CSS file
-      def open_resouce(filename)
+      def open_resource(filename)
         @document = File.read(filename)
         @original_size = File.size(filename)
         @resource_name = filename
