@@ -1,5 +1,5 @@
 #
-# File::       HTMLProcessorTest.rb
+# File::       test_HTMLProcessor.rb
 # Author::     wkm
 # Copyright::  2009
 # License::    GPL

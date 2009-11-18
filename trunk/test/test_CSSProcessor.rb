@@ -1,5 +1,11 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
+#
+# File::       test_CSSProcessor.rb
+# Author::     wkm
+# Copyright::  2009
+# License::    GPL
+#
+# Unit tests for the CSSProcessor
+#
 
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 

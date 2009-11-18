@@ -63,6 +63,25 @@ module SiteFuel
       end
 
 
+      #
+      # FILTER SET SUPPORT
+      #
+
+      # gives the default filterset used
+      def default_filterset
+        :whitespace
+      end
+
+      # evaluate a filterset
+      def run_filterset(name)
+        if respond_to?("filterset_" + name.to_s)
+          self.send("filterset_" + name.to_s)
+        else
+          raise UnknownFilterset(self, name)
+        end
+      end
+
+
 
       #
       # FILTER SUPPORT
@@ -70,7 +89,7 @@ module SiteFuel
 
       # lists all the filters implemented by a processor
       def filters
-        names = self.methods.delete_if { |method| not method =~ /^filter_.*$/ }
+        names = self.methods.sort.delete_if { |method| not method =~ /^filter_.*$/ }
         names.map { |filter_name| filter_name.sub(/^filter_(.*)$/, '\1').to_sym }
       end
 
@@ -79,21 +98,8 @@ module SiteFuel
         if respond_to?("filter_" + name.to_s)
           self.send("filter_"+name.to_s)
         else
-          raise UnknownFilter(self, name)
+          raise UnknownFilter.new(self, name)
         end
-      end
-
-      # gives the default filterset used
-      def default_filterset
-        :whitespace
-      end
-
-      # comglomerates all the defaults,
-      def defaults
-        {
-          :default_filterset => default_filterset,
-          :filtersets => filtersets
-        }
       end
 
       # gives the canonical name of the resource
@@ -111,11 +117,6 @@ module SiteFuel
       def processed_size
         raise NotImplemented
         return 0
-      end
-
-      # gives the processed file content
-      def generate
-        raise NotImplemented
       end
       
     end
