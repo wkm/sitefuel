@@ -53,6 +53,10 @@ module SiteFuel
         raise NotImplemented
       end
 
+      def processorname
+        self.class.to_s.sub(/.*::(.*)Processor/, '\1')
+      end
+
       # gives the original size of a resource before being processed
       def originalsize
         raise NotImplemented

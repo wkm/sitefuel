@@ -19,20 +19,28 @@ module SiteFuel
     class HTMLProcessor < AbstractProcessor
 
       attr_accessor :document
+      attr_reader :originalsize, :processedsize, :resourcename
 
       def self.process(filename)
-        html = HTMLProcessor::new()
-        html.document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
-
-        return html
+        HTMLProcessor.new(filename)
       end
 
-      def apply
-        traversetext
+      def initialize(filename)
+        @document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
+        @originalsize = File.size(filename)
+        @resoucename = filename
       end
 
-      def traversetext
+      def stripwhitespace
+        return if @document == nil
 
+        @document.traverse_text do |txt|
+          if txt.content =~ /^\s+$/ then
+            txt.content = ''
+          else
+            txt.content = txt.content.gsub(/\s+/, ' ')
+          end
+        end
       end
 
       # beautify text by 
@@ -42,7 +50,10 @@ module SiteFuel
       end
 
       def generate
-        @document.to_s
+        stripwhitespace
+        text = @document.to_s
+        @processedsize = text.length
+        return text
       end
     end
 

@@ -80,10 +80,10 @@ def parse_command_line(runtime)
   rescue OptionParser::InvalidOption => iopt
     puts iopt
     puts_and_exit $HELP_HINT_LINE
-  else
+  rescue => exception
     # TODO: add better handling for the various exceptions (unncessary
     #       argument, missing argument, etc.)
-    puts_and_exit 'couldn\'t parse command line', $HELP_HINT_LINE
+    puts_and_exit "couldn\'t parse command line: #{exception}", $HELP_HINT_LINE
   end
   
   
@@ -97,6 +97,10 @@ def parse_command_line(runtime)
     puts_and_exit "unrecognized action '#{commands[0]}'", $HELP_HINT_LINE
   end
 
+  if commands[0].downcase == 'deploy'
+    runtime.deploy_from = commands[1]
+    runtime.deploy
+  end
 end
 
 def main
