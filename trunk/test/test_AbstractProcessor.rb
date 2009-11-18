@@ -38,7 +38,6 @@ class TestAbstractProcessor < Test::Unit::TestCase
   end
 
   def test_filters
-
     assert_equal [:a, :b, :c, :long_name], @ta.filters
     assert_nil @ta.run_filter(:a)
     assert_nil @ta.run_filter(:b)
@@ -51,7 +50,7 @@ class TestAbstractProcessor < Test::Unit::TestCase
     assert_equal [], @tb.filters
   end
 
-  def test_file_patterns
+  def test_file_patterns_01
     assert @ta.processes_file?(".testA")
     assert @ta.processes_file?(".test-a")
     assert @ta.processes_file?(".test.a")
@@ -68,6 +67,16 @@ class TestAbstractProcessor < Test::Unit::TestCase
     assert_equal false, @ta.processes_file?("testA")
     assert_equal false, @ta.processes_file?("XtestA")
     assert_equal false, @ta.processes_file?("XtestXA")
+  end
+
+  def test_file_patterns_02
+    # file extension tests
+    assert @tb.processes_file?("test.tpb")
+    assert @tb.processes_file?("foo.tpb")
+
+    # regexp file name test
+    assert @tb.processes_file?("tpb.foofoofitz")
+    assert_equal false, @tb.processes_file?("TPB.foofoofitz")
   end
 
   def test_processor_names
