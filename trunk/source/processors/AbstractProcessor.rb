@@ -13,6 +13,16 @@ module SiteFuel
     # raised when a method isn't implemented by a child class.
     class NotImplemented < StandardError; end
 
+    # raised when attempting to run a filter that doesn't exist
+    class UnknownFilter < StandardError
+      attr_reader :processor, :name
+
+      def initialize(processor, name)
+        @processor = processor
+        @name = name
+      end
+    end
+
     # defines the base functions every processor must implement to
     # interface with the rest of the sitefuel interface
     #
@@ -20,19 +30,30 @@ module SiteFuel
     # which inherits AbstractProcessor. sitefuel looks at
     class AbstractProcessor
 
-      # list the filtersets and the filters they map to
-      # used to build up documentation
-      #  HTMLProcessor.filtersets # => {:full=>[:whitespace,
-      def filtersets
-        {
-          :full => [filters(:whitespace)],
-          :whitespace => []
-        }
+      # gives the display name for the processor
+      def processor_name
+        self.class.to_s.sub(/.*::(.*)Processor/, '\1')
       end
 
-      # gives the filters a filterset will run
-      def filters(filterset)
-        raise NotImplemented
+      # gives the file patterns that trigger the processor by default; this
+      # behavior can be over-ridden by configuration files.
+      def file_patterns
+        []
+      end
+
+      # lists all the filters implemented by a processor
+      def filters
+        names = self.methods.delete_if { |method| not method =~ /^filter_.*$/ }
+        names.map { |filter_name| filter_name.sub(/^filter_(.*)$/, '\1').to_sym }
+      end
+
+      # runs a particular filter
+      def run_filter(name)
+        if respond_to?("filter_" + name.to_s)
+          self.send("filter_"+name.to_s)
+        else
+          UnknownFilter(self, name)
+        end
       end
 
       # gives the default filterset used
@@ -51,10 +72,6 @@ module SiteFuel
       # gives the canonical name of the resource
       def resource_name
         raise NotImplemented
-      end
-
-      def processor_name
-        self.class.to_s.sub(/.*::(.*)Processor/, '\1')
       end
 
       # gives the original size of a resource before being processed

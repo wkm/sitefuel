@@ -29,9 +29,10 @@ module SiteFuel
         @document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
         @original_size = File.size(filename)
         @resouce_name = filename
+        p filters
       end
 
-      def stripwhitespace
+      def filter_whitespace
         return if @document == nil
 
         @document.traverse_text do |txt|
@@ -43,14 +44,24 @@ module SiteFuel
         end
       end
 
-      # beautify text by 
-      def beautifytext
-        beautifyquotes
-        beautifydashes
+      def filter_beautifytext
+        run_filter :beautifyquotes
+        run_filter :beautifydashes
+      end
+
+      # cleans up all the quotes in
+      def filter_beautifyquotes
+      end
+
+      # cleans up the various dash forms:
+      #
+      #  a = {:a => 1, :b => 2}
+      def filter_beautifydashes
+        
       end
 
       def generate
-        stripwhitespace
+        run_filter :whitespace
         text = @document.to_s
         @processed_size = text.length
         return text

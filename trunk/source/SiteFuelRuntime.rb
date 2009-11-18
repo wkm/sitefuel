@@ -14,6 +14,13 @@
 module SiteFuel
 
   require 'optparse'
+  
+  require 'rubygems'
+  require 'ruby-debug'
+  require 'term/ansicolor'
+
+  include Term::ANSIColor
+
   require 'environment.rb'
   require 'processors/HTMLProcessor.rb'
   require 'processors/CSSProcessor.rb'
@@ -63,7 +70,7 @@ module SiteFuel
           puts '--       '+filename
         else
           processor.generate
-          puts '%s %s %4.2f' % [processor.processor_name.ljust(8), skeleton(filename, 65), processor.processed_size.prec_f/processor.original_size.prec_f]
+          puts '%s %s %4.2f' % [bold(processor.processor_name.ljust(8)), skeleton(filename, 65), processor.processed_size.prec_f/processor.original_size.prec_f]
         end
       end
     end

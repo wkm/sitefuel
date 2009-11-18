@@ -27,7 +27,11 @@
 # add source/ to the load path
 $:.unshift File.join(File.dirname(__FILE__), "source")
 
+require 'rubygems'
+require 'term/ansicolor'
 require 'SiteFuelRuntime.rb'
+
+include Term::ANSIColor
 
 def puts_and_exit(*args)
   puts(*args)
@@ -41,17 +45,17 @@ def parse_command_line(runtime)
 
   #### BUILD THE OPTIONS PARSER
   opts = OptionParser.new
-  opts.banner =  "SiteFuel #{$SiteFuelVersionText}\n"
+  opts.banner =  bold("SiteFuel #{$SiteFuelVersionText}\n")
   opts.banner << 'A ruby framework for deploying sites from version control.'
   opts.separator ''
-  opts.separator 'Usage: sitefuel  COMMAND  ARGUMENTS  [OPTIONS]'
+  opts.separator bold('Usage: sitefuel  COMMAND  ARGUMENTS  [OPTIONS]')
   opts.separator ''
-  opts.separator 'Commands:'
+  opts.separator bold('Commands:')
   opts.separator "    deploy\tDeploy a site using sitefuel."
   opts.separator "    process\tModify an existing deployment in-place."
   opts.separator "    help\tShow this message."
   opts.separator ''
-  opts.separator 'Common options:'
+  opts.separator bold('Common options:')
   opts.on('-oARG', '-o=ARG', '-o PLACE', '--output=ARG', '--output PLACE', String,
           'Where to put a deployed site') do |out|
     runtime.deploy_from = out
@@ -92,14 +96,12 @@ def parse_command_line(runtime)
   puts_and_exit 'no command given', $HELP_HINT_LINE if commands.length < 1
   puts_and_exit opts if commands[0].downcase == 'help'
 
-  # ensure the command we're given is, in fact, a known action
-  if not runtime.actions.include? commands[0].to_sym
-    puts_and_exit "unrecognized action '#{commands[0]}'", $HELP_HINT_LINE
-  end
-
-  if commands[0].downcase == 'deploy'
+  case commands[0].downcase
+  when 'deploy':
     runtime.deploy_from = commands[1]
     runtime.deploy
+  else
+    puts_and_exit "unknown command: '#{commands[0]}'", $HELP_HINT_LINE
   end
 end
 
