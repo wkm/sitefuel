@@ -5,13 +5,14 @@
 # Copyright:: 2009
 # License::   GPL
 #
+#
 # === Introduction
 # sitefuel is a lightweight ruby framework for deploying websites directly from
 # version control. sitefuel includes support for compressing HTML and CSS as
 # well as optimizing PNG graphics. Support is planned for SASS; compressing
 # JavaScript; automatically creating sprites; and supporting more image formats.
 # (and more!)
-#
+# TODO: add more details
 #
 # === Examples
 # Process an already deployed site:
