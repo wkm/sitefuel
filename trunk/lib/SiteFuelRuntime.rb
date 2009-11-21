@@ -66,7 +66,8 @@ module SiteFuel
     end
 
     # like #choose_processor but prints a message if there are clashing
-    # processors
+    # processors and returns the first of the clashing processors.
+    # (effectively alerting the user, but continuing to work)
     def choose_processor!(filename)
       begin
         choose_processor(filename)
@@ -108,32 +109,7 @@ module SiteFuel
 
     # gives an array listing
     def find_all_files(path)
-      find_all_files_nested(path).flatten
-    end
-
-    # gives all files contained within a path
-    # TODO this would probably be much more efficient if it wasn't recursive,
-    # I suspect all of these File.join()s can be nicely streamlined to only
-    # happen once. /wkm
-    # TODO this whole function is stooooopid. It should just be Dir["**/*"]
-    def find_all_files_nested(path)
-      entries = Dir.entries(path)
-
-      # get rid of self or parent references in a directory
-      # also get rid of any hidden files TODO: this needs to be revisted with
-      # some more robust black/white-listing mechanism
-      entries = entries.delete_if { |i| [".", ".."].include?(i) or i =~ /^\./ }
-      
-      return entries.collect { |entry|
-        # attach the start path to the entry
-        fullentry = File.join(path, entry)
-
-        if File.directory?(fullentry)
-          find_all_files_nested(fullentry)
-        else
-          fullentry
-        end
-      }
+      Dir[File.join(path, "**/*")]
     end
 
     def verbosity(level = 1)
