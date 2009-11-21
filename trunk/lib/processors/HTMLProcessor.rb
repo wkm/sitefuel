@@ -28,9 +28,9 @@ module SiteFuel
 
       # setup a link to the HTML file
       def open_resource(filename)
-        @document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
-        @original_size = File.size(filename)
-        @resouce_name = filename
+        self.document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
+        self.original_size = File.size(filename)
+        self.resource_name = filename
         
         return self
       end
@@ -42,9 +42,9 @@ module SiteFuel
       end
 
       def filter_whitespace
-        return if @document == nil
+        return if document == nil
 
-        @document.traverse_text do |txt|
+        document.traverse_text do |txt|
           if txt.content =~ /^\s+$/ then
             txt.content = ''
           else
@@ -71,8 +71,8 @@ module SiteFuel
 
       def generate
         run_filter :whitespace
-        text = @document.to_s
-        @processed_size = text.length
+        text = document.to_s
+        self.processed_size = text.length
         return text
       end
     end

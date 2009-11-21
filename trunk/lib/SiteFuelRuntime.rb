@@ -40,24 +40,53 @@ module SiteFuel
 
     attr_accessor :deploymentconfiguration
 
+    def initialize
+      @processors = SiteFuelRuntime.find_processors
+    end
+
+    # returns a list of processors found by looking for all children of
+    # SiteFuel::Processor::AbstractProcessor
+    #
+    # for a processor to be automatically included it has to:
+    # * be loaded (TODO: all processors under processors/ are automatically loaded)
+    # * be a child class of AbstractProcessor
+    # * the class name must end with Processor
+    #
+    def self.find_processors
+      # TODO: really profile this sucker; it seems quite scary to iterate over
+      # all of the classes
+      procs = []
+      ObjectSpace.each_object(Class) do |cls|
+        if cls.superclass == Processor::AbstractProcessor and
+           cls.to_s =~ /^.*Processor$/
+        then
+          procs << cls
+        end
+      end
+
+      procs
+    end
+
     # lists the actions which are possible with this runtime.
     def actions
       [ :deploy, :process ]
     end
 
     # gives the array of processors available to this runtime
-    def processors
-      [ Processor::HTMLProcessor, Processor::CSSProcessor ]
+    attr_reader :processors
+
+    def add_processor(proc)
+      @processors << proc
     end
 
     # gives the processor to use for a given file
     def choose_processor(filename)
-      matchingprocs = processors.delete_if {|proc| not proc.processes_file?(filename) }
+      matchingprocs = processors.clone.delete_if {|proc| not proc.processes_file?(filename) }
 
       case
       when matchingprocs.length > 1
         chosen = matchingprocs.first
-        raise Processor::MultipleApplicableProcessors(filename, matchingprocs, chosen)
+        raise Processor::MultipleApplicableProcessors.new(filename, matchingprocs, chosen)
       when matchingprocs.length == 1
         return matchingprocs.first
       else
@@ -72,6 +101,7 @@ module SiteFuel
       begin
         choose_processor(filename)
       rescue Processor::MultipleApplicableProcessors => execp
+        # print the exception
         puts excep
         excep.chosen_processor
       end
@@ -84,20 +114,20 @@ module SiteFuel
       # find all files under deploy_from
       files = find_all_files @deploy_from
 
-      @processors = {}
+      @resource_processors = {}
       files.each do |filename|
         processor = choose_processor!(filename)
         if processor == nil
-          @processors[filename] = nil
+          @resource_processors[filename] = nil
         else
-          @processors[filename] = processor.process(filename)
+          @resource_processors[filename] = processor.process(filename)
         end
       end
 
 
       # print all results
       files.each do |filename|
-        processor = @processors[filename]
+        processor = @resource_processors[filename]
         if processor == nil
           puts '%s %s' %['--'.ljust(8), filename.abbrev(65)]
         else

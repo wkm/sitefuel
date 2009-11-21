@@ -29,13 +29,13 @@ module SiteFuel
 
       def initialize(filename, processors, chosen_processor)
         @filename = filename
-        @processors = processors
+        @resource_processors = processors
         @chosen_processor = chosen_processor
       end
 
       def to_s
         "MultipleApplicableProcessors: File '%s' triggered processors: %s. Using %s" %
-        [@filename, @processors.join(','), @chosen_processor]
+        [@filename, @resource_processors.join(','), @chosen_processor]
       end
     end
 
@@ -46,6 +46,15 @@ module SiteFuel
       #
       # PROCESSOR INFORMATION
       #
+
+      # gives the canonical name of the resource
+      attr_reader :resource_name
+
+      # gives the original size of a resource before being processed
+      attr_reader :original_size
+
+      # gives the size of the resouce now that it's been processed
+      attr_reader :processed_size
 
       # gives the display name for the processor
       def self.processor_name
@@ -126,23 +135,14 @@ module SiteFuel
         end
       end
 
+    protected
+      # gives the raw document handle used by the processor
+      attr_accessor :document
 
-      # gives the canonical name of the resource
-      def resource_name
-        raise NotImplemented
-      end
-
-      # gives the original size of a resource before being processed
-      def original_size
-        raise NotImplemented
-        return 0
-      end
-
-      # gives the size of the resouce now that it's been processed
-      def processed_size
-        raise NotImplemented
-        return 0
-      end
+      # gives write-access to children classes
+      attr_writer :original_size
+      attr_writer :processed_size
+      attr_writer :resource_name
       
     end
   end

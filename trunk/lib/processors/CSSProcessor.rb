@@ -14,8 +14,6 @@ module SiteFuel
     require 'processors/AbstractProcessor.rb'
 
     class CSSProcessor < AbstractProcessor
-      attr_accessor :document
-      attr_reader :original_size, :processed_size
 
       def self.process(filename)
         css = CSSProcessor.new()
@@ -28,23 +26,27 @@ module SiteFuel
 
       # setup a link to a CSS file
       def open_resource(filename)
-        @document = File.read(filename)
-        @original_size = File.size(filename)
-        @resource_name = filename
+        self.document = File.read(filename)
+        self.original_size = File.size(filename)
+        self.resource_name = filename
 
         return self
       end
 
+      # uses the CSSMin gem to minfy a CSS document using regular expressions
       def filter_minify
-        @document = CSSMin.minify(@document)
-        @processed_size = @document.length
+        self.document = CSSMin.minify(document)
+        self.processed_size = document.length
       end
 
+      # TODO: the real fun begins when we integrate HTML and CSS minification
+      # using shorter ID names, etc.
+
+      # gives
       def generate
         run_filter :minify
-        return @document
+        return document
       end
-
     end
   end
 end
