@@ -35,7 +35,6 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
     assert_nil @runtime.choose_processor("foo.xxxx")
     assert_nil @runtime.choose_processor("foocss")
     assert_nil @runtime.choose_processor("foohtml")
-    p dawg
   end
 
   def test_processor_finding
@@ -43,14 +42,9 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
     assert !SiteFuelRuntime.find_processors.include?(HTMLClasherTest), 'HTMLClasherTest included'
 
     # test that we do have the basic processor test suite
-    assert_equal(
-      SiteFuelRuntime.find_processors.sort,
-      [
-        Processor::HTMLProcessor,
-        Processor::CSSProcessor,
-        Processor::SassProcessor
-      ].sort
-    )
+    assert SiteFuelRuntime.find_processors.include?(Processor::HTMLProcessor)
+    assert SiteFuelRuntime.find_processors.include?(Processor::CSSProcessor)
+    assert SiteFuelRuntime.find_processors.include?(Processor::SassProcessor)
   end
 
   def test_processor_clashing
@@ -60,7 +54,9 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
       @runtime.choose_processor("foo.html")
     end
 
-    assert_nothing_raised @runtime.choose_processor!("foo.html")
+    assert_nothing_raised do
+      @runtime.choose_processor!("foo.html")
+    end
 
     assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.htm")
 
