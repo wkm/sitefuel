@@ -21,11 +21,11 @@ module SiteFuel
 
   include Term::ANSIColor
 
-  require 'environment.rb'
-  require 'processors/HTMLProcessor.rb'
-  require 'processors/CSSProcessor.rb'
-  require 'processors/SASSProcessor.rb'
-  require 'mixins/StringFormatting.rb'
+  require 'environment'
+  require 'processors/HTMLProcessor'
+  require 'processors/CSSProcessor'
+  require 'processors/SASSProcessor'
+  require 'mixins/StringFormatting'
 
   class SiteFuelRuntime
 

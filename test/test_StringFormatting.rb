@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
-require 'mixins/StringFormatting.rb'
+require 'mixins/StringFormatting'
 
 class TestString < Test::Unit::TestCase
   def test_abbrev

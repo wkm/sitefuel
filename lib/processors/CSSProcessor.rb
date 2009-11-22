@@ -11,7 +11,7 @@ module SiteFuel
     require 'rubygems'
     require 'cssmin'
 
-    require 'processors/AbstractProcessor.rb'
+    require 'processors/AbstractProcessor'
 
     class CSSProcessor < AbstractProcessor
 

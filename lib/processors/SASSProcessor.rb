@@ -12,8 +12,8 @@ module SiteFuel
     require 'rubygems'
     require 'haml'
 
-    require 'processors/AbstractProcessor.rb'
-    require 'processors/CSSProcessor.rb'
+    require 'processors/AbstractProcessor'
+    require 'processors/CSSProcessor'
 
     class SassProcessor < AbstractProcessor
       

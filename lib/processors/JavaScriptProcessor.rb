@@ -10,7 +10,7 @@ module SiteFuel
     require 'rubygems'
     require 'jsmin'
 
-    require 'processors/AbstractProcessor.rb'
+    require 'processors/AbstractProcessor'
 
     class JavaScriptProcessor < AbstractProcessor
       attr_accessor :document

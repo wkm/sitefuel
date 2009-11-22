@@ -30,7 +30,8 @@ $:.unshift File.join(File.dirname(__FILE__), "source")
 
 require 'rubygems'
 require 'term/ansicolor'
-require 'SiteFuelRuntime.rb'
+
+require 'SiteFuelRuntime'
 
 include Term::ANSIColor
 
