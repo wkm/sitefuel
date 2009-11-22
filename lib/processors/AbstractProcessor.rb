@@ -35,7 +35,7 @@ module SiteFuel
 
       def to_s
         "MultipleApplicableProcessors: File '%s' triggered processors: %s. Using %s" %
-        [@filename, @resource_processors.join(','), @chosen_processor]
+        [@filename, @resource_processors.join(', '), @chosen_processor]
       end
     end
 
