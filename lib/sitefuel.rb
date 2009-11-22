@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -w
 #
 # File::      sitefuel.rb
 # Author::    wkm
