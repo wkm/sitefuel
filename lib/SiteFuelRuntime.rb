@@ -44,6 +44,14 @@ module SiteFuel
       @processors = SiteFuelRuntime.find_processors
     end
 
+    # finds all processors under processors/ and loads them. Any file matching
+    # *Processor.rb will be loaded
+    def self.load_processors
+      Dir["processors/*Processor.rb"].each do |file|
+        require file
+      end
+    end
+
     # returns a list of processors found by looking for all children of
     # SiteFuel::Processor::AbstractProcessor
     #
@@ -100,7 +108,7 @@ module SiteFuel
     def choose_processor!(filename)
       begin
         choose_processor(filename)
-      rescue Processor::MultipleApplicableProcessors => execp
+      rescue Processor::MultipleApplicableProcessors => excep
         # print the exception
         puts excep
         excep.chosen_processor
@@ -155,4 +163,8 @@ module SiteFuel
       }
     end
   end
+
+
+  # load the various processors
+  SiteFuelRuntime.load_processors
 end
