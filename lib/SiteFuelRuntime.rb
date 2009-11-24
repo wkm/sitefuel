@@ -110,7 +110,9 @@ module SiteFuel
         choose_processor(filename)
       rescue Processor::MultipleApplicableProcessors => excep
         # print the exception
-        puts excep
+        # TODO: print [or log] the exception once we have a proper logging
+        # mechanism
+        # puts excep
         excep.chosen_processor
       end
     end
