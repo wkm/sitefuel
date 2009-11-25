@@ -26,6 +26,7 @@ module SiteFuel
   require 'processors/CSSProcessor'
   require 'processors/SASSProcessor'
   require 'mixins/StringFormatting'
+  require 'mixins/FileComparison'
 
   class SiteFuelRuntime
 
@@ -44,20 +45,32 @@ module SiteFuel
       @processors = SiteFuelRuntime.find_processors
     end
 
+    # gives true if the given file (typially a processor) has already been
+    # loaded (by looking into $")
+    def self.processor_loaded?(file)
+      $".map do |f|
+        if File.equivalent?(file, f)
+          return true
+        end
+      end
+
+      return false
+    end
+
     # finds all processors under processors/ and loads them. Any file matching
     # *Processor.rb will be loaded
     def self.load_processors
+      # build up the search pattern by taking this file's direction and shoving
+      # on the search patt
       patt = File.dirname(__FILE__)
       patt = File.join(patt, 'processors/*Processor.rb')
-      patt = File.expand_path(patt)
-      Dir[patt].collect do |file|
-        if $".map {|f| File.expand_path(f) }.include?(file)
-          puts 'Already has %s' % file
-        else
-          require file
-          file
-        end
-      end
+
+      # get rid of any processor we've already loaded (using a super crude
+      # metric)
+      files = Dir[patt].delete_if { |file| processor_loaded?(file) }
+
+      # load whatever files we're left with
+      files.each { |f| require f }
     end
 
     # returns a list of processors found by looking for all children of
