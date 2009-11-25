@@ -47,9 +47,16 @@ module SiteFuel
     # finds all processors under processors/ and loads them. Any file matching
     # *Processor.rb will be loaded
     def self.load_processors
-      Dir[File.join(File.dirname(__FILE__),'processors/*Processor.rb')].collect do |file|
-        require file
-        file
+      patt = File.dirname(__FILE__)
+      patt = File.join(patt, 'processors/*Processor.rb')
+      patt = File.expand_path(patt)
+      Dir[patt].collect do |file|
+        if $".map {|f| File.expand_path(f) }.include?(file)
+          puts 'Already has %s' % file
+        else
+          require file
+          file
+        end
       end
     end
 
@@ -140,10 +147,10 @@ module SiteFuel
       files.each do |filename|
         processor = @resource_processors[filename]
         if processor == nil
-          puts '%s %s' %['--'.ljust(8), filename.abbrev(65)]
+          puts '%s %s' %['--'.ljust(8), filename.cabbrev(65)]
         else
           processor.generate
-          puts '%s %s %4.2f' % [bold(processor.class.processor_name.ljust(8)), filename.abbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
+          puts '%s %s %4.2f' % [bold(processor.class.processor_name.ljust(8)), filename.cabbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
         end
       end
     end
