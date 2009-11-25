@@ -22,6 +22,10 @@ module SiteFuel
         return js
       end
 
+      def self.file_patterns
+        ['.js']
+      end
+
       # use the +JSMin+ library to compact a javascript file
       def compact
         @document = JSMin.minify(@document)
