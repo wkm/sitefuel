@@ -10,5 +10,15 @@
 module SiteFuel
   module Processor
 
+    require 'processors/AbstractProcessor'
+
+    # processor for handling Portable Network Graphics images
+    # currently operates as a lightweight wrapper around 'pngcrush'
+    class PNGProcessor < AbstractProcessor
+      def file_patterns
+        ['.png']
+      end
+    end
+
   end
 end
