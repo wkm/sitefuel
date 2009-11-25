@@ -48,7 +48,7 @@ module SiteFuel
       include SiteFuel::Logging
 
       def initialize
-        logger = SiteFuelLogger.instance
+        self.logger = SiteFuelLogger.instance
       end
 
 
