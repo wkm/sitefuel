@@ -10,8 +10,10 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
+require 'SiteFuelLogger'
 require 'processors/AbstractProcessor'
 
+include SiteFuel
 include SiteFuel::Processor
 
 class TestAProcessor < AbstractProcessor
@@ -81,4 +83,37 @@ class TestAbstractProcessor < Test::Unit::TestCase
     assert_equal "TestA", TestAProcessor.processor_name
     assert_equal "TestB", TestBProcessor.processor_name
   end
+
+  def test_processor_logging
+    log = SiteFuelLogger.instance
+    proc = TestAProcessor.new
+
+    log.level = Logger::UNKNOWN
+
+    # test fatal messages
+    fatal = log.fatal_count
+    proc.fatal 'Fatal error: fatal errors don\'t cause program halt.'
+    assert_equal fatal+1, log.fatal_count
+
+    # test error messages
+    error = log.error_count
+    proc.error 'Error: brain malfunction: cannot find Creativity.'
+    assert_equal error+1, log.error_count
+
+    # test warning messages
+    warn = log.warn_count
+    proc.warn 'Warning: impending doom...!'
+    assert_equal warn+1, log.warn_count
+
+    # test info messages
+    info = log.info_count
+    proc.info 'It\'s 77oC outside.'
+    assert_equal info+1, log.info_count
+
+    # test debugging messages
+    debug = log.debug_count
+    proc.debug 'testing the value of "i" :P'
+    assert_equal debug+1, log.debug_count
+  end
+  
 end
