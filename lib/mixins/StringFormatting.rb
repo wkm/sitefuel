@@ -29,7 +29,7 @@ class String
     if length <= len
       self
     else
-      self[0..(len-3)] + '...'
+      self[0..(len-4)] + '...'
     end
   end
 
