@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w
+#!/usr/bin/ruby -w -rubygems
 #
 # File::      sitefuel.rb
 # Author::    wkm
@@ -26,7 +26,7 @@
 #
 
 # add source/ to the load path
-$:.unshift File.join(File.dirname(__FILE__), "source")
+$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 
 require 'rubygems'
 require 'term/ansicolor'
