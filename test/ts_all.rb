@@ -3,7 +3,7 @@
 require 'test/unit' 
 
 # programmatically load all test files in this directory
-testfiles = Dir["test_*.rb"];
+testfiles = Dir[File.join(File.dirname(__FILE__), "test_*.rb")];
 
 puts '='*60
 puts 'Loaded:'
