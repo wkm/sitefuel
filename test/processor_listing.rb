@@ -15,5 +15,5 @@ include SiteFuel
 
 processors = SiteFuelRuntime.find_processors
 processors.each do |proc|
-  puts ' |%s | %s |'% [proc.processor_name.ljust(10), proc.file_patterns.join(', ').ljust(30)]
+  puts ' | %s | %s |'% [proc.processor_name.ljust(10), proc.file_patterns.join(', ').ljust(30)]
 end
