@@ -10,6 +10,8 @@
 module SiteFuel
   module Processor
 
+    require 'SiteFuelLogger'
+
     # raised when a method isn't implemented by a child class.
     class NotImplemented < StandardError; end
 
@@ -42,6 +44,13 @@ module SiteFuel
     # defines the base functions every processor must implement to
     # interface with the sitefuel architecture
     class AbstractProcessor
+
+      include SiteFuel::Logging
+
+      def initialize
+        logger = SiteFuelLogger.instance
+      end
+
 
       #
       # PROCESSOR INFORMATION
