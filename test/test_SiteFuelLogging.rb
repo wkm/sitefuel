@@ -17,7 +17,7 @@ include SiteFuel
 
 class TestSiteFuelLogging < Test::Unit::TestCase
   def test_fatal
-    log = SiteFuelLogger.instance()
+    log = SiteFuelLogger.instance
     log.level = Logger::UNKNOWN
 
     assert_equal 0, log.fatal_count
@@ -28,7 +28,7 @@ class TestSiteFuelLogging < Test::Unit::TestCase
   end
 
   def test_errors
-    log = SiteFuelLogger.instance()
+    log = SiteFuelLogger.instance
     log.level = Logger::UNKNOWN
 
     assert_equal 0, log.error_count
@@ -39,7 +39,7 @@ class TestSiteFuelLogging < Test::Unit::TestCase
   end
 
   def test_warnings
-    log = SiteFuelLogger.instance()
+    log = SiteFuelLogger.instance
     log.level = Logger::UNKNOWN
 
     assert_equal 0, log.warning_count
@@ -50,7 +50,7 @@ class TestSiteFuelLogging < Test::Unit::TestCase
   end
 
   def test_info_messages
-    log = SiteFuelLogger.instance()
+    log = SiteFuelLogger.instance
     log.level = Logger::UNKNOWN
 
     assert_equal 0, log.info_count
@@ -61,7 +61,7 @@ class TestSiteFuelLogging < Test::Unit::TestCase
   end
 
   def test_debug_messages
-    log = SiteFuelLogger.instance()
+    log = SiteFuelLogger.instance
     log.level = Logger::UNKNOWN
 
     assert_equal 0, log.debug_count
