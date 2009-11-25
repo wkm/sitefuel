@@ -22,7 +22,7 @@ module SiteFuel
     attr_reader :error_count
 
     # the number of warning messages logged so far (even if lower than #level)
-    attr_reader :warning_count
+    attr_reader :warn_count
 
     # the number of info messages logged so far (even if lower than #level)
     attr_reader :info_count
@@ -33,7 +33,7 @@ module SiteFuel
     def initialize(filename = STDOUT)
       @fatal_count = 0
       @error_count = 0
-      @warning_count = 0
+      @warn_count = 0
       @info_count = 0
       @debug_count = 0
       
@@ -51,7 +51,7 @@ module SiteFuel
     end
 
     def warn(*args)
-      @warning_count += 1
+      @warn_count += 1
       super(*args)
     end
 
@@ -75,7 +75,7 @@ module SiteFuel
     end
 
     # adds a fatal error to the log
-    def fatal(*args) @log.fatal(*args); end
+    def fatal(*args) @logger.fatal(*args); end
     
     # adds an error to the log
     def error(*args) @logger.error(*args); end
