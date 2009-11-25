@@ -47,8 +47,9 @@ module SiteFuel
     # finds all processors under processors/ and loads them. Any file matching
     # *Processor.rb will be loaded
     def self.load_processors
-      Dir["processors/*Processor.rb"].each do |file|
+      Dir[File.join(File.dirname(__FILE__),'processors/*Processor.rb')].collect do |file|
         require file
+        file
       end
     end
 
