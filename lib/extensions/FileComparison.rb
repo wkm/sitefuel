@@ -19,6 +19,6 @@ class File
       File.expand_path(a, '/').split(File::SEPARATOR)[1 .. -1],
       File.expand_path(b, '/').split(File::SEPARATOR)[1 .. -1]
     ].sort {|l,r| l.length <=> r.length }.reverse
-    list.last.ends_with? list.first
+    list.first.ends_with? list.last
   end
 end

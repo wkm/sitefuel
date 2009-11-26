@@ -16,6 +16,11 @@ class Array
   #  [1, 2, 3].ends_with? [1, 2, 3]  # ==> true
   #  [1, 2, 3].ends_with? [1, 2]  # ==> false
   def ends_with?(other)
+    # if the supposed 'ending' is longer, it can't be an ending
+    if length < other.length
+      return false
+    end
+
     index = -1
     while -index <= other.length and -index <= length
       if other[index] != self[index]
