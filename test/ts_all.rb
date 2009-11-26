@@ -18,6 +18,8 @@ $Divider = '='*60
 # programmatically load all test files in this directory
 testfiles = Dir[File.join(File.dirname(__FILE__), "test_*.rb")];
 
+  # some whitespace
+
 puts $Divider
 puts bold('Found:')
 puts testfiles.join("\n")

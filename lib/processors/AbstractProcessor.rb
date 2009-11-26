@@ -47,6 +47,7 @@ module SiteFuel
 
       include SiteFuel::Logging
 
+      # setup an AbstractProcessor
       def initialize
         self.logger = SiteFuelLogger.instance
       end
