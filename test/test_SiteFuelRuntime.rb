@@ -11,6 +11,7 @@ $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'test/unit'
 require 'SiteFuelRuntime'
+require 'SiteFuelLogger'
 
 include SiteFuel
 
@@ -54,9 +55,13 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
       @runtime.choose_processor("foo.html")
     end
 
+    # test that SiteFuelLogger#choose_processor! doesn't throw
+    # a message but does log a warning
+    warnings = SiteFuelLogger.instance.warn_count
     assert_nothing_raised do
       @runtime.choose_processor!("foo.html")
     end
+    assert_equal warnings+1, SiteFuelLogger.instance.warn_count
 
     assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.htm")
 
