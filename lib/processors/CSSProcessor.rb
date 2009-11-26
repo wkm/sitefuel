@@ -11,42 +11,48 @@ module SiteFuel
     require 'rubygems'
     require 'cssmin'
 
-    require 'processors/AbstractProcessor'
+    require 'processors/AbstractStringBasedProcessor'
 
-    class CSSProcessor < AbstractProcessor
+    class CSSProcessor < AbstractStringBasedProcessor
 
-      def self.process(filename)
-        css = CSSProcessor.new()
-        css.open_resource(filename)
-      end
-
+      # file patterns for CSS
       def self.file_patterns
         [".css"]
       end
 
-      # setup a link to a CSS file
-      def open_resource(filename)
-        self.document = File.read(filename)
-        self.original_size = File.size(filename)
-        self.resource_name = filename
+      #
+      # FILTER SETS
+      #
 
-        return self
+      # gives the default filterset to run
+      def default_filterset
+        :minify
+      end
+
+      # gives the minify filter to run
+      def filterset_minify
+        [:minify]
+      end
+
+      #
+      # FILTERS
+      #
+
+      # lightweight whitespace crusher; removed excess whitespace, etc.
+      def filter_crush_whitespace
+        
+      end
+
+      # lightweight CSS beautifier based on Regexp
+      def filter_beautify
+
       end
 
       # uses the CSSMin gem to minfy a CSS document using regular expressions
       def filter_minify
-        self.document = CSSMin.minify(document)
-        self.processed_size = document.length
+        document = CSSMin.minify(document)
       end
 
-      # TODO: the real fun begins when we integrate HTML and CSS minification
-      # using shorter ID names, etc.
-
-      # gives
-      def generate
-        run_filter :minify
-        return document
-      end
     end
   end
 end
