@@ -10,8 +10,57 @@
 # is usually fine.
 #
 
-require 'processors/AbstractProcessor'
+module SiteFuel
+  module Processor
 
-class AbstractStringBasedProcessor < AbstractProcessor
-  
+    require 'processors/AbstractProcessor'
+
+    class AbstractStringBasedProcessor < AbstractProcessor
+
+      # lightweight wrapper for opening a resouce
+      def self.process_file(filename)
+        proc = proc.new()
+        proc.open_file(filename)
+        proc.generate()
+      end
+
+      # opens a resource in-memory and returns the generated string
+      def self.process_string(string)
+        proc = proc.new()
+        proc.open_string(string)
+        proc.generate_string
+      end
+
+      # opens a resource from a file
+      def open_file(filename)
+        self.document = File.read(filename)
+        self.original_size = File.size(filename)
+        self.resource_name = filename
+
+        return self
+      end
+
+      # opens a resource directly from a string
+      def open_string(string)
+        self.document = string
+        self.original_size = string.length
+        self.resource_name = '<<in-memory string>>'
+      end
+
+      # generates the actual string
+      def generate_string
+        run_filters @filters
+        self.processed_size = @document.length
+      end
+
+      # generates the string and shoves it into the deployment abstraction
+      def generate
+        generate_string
+      end
+
+      protected
+      attr_accessor :document
+    end
+    
+  end
 end
