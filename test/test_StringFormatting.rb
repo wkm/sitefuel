@@ -1,3 +1,13 @@
+#
+# File::       test_StringFormatting.rb
+# Author::     wkm
+# Copyright::  2009
+# License::    GPL
+#
+# Unit tests for String#cabbrev, String#labbrev, and String#rabbrev
+# methods. The main thing these look for is off-by-one errors.
+#
+
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'

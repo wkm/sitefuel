@@ -1,3 +1,14 @@
+#
+# File::       test_FileComparisons.rb
+# Author::     wkm
+# Copyright::  2009
+# License::    GPL
+#
+# Unit tests for File.equivalent? class method. The method is
+# heuristic based so lots of tests are needed, although perhaps
+# this is a little excessive.
+#
+
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
