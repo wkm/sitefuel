@@ -12,7 +12,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
-require 'mixins/FileComparison'
+require 'extensions/FileComparison'
 
 class TestFileComparion < Test::Unit::TestCase
   def test_equivalent

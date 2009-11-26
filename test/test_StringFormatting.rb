@@ -11,7 +11,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
-require 'mixins/StringFormatting'
+require 'extensions/StringFormatting'
 
 class TestString < Test::Unit::TestCase
   def test_cabbrev

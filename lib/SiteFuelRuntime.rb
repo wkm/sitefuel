@@ -25,8 +25,8 @@ module SiteFuel
   require 'processors/HTMLProcessor'
   require 'processors/CSSProcessor'
   require 'processors/SASSProcessor'
-  require 'mixins/StringFormatting'
-  require 'mixins/FileComparison'
+  require 'extensions/StringFormatting'
+  require 'extensions/FileComparison'
 
   class SiteFuelRuntime
 
