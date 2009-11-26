@@ -30,6 +30,8 @@ module SiteFuel
 
   class SiteFuelRuntime
 
+    include SiteFuel::Logging
+
     # what action is the runtime supposed to preform
     attr_accessor :action
 
@@ -43,6 +45,7 @@ module SiteFuel
 
     def initialize
       @processors = SiteFuelRuntime.find_processors
+      self.logger = SiteFuelLogger.instance
     end
 
     # gives true if the given file (typially a processor) has already been
@@ -130,10 +133,8 @@ module SiteFuel
       begin
         choose_processor(filename)
       rescue Processor::MultipleApplicableProcessors => excep
-        # print the exception
-        # TODO: print [or log] the exception once we have a proper logging
-        # mechanism
-        # puts excep
+        # log the exception
+        warn excep
         excep.chosen_processor
       end
     end
