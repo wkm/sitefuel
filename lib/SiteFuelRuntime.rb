@@ -89,7 +89,7 @@ module SiteFuel
       # all of the classes
       procs = []
       ObjectSpace.each_object(Class) do |cls|
-        if cls.superclass == Processor::AbstractProcessor and
+        if [Processor::AbstractProcessor, Processor::AbstractStringBasedProcessor].include?(cls.superclass) and
            cls.to_s =~ /^.*Processor$/
         then
           procs << cls
@@ -152,7 +152,7 @@ module SiteFuel
         if processor == nil
           @resource_processors[filename] = nil
         else
-          @resource_processors[filename] = processor.process(filename)
+          @resource_processors[filename] = processor.process_file(filename)
         end
       end
 
