@@ -4,6 +4,9 @@
 # Copyright:: 2009
 # License::   GPL
 #
+# Rather lightweight CSS processor; primarily intended to minify CSS, but has
+# basic support for beautifcation as well
+#
 
 module SiteFuel
   module Processor
@@ -25,7 +28,7 @@ module SiteFuel
       #
 
       # gives the default filterset to run
-      def default_filterset
+      def default_filterset 
         :minify
       end
 
@@ -34,21 +37,34 @@ module SiteFuel
         [:minify]
       end
 
+      # beautifies the source
+      def filterset_beautify
+        [:beautify]
+      end
+
+      
+
       #
       # FILTERS
       #
 
-      # lightweight whitespace crusher; removed excess whitespace, etc.
-      def filter_crush_whitespace
+      # strips comments out of CSS using Regexp
+      def filter_strip_comments
+
+      end
+
+      # lightweight minification by removing excess whitespace
+      def filter_clean_whitespace
         
       end
 
-      # lightweight CSS beautifier based on Regexp
+      # lightweight beautifier that works through Regexp, adds whitespace above
+      # line comments, puts each declaration on it's own line. etc.
       def filter_beautify
-
+        document = document
       end
 
-      # uses the CSSMin gem to minfy a CSS document using regular expressions
+      # uses the CSSMin gem to minify a CSS document using regular expressions
       def filter_minify
         document = CSSMin.minify(document)
       end
