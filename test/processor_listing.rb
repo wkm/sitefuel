@@ -13,7 +13,11 @@ $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'SiteFuelRuntime'
 include SiteFuel
 
+SiteFuelRuntime.load_processors
 processors = SiteFuelRuntime.find_processors
+processors = processors.delete_if do |proc| 
+  proc.processor_name =~ /Abstract.*/ 
+end
 processors.each do |proc|
   puts ' | %s | %s |'% [proc.processor_name.ljust(10), proc.file_patterns.join(', ').ljust(30)]
 end
