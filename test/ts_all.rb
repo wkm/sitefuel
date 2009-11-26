@@ -21,7 +21,7 @@ testfiles = Dir[File.join(File.dirname(__FILE__), "test_*.rb")];
   # some whitespace
 
 puts $Divider
-puts bold('Found:')
+puts bold('Found: %d test files' % testfiles.length)
 puts testfiles.join("\n")
 
 puts $Divider
