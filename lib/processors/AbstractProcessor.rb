@@ -136,6 +136,35 @@ module SiteFuel
         names.map { |filter_name| filter_name.sub(/^filter_(.*)$/, '\1').to_sym }
       end
 
+      # gives true if the given filter is known TODO: should this use #filters ?
+      def self.filter?(filter)
+        if respond_to?("filter_" + filter.to_s)
+          return true
+        else
+          return false
+        end
+      end
+
+      # array of filters to run
+      attr_accessor :filters
+
+      # adds a filter to be run
+      def add_filter(filter)
+        if self.filter?(filter)
+          # if the filter exists append it
+          @filters << filter
+        else
+          raise UnknownFilter.new(self, filter)
+        end
+      end
+
+      # runs all filters in #filter
+      def run_filters
+        @filters.uniq.each do |filter|
+          run_filter(filter)
+        end
+      end
+
       # runs a particular filter
       def run_filter(name)
         if respond_to?("filter_" + name.to_s)
@@ -146,9 +175,6 @@ module SiteFuel
       end
 
     protected
-      # gives the raw document handle used by the processor
-      attr_accessor :document
-
       # gives write-access to children classes
       attr_writer :original_size
       attr_writer :processed_size
