@@ -29,13 +29,20 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
 
   def test_processor_picking
     assert_equal Processor::CSSProcessor, @runtime.choose_processor("foo.css")
-
     assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.html")
     assert_equal Processor::HTMLProcessor, @runtime.choose_processor("FOO.HtM")
+
+    assert_equal Processor::CSSProcessor, @runtime.choose_processor!("foo.css")
+    assert_equal Processor::HTMLProcessor, @runtime.choose_processor!("foo.html")
+    assert_equal Processor::HTMLProcessor, @runtime.choose_processor!("FOO.HtM")
 
     assert_nil @runtime.choose_processor("foo.xxxx")
     assert_nil @runtime.choose_processor("foocss")
     assert_nil @runtime.choose_processor("foohtml")
+
+    assert_nil @runtime.choose_processor!("foo.xxxx")
+    assert_nil @runtime.choose_processor!("foocss")
+    assert_nil @runtime.choose_processor!("foohtml")
   end
 
   def test_processor_finding
