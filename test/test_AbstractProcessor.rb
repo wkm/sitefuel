@@ -13,6 +13,8 @@ require 'test/unit'
 require 'SiteFuelLogger'
 require 'processors/AbstractProcessor'
 
+require 'extensions/SymbolComparison'
+
 include SiteFuel
 include SiteFuel::Processor
 
@@ -187,7 +189,7 @@ class TestAbstractProcessor < Test::Unit::TestCase
   end
 
   # configuration testing
-  def test_config
+  def test_config_filters
     a = TestAProcessor.new
 
     a.configure({:filters => :a})
@@ -202,5 +204,21 @@ class TestAbstractProcessor < Test::Unit::TestCase
 
     a.configure({:filters => [:a, :b]})
     assert_equal [:a,:b], a.execution_list
+
+    a.configure({:filtersets => [:light]})
+    assert_equal [:a], a.execution_list
+
+    a.configure({:filtersets => :normal})
+    assert_equal [:a,:b], a.execution_list
+
+    # note: since we're doing #each_pair on a hash, order is not guaranteed,
+    # hence the #sort
+    a.configure({:filters => [:c], :filtersets => :light})
+    assert_equal [:c,:a].sort, a.execution_list.sort
+  end
+
+  # test attempts to add unknown filters/filtersets
+  def test_config_filters_negative
+
   end
 end
