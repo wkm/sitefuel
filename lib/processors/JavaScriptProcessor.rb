@@ -12,33 +12,28 @@ module SiteFuel
 
     require 'processors/AbstractProcessor'
 
-    class JavaScriptProcessor < AbstractProcessor
-      attr_accessor :document
-
-      def self.process(filename)
-        js = JavaScriptProcessor.new
-        js.document = File.read(filename)
-
-        return js
-      end
+    class JavaScriptProcessor < AbstractStringBasedProcessor
 
       def self.file_patterns
         ['.js']
       end
-
-      # use the +JSMin+ library to compact a javascript file
-      def compact
-        @document = JSMin.minify(@document)
-      end
-
+      
       # override AbstractProcessor#processor_name so output shows up as +JS+
       # instead of +JavaScript+.
       def processor_name
         "JS"
       end
 
-      def generate
-        return @document
+      def default_filterset
+        :minify
+      end
+
+      def filterset_minify
+        [:minify]
+      end
+
+      def filter_minify
+        @document = JSMin.minfy(@document)
       end
 
     end
