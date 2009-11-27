@@ -28,7 +28,7 @@ puts $Divider
 puts bold('Loading:')
 
 testfiles.each do |testfile|
-  require testfile
+  load testfile
 end
 
 puts $Divider
