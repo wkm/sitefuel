@@ -162,6 +162,27 @@ class TestAbstractProcessor < Test::Unit::TestCase
     assert_equal [:c, :b], a.add_filter(:b)
 
     assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
 
+
+    # test filter sets
+    assert_equal [:a,:b], a.add_filterset(:normal)
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
+
+    assert_equal [:a,:b,:c], a.add_filterset(:heavy)
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
+
+    # test filters *and* filter sets
+    assert_equal [:c], a.add_filter(:c)
+    assert_equal [:c, :a], a.add_filterset(:light)
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
+
+    assert_equal [:a,:b], a.add_filterset(:normal)
+    assert_equal [:a,:b,:c], a.add_filter(:c)
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
   end
 end

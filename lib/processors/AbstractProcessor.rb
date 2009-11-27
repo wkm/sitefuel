@@ -167,11 +167,13 @@ module SiteFuel
 
       # adds the filters in a filterset to the execution list
       def add_filterset(filterset)
-        if self.filterset?(filterset)
+        if self.class.filterset?(filterset)
           # extract the filters in the filterset and add them to the list
-          filters_in_filterset(filterset).each do |filter|
+          filter_list = self.class.filters_in_filterset(filterset)
+          filter_list.each do |filter|
             add_filter(filter)
           end
+          @execution_list
         else
           raise UnknownFilterset.new(self, filterset)
         end
