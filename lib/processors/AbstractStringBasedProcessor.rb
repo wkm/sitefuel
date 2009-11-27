@@ -17,16 +17,18 @@ module SiteFuel
 
     class AbstractStringBasedProcessor < AbstractProcessor
 
-      # lightweight wrapper for opening a resouce
-      def self.process_file(filename)
+      # lightweight wrapper for opening a resource and generating the file
+      def self.process_file(filename, config = {})
         proc = proc.new()
+        proc.configure(config)
         proc.open_file(filename)
-        proc.generate()
+        proc.generate
       end
 
       # opens a resource in-memory and returns the generated string
-      def self.process_string(string)
+      def self.process_string(string, config = {})
         proc = proc.new()
+        proc.configure(config)
         proc.open_string(string)
         proc.generate_string
       end
