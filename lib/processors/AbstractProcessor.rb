@@ -70,6 +70,7 @@ module SiteFuel
       def initialize
         self.logger = SiteFuelLogger.instance
         @execution_list = []
+        @filters = []
       end
 
 
