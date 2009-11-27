@@ -23,6 +23,25 @@ module SiteFuel
         @processor = processor
         @name = name
       end
+
+      def to_s
+        "'%s' called for processor '%s'" %
+        [@name, @processor.class]
+      end
+    end
+
+    class UnknownFilterset < StandardError
+      attr_reader :processor, :name
+
+      def initialize(processor, name)
+        @processor = processor
+        @name = name
+      end
+
+      def to_s
+        "'%s' called for processor '%s'" %
+        [@name, @processor.class]
+      end
     end
 
     # raised when multipe processors trigger off of a single file
@@ -36,8 +55,8 @@ module SiteFuel
       end
 
       def to_s
-        "MultipleApplicableProcessors: File '%s' triggered processors: %s. Using %s" %
-        [@filename, @resource_processors.join(', '), @chosen_processor]
+        "File '%s' triggered processors: %s. Using %s" %
+        [@filename, @resource_processors.join(', '), @chosen_processor.class]
       end
     end
 
@@ -50,6 +69,7 @@ module SiteFuel
       # setup an AbstractProcessor
       def initialize
         self.logger = SiteFuelLogger.instance
+        @execution_list = []
       end
 
 
@@ -71,6 +91,7 @@ module SiteFuel
         self.to_s.sub(/.*\b(.*)Processor/, '\1')
       end
 
+      
       # gives the file patterns that trigger the processor by default; this
       # behavior can be over-ridden by configuration files.
       #
@@ -97,6 +118,7 @@ module SiteFuel
         return false
       end
 
+      
       # uses #file_pattern_match? to decide if the file can be processed
       # eventually this may use other metrics (like mime types)
       def self.processes_file?(filename)
@@ -111,19 +133,58 @@ module SiteFuel
       #
 
       # gives the default filterset used
-      def default_filterset
-        :whitespace
+      def self.default_filterset
+        nil
+      end
+
+      # lists all filtersets for this processor
+      def self.filtersets
+        names = methods
+        names = names.delete_if{|method| not method =~ /^filterset_.*$/ }
+        names.sort!
+
+        names.map { |filterset| filterset.sub(/^filterset_(.*)$/, '\1').to_sym }
+      end
+
+      # gives true if the given name is of a filter set for this processor
+      def self.filterset?(name)
+        respond_to?("filterset_" + name.to_s)
+      end
+
+      # returns the filters in the given filter set, [] if no such filters
+      # exist
+      def self.filters_in_filterset(name)
+        return [] unless self.filterset?(name)
+
+        filter_list = self.send("filterset_" + name.to_s)
+        
+        if filter_list == nil
+          return []
+        else
+          return filter_list
+        end
+      end
+
+      # adds the filters in a filterset to the execution list
+      def add_filterset(filterset)
+        if self.filterset?(filterset)
+          # extract the filters in the filterset and add them to the list
+          filters_in_filterset(filterset).each do |filter|
+            add_filter(filter)
+          end
+        else
+          raise UnknownFilterset.new(self, filterset)
+        end
       end
 
       # evaluate a filterset
       def run_filterset(name)
-        if respond_to?("filterset_" + name.to_s)
+        if self.class.filter_set?("filterset_" + name.to_s)
           self.send("filterset_" + name.to_s)
         else
           raise UnknownFilterset(self, name)
         end
       end
-
 
 
       #
@@ -132,37 +193,41 @@ module SiteFuel
 
       # lists all the filters implemented by a processor
       def self.filters
-        names = instance_methods.sort.delete_if { |method| not method =~ /^filter_.*$/ }
+        names = instance_methods
+        names = names.delete_if{ |method| not method =~ /^filter_.*$/ }
+        names.sort!
+        
         names.map { |filter_name| filter_name.sub(/^filter_(.*)$/, '\1').to_sym }
       end
 
-      # gives true if the given filter is known TODO: should this use #filters ?
-      def self.filter?(filter)
-        if respond_to?("filter_" + filter.to_s)
-          return true
-        else
-          return false
-        end
+      # gives true if the given filter is known
+      # TODO: should this use #filters
+      def filter?(filter)
+        respond_to?("filter_" + filter.to_s)
       end
 
       # array of filters to run
-      attr_accessor :filters
+      attr_reader :execution_list
 
-      # adds a filter to be run
+      # adds a filter to the execution list
       def add_filter(filter)
-        if self.filter?(filter)
+        if filter?(filter)
           # if the filter exists append it
-          @filters << filter
+          @execution_list << filter
         else
           raise UnknownFilter.new(self, filter)
         end
       end
 
-      # runs all filters in #filter
-      def run_filters
-        @filters.uniq.each do |filter|
-          run_filter(filter)
-        end
+      # clears all filters from the execution list
+      def clear_filters
+        @execution_list = []
+      end
+
+      # drops a filter from the execution list
+      def drop_filter(filter)
+        @execution_list.delete(filter)
+        @execution_list
       end
 
       # runs a particular filter
@@ -171,6 +236,13 @@ module SiteFuel
           self.send("filter_"+name.to_s)
         else
           raise UnknownFilter.new(self, name)
+        end
+      end
+
+      # runs all filters in the execution list
+      def execute
+        @execution_list.uniq.each do |filter|
+          run_filter(filter)
         end
       end
 
