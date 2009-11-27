@@ -71,6 +71,7 @@ module SiteFuel
       # generates the string and shoves it into the deployment abstraction
       def generate
         generate_string
+        return self
       end
 
       protected
