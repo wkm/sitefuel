@@ -66,7 +66,7 @@ module SiteFuel
 
       # uses the CSSMin gem to minify a CSS document using regular expressions
       def filter_minify
-        document = CSSMin.minify(document)
+        @document = CSSMin.minify(document)
       end
 
     end
