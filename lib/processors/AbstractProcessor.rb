@@ -212,7 +212,10 @@ module SiteFuel
       # array of filters to run
       attr_reader :execution_list
 
-      # adds a filter to the execution list
+      # adds a filter or array of filters to the execution list
+      #
+      #  add_filter(:minify)
+      #  add_filter([:beautifytext, :minify])
       def add_filter(filter)
         case filter
         when Array
