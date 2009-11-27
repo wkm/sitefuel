@@ -61,7 +61,7 @@ module SiteFuel
       # lightweight beautifier that works through Regexp, adds whitespace above
       # line comments, puts each declaration on it's own line. etc.
       def filter_beautify
-        document = document
+        @document
       end
 
       # uses the CSSMin gem to minify a CSS document using regular expressions
