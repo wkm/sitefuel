@@ -18,7 +18,7 @@ class TestSymbolComparisons < Test::Unit::TestCase
     assert_equal  0, :a<=>:a
     assert_equal  1, :b<=>:a
 
-    assert_equal -1, :a<=>:ab
+    assert_equal(-1, :a<=>:ab)
   end
 
   def test_sort
