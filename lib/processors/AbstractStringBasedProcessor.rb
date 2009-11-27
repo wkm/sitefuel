@@ -19,7 +19,7 @@ module SiteFuel
 
       # lightweight wrapper for opening a resource and generating the file
       def self.process_file(filename, config = {})
-        proc = proc.new()
+        proc = self.new()
         proc.configure(config)
         proc.open_file(filename)
         proc.generate
@@ -27,8 +27,19 @@ module SiteFuel
 
       # opens a resource in-memory and returns the generated string
       def self.process_string(string, config = {})
-        proc = proc.new()
+        proc = self.new()
         proc.configure(config)
+        proc.open_string(string)
+        proc.generate_string
+      end
+
+      # mostly intended for debugging; applies a single filter directly
+      # to a string
+      #
+      # filter can be either a single or multiple filters
+      def self.filter_string(filter, string)
+        proc = self.new()
+        proc.configure(:filters => filter)
         proc.open_string(string)
         proc.generate_string
       end
@@ -51,8 +62,10 @@ module SiteFuel
 
       # generates the actual string
       def generate_string
-        run_filters @filters
+        self.execute
         self.processed_size = @document.length
+
+        document
       end
 
       # generates the string and shoves it into the deployment abstraction
