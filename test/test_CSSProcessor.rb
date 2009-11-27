@@ -30,4 +30,14 @@ class TestCSSProcessor < Test::Unit::TestCase
   def test_name
     assert_equal "CSS", CSSProcessor.processor_name
   end
+
+  def test_minify
+    p CSSProcessor.process_string(
+      <<-END
+        body {
+          color: #000;
+        }
+      END
+    )
+  end
 end
