@@ -25,6 +25,22 @@ class TestAProcessor < AbstractProcessor
   def self.file_patterns
     [".testA", ".test-a", ".test.a", "_test_a"]
   end
+
+  def self.default_filterset
+    :normal
+  end
+
+  def self.filterset_normal
+    [:a, :b]
+  end
+
+  def self.filterset_heavy
+    [:a, :b, :c]
+  end
+
+  def self.filterset_light
+    [:a]
+  end
 end
 
 class TestBProcessor < AbstractProcessor
@@ -115,5 +131,37 @@ class TestAbstractProcessor < Test::Unit::TestCase
     proc.debug 'testing the value of "i" :P'
     assert_equal debug+1, log.debug_count
   end
-  
+
+  # filter set testing
+  def test_filtersets
+    assert_equal [:heavy, :light, :normal], TestAProcessor.filtersets
+    assert_equal :normal, TestAProcessor.default_filterset
+
+    assert_equal [:a,:b], TestAProcessor.filters_in_filterset(:normal)
+    assert_equal [:a,:b,:c], TestAProcessor.filters_in_filterset(:heavy)
+    assert_equal [:a], TestAProcessor.filters_in_filterset(:light)
+  end
+
+  # execution list testing
+  def test_execution_list
+    a = TestAProcessor.new
+
+    # with normal filters
+    assert_equal [:b], a.add_filter(:b)
+    assert_equal [:b, :a], a.add_filter(:a)
+    assert_equal [:b, :a], a.execution_list
+
+    assert_equal [:b, :a, :c], a.add_filter(:c)
+    assert_equal [:b, :a, :c], a.execution_list
+
+    assert_equal [:a, :c], a.drop_filter(:b)
+    assert_equal [:c], a.drop_filter(:a)
+    assert_equal [], a.drop_filter(:c)
+
+    assert_equal [:c], a.add_filter(:c)
+    assert_equal [:c, :b], a.add_filter(:b)
+
+    assert_equal [], a.clear_filters
+
+  end
 end
