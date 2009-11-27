@@ -248,6 +248,44 @@ module SiteFuel
         end
       end
 
+
+      #
+      # CONFIGURATION SUPPORT
+      #
+      def configure(config)
+        if config == nil  or  config == {}
+          add_filterset(self.class.default_filterset)
+        else
+          config.each_pair do |k, v|
+            set_configuration(k, v)
+          end
+        end
+      end
+
+    private
+      def set_configuration(key, value)
+        case key
+        when :filters
+          case value
+          when Array
+            value.each { |v| add_filter(v) }
+          when Symbol, String
+            add_filter(v)
+          end
+
+        when :filtersets
+          case value
+          when Array
+            value.each { |v| add_filterset(v) }
+          when Symbol, String
+            add_filterset(v)
+          end
+
+        else
+          raise UnknownConfigurationOption(self.class, key, value)
+        end
+      end
+
     protected
       # gives write-access to children classes
       attr_writer :original_size
