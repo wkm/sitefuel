@@ -185,4 +185,22 @@ class TestAbstractProcessor < Test::Unit::TestCase
     assert_equal [], a.clear_filters
     assert_equal [], a.execution_list
   end
+
+  # configuration testing
+  def test_config
+    a = TestAProcessor.new
+
+    a.configure({:filters => :a})
+    assert_equal [:a], a.execution_list
+
+    # test that filters are cleared before being set
+    a.configure({:filters => :b})
+    assert_equal [:b], a.execution_list
+
+    a.configure({:filters => [:a]})
+    assert_equal [:a], a.execution_list
+
+    a.configure({:filters => [:a, :b]})
+    assert_equal [:a,:b], a.execution_list
+  end
 end
