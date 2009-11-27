@@ -253,6 +253,7 @@ module SiteFuel
       # CONFIGURATION SUPPORT
       #
       def configure(config)
+        @filters_cleared = false
         if config == nil  or  config == {}
           add_filterset(self.class.default_filterset)
         else
@@ -260,13 +261,17 @@ module SiteFuel
             set_configuration(k, v)
           end
         end
+        @filters_cleared = false
       end
 
     private
       def set_configuration(key, value)
         case key
         when :filters
-          clear_filters
+          if not @filters_cleared
+            clear_filters
+            @filters_cleared = true
+          end
           
           case value
           when Array
@@ -276,7 +281,10 @@ module SiteFuel
           end
 
         when :filtersets
-          clear_filters
+          if not @filters_cleared
+            clear_filters
+            @filters_cleared = true
+          end
 
           case value
           when Array
