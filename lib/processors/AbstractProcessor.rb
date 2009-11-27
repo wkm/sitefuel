@@ -214,11 +214,17 @@ module SiteFuel
 
       # adds a filter to the execution list
       def add_filter(filter)
-        if filter?(filter)
-          # if the filter exists append it
-          @execution_list << filter
-        else
-          raise UnknownFilter.new(self, filter)
+        case filter
+        when Array
+          filter.each do |f|
+            add_filter f
+          end
+        when Symbol, String
+          if filter?(filter)
+            @execution_list << filter
+          else
+            raise UnknownFilter.new(self, filter)
+          end
         end
       end
 
