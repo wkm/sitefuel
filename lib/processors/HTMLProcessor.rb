@@ -14,32 +14,32 @@ module SiteFuel
     require 'rubygems'
     require 'hpricot'
 
-    require 'processors/AbstractProcessor'
+    require 'processors/AbstractStringBasedProcessor'
 
-    class HTMLProcessor < AbstractProcessor
-
-      attr_accessor :document
-      attr_reader :original_size, :processed_size, :resource_name
-
-      def self.process(filename)
-        html = HTMLProcessor.new
-        html.open_resource(filename)
-      end
-
-      # setup a link to the HTML file
-      def open_resource(filename)
-        self.document = open(filename) { |f| Hpricot(f, :fixup_tags => true) }
-        self.original_size = File.size(filename)
-        self.resource_name = filename
-        
-        return self
-      end
+    class HTMLProcessor < AbstractStringBasedProcessor
 
       # gives the file patterns which this processor will match
       def self.file_patterns
         # TODO: add rhtml, php, etc.
         [".html", ".htm"]
       end
+
+      def default_filterset
+        :minify
+      end
+
+      def filterset_minify
+        [:minify]
+      end
+
+      def filterset_beautify
+        [:beautifytext, :beautifyquotes, :beautifydashes]
+      end
+
+
+      #
+      # FILTERS
+      #
 
       def filter_whitespace
         return if document == nil
@@ -63,19 +63,10 @@ module SiteFuel
       end
 
       # cleans up the various dash forms:
-      #
-      #  a = {:a => 1, :b => 2}
       def filter_beautifydashes
         
       end
 
-      def generate
-        run_filter :whitespace
-        text = document.to_s
-        self.processed_size = text.length
-        return text
-      end
     end
-
   end
 end
