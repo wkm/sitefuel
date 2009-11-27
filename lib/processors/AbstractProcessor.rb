@@ -266,19 +266,23 @@ module SiteFuel
       def set_configuration(key, value)
         case key
         when :filters
+          clear_filters
+          
           case value
           when Array
             value.each { |v| add_filter(v) }
           when Symbol, String
-            add_filter(v)
+            add_filter(value)
           end
 
         when :filtersets
+          clear_filters
+
           case value
           when Array
             value.each { |v| add_filterset(v) }
           when Symbol, String
-            add_filterset(v)
+            add_filterset(value)
           end
 
         else
