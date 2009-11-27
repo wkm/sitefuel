@@ -32,12 +32,18 @@ class TestCSSProcessor < Test::Unit::TestCase
   end
 
   def test_minify
-    p CSSProcessor.process_string(
+    # test: whitespace removal; hexcode compaction; comment stripping
+    assert_equal "body{color:#000;}", CSSProcessor.filter_string(
+      :minify,
       <<-END
         body {
-          color: #000;
+          /* comments should be stripped */
+          color: #000000;
         }
       END
     )
+
+    # TODO need many more unit tests here; since it's based on CSSMin we might
+    # just inherit those.
   end
 end
