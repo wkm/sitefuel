@@ -9,5 +9,4 @@
 # Bash script to test coverage of the unit test suite
 #
 
-set thresh='--threshold 100'
-rcov --xrefs --sort coverage -i 'sitefuel/' -x '.*' $thresh --no-html -T test_*.rb
+rcov --sort coverage -i 'sitefuel/' -x '.*' --no-html -T test_*.rb
