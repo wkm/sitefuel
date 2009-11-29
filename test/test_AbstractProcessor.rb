@@ -199,6 +199,10 @@ class TestAbstractProcessor < Test::Unit::TestCase
     a.configure({:filters => :b})
     assert_equal [:b], a.execution_list
 
+    # test that filters aren't changed if they're not set
+#    a.configure({})
+#    assert_equal [:b], a.execution_list
+
     a.configure({:filters => [:a]})
     assert_equal [:a], a.execution_list
 
