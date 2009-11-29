@@ -1,11 +1,9 @@
 #!/usr/bin/ruby -w -rubygems
 
+# == Synopsis
 #
-# File::      sitefuel.rb
-# Author::    wkm
-# Copyright:: 2009
-# License::   GPL
-#
+# A lightweight ruby framework for processing and deploying websites, either
+# from
 #
 # === Introduction
 # sitefuel is a lightweight ruby framework for deploying websites directly from
@@ -24,6 +22,27 @@
 #
 # Specify a non-default deployment file:
 # <pre>sitefuel process /var/www/ -c customdeployment.yml</pre>
+#
+#
+# == Author
+# wkm, Zanoccio, LLC.
+#
+# == Copyright
+# Copyright (c) 2009 Zanoccio.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
 # add source/ to the load path
@@ -92,8 +111,8 @@ def parse_command_line(runtime)
     #       argument, missing argument, etc.)
     puts_and_exit "couldn\'t parse command line: #{exception}", $HELP_HINT_LINE
   end
-  
-  
+
+
   # note that --help will have already been intercepted but 'help' still needs
   # special treatment
   puts_and_exit 'no command given', $HELP_HINT_LINE if commands.length < 1
