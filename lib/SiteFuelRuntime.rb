@@ -21,10 +21,9 @@ module SiteFuel
 
   include Term::ANSIColor
 
+  require 'SiteFuelLogger'
+
   require 'environment'
-  require 'processors/HTMLProcessor'
-  require 'processors/CSSProcessor'
-  require 'processors/SASSProcessor'
   require 'extensions/StringFormatting'
   require 'extensions/FileComparison'
 
@@ -56,21 +55,29 @@ module SiteFuel
           return true
         end
       end
-
+      
       return false
     end
 
     # finds all processors under processors/ and loads them. Any file matching
     # *Processor.rb will be loaded
     def self.load_processors
+      dir = File.dirname(__FILE__)+File::SEPARATOR
+
       # build up the search pattern by taking this file's direction and shoving
       # on the search patt
-      patt = File.dirname(__FILE__)
-      patt = File.join(patt, 'processors/*Processor.rb')
+      patt = File.join(dir, 'processors/*Processor.rb')
 
-      # get rid of any processor we've already loaded (using a super crude
-      # metric)
-      files = Dir[patt].delete_if { |file| processor_loaded?(file) }
+      # find all file matching pattern
+      files = Dir[patt]
+      
+      # rip off the path prefix so 'sitefuel/lib/foo.rb' becomes 'foo.rb'
+      files = files.map do |filename|
+        filename.gsub(Regexp.new("^"+Regexp.escape(dir)), '')
+      end
+
+      # get rid of anything we've loaded
+      files = files.delete_if { |file| processor_loaded?(file) }
 
       # load whatever files we're left with
       files.each { |f| require f }

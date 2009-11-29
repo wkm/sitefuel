@@ -6,6 +6,7 @@
 #
 
 module SiteFuel
+  
   require 'Logger'
   require 'singleton'
 
