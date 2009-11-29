@@ -28,17 +28,17 @@ module SiteFuel
       #
 
       # gives the default filterset to run
-      def default_filterset 
+      def self.default_filterset
         :minify
       end
 
       # gives the minify filter to run
-      def filterset_minify
+      def self.filterset_minify
         [:minify]
       end
 
       # beautifies the source
-      def filterset_beautify
+      def self.filterset_beautify
         [:beautify]
       end
 
