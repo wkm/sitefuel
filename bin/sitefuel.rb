@@ -22,6 +22,12 @@
 # * Getting started: http://sitefuel.org/getstarted
 # * Documentation: http://sitefuel.org/documentation
 #
+# == Commands
+#
+# deploy::      Deploy a site using sitefuel.
+# process::     Modify an existing website inplace.
+# help::        Show this message.
+#
 # == Examples
 # Process an already deployed site:
 #  sitefuel process /var/www/
