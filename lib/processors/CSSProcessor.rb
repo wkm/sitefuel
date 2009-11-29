@@ -42,7 +42,7 @@ module SiteFuel
         [:beautify]
       end
 
-      
+
 
       #
       # FILTERS
@@ -55,7 +55,7 @@ module SiteFuel
 
       # lightweight minification by removing excess whitespace
       def filter_clean_whitespace
-        
+
       end
 
       # lightweight beautifier that works through Regexp, adds whitespace above
