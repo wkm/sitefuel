@@ -24,15 +24,15 @@ module SiteFuel
         [".html", ".htm"]
       end
 
-      def default_filterset
+      def self.default_filterset
         :minify
       end
 
-      def filterset_minify
-        [:minify]
+      def self.filterset_minify
+        [:whitespace]
       end
 
-      def filterset_beautify
+      def self.filterset_beautify
         [:beautifytext, :beautifyquotes, :beautifydashes]
       end
 
@@ -44,13 +44,16 @@ module SiteFuel
       def filter_whitespace
         return if document == nil
 
-        document.traverse_text do |txt|
+        htmlstruc = Hpricot.parse(document, :fixtags)
+        htmlstruc.traverse_text do |txt|
           if txt.content =~ /^\s+$/ then
             txt.content = ''
           else
             txt.content = txt.content.gsub(/\s+/, ' ')
           end
         end
+
+        @document = htmlstruc.to_s
       end
 
       def filter_beautifytext
