@@ -29,7 +29,10 @@ puts bold('Loading:')
 
 testfiles.each do |testfile|
   load testfile
+  printf '.'
+  STDOUT.flush
 end
+puts
 
 puts $Divider
 puts bold('Results:')
