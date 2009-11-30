@@ -128,9 +128,9 @@ def parse_command_line(runtime)
     runtime.deploy_from = commands[1]
     runtime.deploy
 
-  when 'process'
+  when 'stage'
     runtime.deploy_from = commands[1]
-    runtime.process
+    runtime.stage
     
   else
     puts_and_exit "unknown command: '#{commands[0]}'", $HELP_HINT_LINE

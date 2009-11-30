@@ -108,7 +108,7 @@ module SiteFuel
 
     # lists the actions which are possible with this runtime.
     def actions
-      [ :deploy, :process ]
+      [ :deploy, :stage ]
     end
 
     # gives the array of processors available to this runtime
@@ -146,10 +146,10 @@ module SiteFuel
       end
     end
 
-    def process
+    def stage
       return nil if @deploy_from == nil
 
-      puts bold('Processing:')
+      puts bold('Staging:')
 
       # find all files under deploy_from
       files = find_all_files @deploy_from
@@ -180,8 +180,8 @@ module SiteFuel
 
     # create a deployment
     def deploy
-      # first we have to process the files
-      process
+      # first we have to stage the files
+      stage
 
       files = find_all_files @deploy_from
 
