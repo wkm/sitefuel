@@ -20,7 +20,7 @@ module SiteFuel
     require 'processors/AbstractProcessor'
     require 'processors/CSSProcessor'
 
-    class SassProcessor < AbstractProcessor
+    class SASSProcessor < AbstractProcessor
       
     end
   end
