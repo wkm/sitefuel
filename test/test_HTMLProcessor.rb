@@ -46,5 +46,13 @@ class TestHTMLProcessor < Test::Unit::TestCase
         %q{<p>"Really?" Alice asked.<br>"Yes. Just yesterday." said Bob.}
       )
     )
+
+    assert_equal(
+      %q{<p>This was Alice&#8217;s car; she bought it from the Hoover&#8217;s.</p>},
+      HTMLProcessor.filter_string(
+        :beautify_quotes,
+        %q{<p>This was Alice's car; she bought it from the Hoover's.</p>}
+      )
+    )
   end
 end

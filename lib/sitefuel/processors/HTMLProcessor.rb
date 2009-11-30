@@ -62,15 +62,15 @@ module SiteFuel
       end
 
       def self.default_filterset
-        :minify
+        :beautify
       end
 
       def self.filterset_minify
-        [:whitespace, :beautify_quotes]
+        [:whitespace, :minify_javascript, :minify_styles]
       end
 
       def self.filterset_beautify
-        [:beautify_quotes, :beautify_dashes]
+        [:beautify_quotes, :beautify_dashes, :beautify_arrows]
       end
 
 
@@ -108,20 +108,30 @@ module SiteFuel
         end
       end
 
+      # minifies embedded JavaScript code
+      def filter_minify_javascript
+
+      end
+
+      # minifies embedded CSS styles
+      def filter_minify_styles
+        
+      end
+
       # cleans up double and single quotes in textual objects
-      # <pre>"hello world"  =>  &#8220;hello world&#8221;</pre>
+      # <pre>"hello world"  =>  &#8220; hello world&#8221;</pre>
       def filter_beautify_quotes
         traverse do |tag,txt|
           txt.content = txt.content.
+            # apostrophes
+            gsub(/(\S)'(s)/i,   '\1%s\2' % SINGLE_QUOTE_CLOSE).
+            gsub(/(\Ss)'(\s)/i,     '\1%s\2'   % SINGLE_QUOTE_CLOSE).
+
             # double quotes
             gsub(/"(\S.*?\S)"/, '%s\1%s' % [DOUBLE_QUOTE_OPEN, DOUBLE_QUOTE_CLOSE]).
 
             # single quotes
-            gsub(/'(\S.*?\S)'/, '%s\1%s' % [SINGLE_QUOTE_OPEN, SINGLE_QUOTE_CLOSE]).
-
-            # apostrophes
-            gsub(/(\S)'(s)/i,   '\1%s\2' % SINGLE_QUOTE_CLOSE).
-            gsub(/(\Ss)'/i,     '\1%s'   % SINGLE_QUOTE_CLOSE)
+            gsub(/'(\S.*?\S)'/, '%s\1%s' % [SINGLE_QUOTE_OPEN, SINGLE_QUOTE_CLOSE])
         end
       end
 
@@ -132,6 +142,18 @@ module SiteFuel
         # TODO en-dashes between two numbers
         # TODO em-dashes between words
         # ...
+      end
+
+      def filter_beautify_arrows
+        traverse do |tag,txt|
+          txt.content = txt.content.
+            gsub(/\b-->\b/, ARROW_RIGHTWARD).
+            gsub(/\b<--\b/, ARROW_LEFTWARD).
+            gsub(/\b<->\b/, ARROW_LEFTRIGHT).
+            gsub(/\b==>\b/, ARROW_DOUBLE_RIGHTWARD).
+            gsub(/\b<==\b/, ARROW_DOUBLE_LEFTWARD).
+            gsub(/\b<=>\b/, ARROW_DOUBLE_LEFTRIGHT)
+        end
       end
 
     end
