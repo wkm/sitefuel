@@ -8,7 +8,7 @@
 module SiteFuel
   module Processor
 
-    require 'processors/AbstractProcessor'
+    require 'sitefuel/processors/AbstractProcessor'
 
     
     # Defines an abstract processor that offloads the work onto an external program.

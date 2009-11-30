@@ -7,7 +7,7 @@
 # Adds File.equivalent? that tries to guess whether two files are equivalent
 #
 
-require 'extensions/ArrayComparisons'
+require 'sitefuel/extensions/ArrayComparisons'
 
 class File
   # gives true if one of the paths is the ending of another path

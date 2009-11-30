@@ -21,11 +21,14 @@ module SiteFuel
 
   include Term::ANSIColor
 
-  require 'SiteFuelLogger'
+  require 'sitefuel/SiteFuelLogger'
 
-  require 'environment'
-  require 'extensions/StringFormatting'
-  require 'extensions/FileComparison'
+  require 'sitefuel/environment'
+  require 'sitefuel/extensions/StringFormatting'
+  require 'sitefuel/extensions/FileComparison'
+
+  # we need the AbstractProcessor symbol when we go child hunting
+  require 'sitefuel/processors/AbstractProcessor'
 
   class SiteFuelRuntime
 
@@ -62,11 +65,12 @@ module SiteFuel
     # finds all processors under processors/ and loads them. Any file matching
     # *Processor.rb will be loaded
     def self.load_processors
-      dir = File.dirname(__FILE__)+File::SEPARATOR
+      dir = File.dirname(__FILE__).split(File::SEPARATOR)
+      dir = File.join(*dir[0..-2]) + File::SEPARATOR
 
-      # build up the search pattern by taking this file's direction and shoving
+      # build up the search pattern by taking this file's directory and shoving
       # on the search patt
-      patt = File.join(dir, 'processors/*Processor.rb')
+      patt = File.join(dir, 'sitefuel/processors/*Processor.rb')
 
       # find all file matching pattern
       files = Dir[patt]
@@ -96,7 +100,7 @@ module SiteFuel
       # all of the classes
       procs = []
       ObjectSpace.each_object(Class) do |cls|
-        if [Processor::AbstractProcessor, Processor::AbstractStringBasedProcessor].include?(cls.superclass) and
+        if cls.ancestors.include?(Processor::AbstractProcessor) and
            cls.to_s =~ /^.*Processor$/
         then
           procs << cls

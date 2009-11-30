@@ -11,7 +11,8 @@ $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
 require 'Logger'
-require 'SiteFuelLogger'
+
+require 'sitefuel/SiteFuelLogger'
 
 include SiteFuel
 

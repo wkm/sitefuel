@@ -68,7 +68,7 @@ require 'rubygems'
 require 'rdoc/usage'
 require 'term/ansicolor'
 
-require 'SiteFuelRuntime'
+require 'sitefuel/SiteFuelRuntime'
 
 include Term::ANSIColor
 

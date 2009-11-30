@@ -13,7 +13,7 @@
 module SiteFuel
   module Processor
 
-    require 'processors/AbstractProcessor'
+    require 'sitefuel/processors/AbstractProcessor'
 
     class AbstractStringBasedProcessor < AbstractProcessor
 

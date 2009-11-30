@@ -10,10 +10,10 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
-require 'SiteFuelLogger'
-require 'processors/AbstractProcessor'
+require 'sitefuel/SiteFuelLogger'
+require 'sitefuel/processors/AbstractProcessor'
 
-require 'extensions/SymbolComparison'
+require 'sitefuel/extensions/SymbolComparison'
 
 include SiteFuel
 include SiteFuel::Processor

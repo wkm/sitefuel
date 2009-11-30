@@ -10,7 +10,7 @@
 module SiteFuel
   module Processor
 
-    require 'SiteFuelLogger'
+    require 'sitefuel/SiteFuelLogger'
 
     # raised when a method isn't implemented by a child class.
     class NotImplemented < StandardError; end

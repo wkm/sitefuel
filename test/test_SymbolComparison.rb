@@ -10,7 +10,7 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'test/unit'
-require 'extensions/SymbolComparison'
+require 'sitefuel/extensions/SymbolComparison'
 
 class TestSymbolComparisons < Test::Unit::TestCase
   def test_spaceship

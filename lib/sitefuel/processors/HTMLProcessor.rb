@@ -14,7 +14,7 @@ module SiteFuel
     require 'rubygems'
     require 'hpricot'
 
-    require 'processors/AbstractStringBasedProcessor'
+    require 'sitefuel/processors/AbstractStringBasedProcessor'
 
     class HTMLProcessor < AbstractStringBasedProcessor
 

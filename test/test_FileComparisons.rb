@@ -12,7 +12,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
-require 'extensions/FileComparison'
+require 'sitefuel/extensions/FileComparison'
 
 class TestFileComparion < Test::Unit::TestCase
   def test_equivalent

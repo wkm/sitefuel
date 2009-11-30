@@ -10,7 +10,7 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'test/unit'
-require 'processors/PNGProcessor'
+require 'sitefuel/processors/PNGProcessor'
 
 include SiteFuel::Processor
 
