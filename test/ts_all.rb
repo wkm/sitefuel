@@ -29,7 +29,7 @@ puts bold('Loading:')
 
 testfiles.each do |testfile|
   load testfile
-  printf '.'
+  putc '.'
   STDOUT.flush
 end
 puts
