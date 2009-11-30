@@ -1,10 +1,10 @@
 #
-# File::       SASSProcessor.rb
+# File::       HAMLProcessor.rb
 # Author::     wkm
 # Copyright::  2009
 # License::    GPL
 #
-# processes .sass stylesheets to generate the associated CSS
+# processes .haml source files to generate the associated HTML
 #
 
 module SiteFuel
@@ -18,10 +18,9 @@ module SiteFuel
     silently { require 'haml' }
 
     require 'processors/AbstractProcessor'
-    require 'processors/CSSProcessor'
 
-    class SASSProcessor < AbstractProcessor
-      
+    class HAMLProcessor < AbstractProcessor
+
     end
   end
 end
