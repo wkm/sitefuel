@@ -36,7 +36,7 @@ module SiteFuel
       # mostly intended for debugging; applies a single filter directly
       # to a string
       #
-      # filter can be either a single or multiple filters
+      # filter can either be a single filter or an array of filters
       def self.filter_string(filter, string)
         proc = self.new()
         proc.configure(:filters => filter)
