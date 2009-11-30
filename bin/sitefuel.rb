@@ -89,7 +89,7 @@ def parse_command_line(runtime)
 
   opts.on('-oARG', '-o=ARG', '-o PLACE', '--output=ARG', '--output PLACE', String,
           'Where to put a deployed site') do |out|
-    runtime.deploy_from = out
+    runtime.deploy_to = out
   end
   opts.on('-v', '--version', 'Gives the version of sitefuel') {|| puts 'sitefuel ' + $SiteFuelVersion.join('.')}
   opts.on('--[no-]verbose', 'Cause sitefuel to be verbose, listing actions as they are preformed') {|| puts 'cause sitefuel to be verbose listing actions as they are preformed' }
