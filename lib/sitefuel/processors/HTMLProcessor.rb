@@ -66,7 +66,7 @@ module SiteFuel
       end
 
       def self.filterset_minify
-        [:whitespace]
+        [:whitespace, :beautify_quotes]
       end
 
       def self.filterset_beautify
@@ -112,7 +112,16 @@ module SiteFuel
       # <pre>"hello world"  =>  &#8220;hello world&#8221;</pre>
       def filter_beautify_quotes
         traverse do |tag,txt|
-          txt.content = txt.content.gsub(/"(\S.*?\S)"/, '%s\1%s' % [DOUBLE_QUOTE_OPEN, DOUBLE_QUOTE_CLOSE])
+          txt.content = txt.content.
+            # double quotes
+            gsub(/"(\S.*?\S)"/, '%s\1%s' % [DOUBLE_QUOTE_OPEN, DOUBLE_QUOTE_CLOSE]).
+
+            # single quotes
+            gsub(/'(\S.*?\S)'/, '%s\1%s' % [SINGLE_QUOTE_OPEN, SINGLE_QUOTE_CLOSE]).
+
+            # apostrophes
+            gsub(/(\S)'(s)/i,   '\1%s\2' % SINGLE_QUOTE_CLOSE).
+            gsub(/(\Ss)'/i,     '\1%s'   % SINGLE_QUOTE_CLOSE)
         end
       end
 
@@ -120,7 +129,9 @@ module SiteFuel
       # <pre>12--13  =>  12&#8211;13</pre>
       # <pre>the car---it was red---was destroyed  =>  ...&#8212;it was red&#8212;...</pre>
       def filter_beautify_dashes
-        
+        # TODO en-dashes between two numbers
+        # TODO em-dashes between words
+        # ...
       end
 
     end
