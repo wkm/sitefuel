@@ -47,6 +47,13 @@ module SiteFuel
       MULTIPLICATION_SIGN      = '&#215;'
 
 
+      # list of tags which have proper text items inside them
+      TEXTUAL_TAGS             = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+      
+      # filter for use with XPath searches
+      TEXTUAL_TAGS_FILTER      = TEXTUAL_TAGS.join('|')
+
+
 
       # gives the file patterns which this processor will match
       def self.file_patterns
@@ -63,7 +70,7 @@ module SiteFuel
       end
 
       def self.filterset_beautify
-        [:beautify_text, :beautify_quotes, :beautify_dashes]
+        [:beautify_quotes, :beautify_dashes]
       end
 
 
@@ -73,12 +80,22 @@ module SiteFuel
 
       # before any filters are run parse the document with hpricot
       def setup_filters
-        @htmlstruc = Hpricot.parse(document, :fixtags)
+        @htmlstruc = Hpricot.parse(document)
       end
 
-      # after all the filters are run dump the HTML as a string
+      # after all the filters are run dump the HTML as a string and do a
+      # tiny bit of post processing
       def finish_filters
-        @document = @htmlstruc.to_s
+        # do a last minute, ugly +br+ cleanup
+        @document = @htmlstruc.to_s.gsub('<br />', '<br>')
+      end
+
+      def traverse(patterns = TEXTUAL_TAGS_FILTER, &block)
+        (@htmlstruc/patterns).each do |tag|
+          tag.traverse_text do |txt|
+            block.call(tag.pathname, txt)
+          end
+        end
       end
 
       def filter_whitespace
@@ -91,20 +108,18 @@ module SiteFuel
         end
       end
 
-      def filter_beautify_quotes
-        
-      end
-
-
       # cleans up double and single quotes in textual objects
       # <pre>"hello world"  =>  &#8220;hello world&#8221;</pre>
-      def filter_beautifyquotes
+      def filter_beautify_quotes
+        traverse do |tag,txt|
+          txt.content = txt.content.gsub(/"(\S.*?\S)"/, '%s\1%s' % [DOUBLE_QUOTE_OPEN, DOUBLE_QUOTE_CLOSE])
+        end
       end
 
       # cleans up the various dash forms:
       # <pre>12--13  =>  12&#8211;13</pre>
       # <pre>the car---it was red---was destroyed  =>  ...&#8212;it was red&#8212;...</pre>
-      def filter_beautifydashes
+      def filter_beautify_dashes
         
       end
 
