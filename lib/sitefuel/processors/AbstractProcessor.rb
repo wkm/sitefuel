@@ -203,7 +203,12 @@ module SiteFuel
         names.map { |filter_name| filter_name.sub(/^filter_(.*)$/, '\1').to_sym }
       end
 
-      # gives true if the given filter is known
+      # gives true if the given filter is known for this processor class
+      def self.filter?(name)
+        filters.include?(name.to_sym)
+      end
+
+      # gives true if the given filter is known for this processor instance
       # TODO: should this use #filters
       def filter?(filter)
         respond_to?("filter_" + filter.to_s)
