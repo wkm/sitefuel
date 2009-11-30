@@ -258,6 +258,12 @@ module SiteFuel
         end
       end
 
+      def save(basepath)
+        File.open(File.join(basepath, resource_name), 'w') do |fhndl|
+          fhndl.write(document.to_s)
+        end
+      end
+
 
       #
       # CONFIGURATION SUPPORT

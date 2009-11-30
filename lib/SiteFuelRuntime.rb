@@ -150,6 +150,8 @@ module SiteFuel
     def deploy
       return nil if @deploy_from == nil
 
+      puts bold('Processing:')
+
       # find all files under deploy_from
       files = find_all_files @deploy_from
 
@@ -174,6 +176,26 @@ module SiteFuel
           puts '%s %s %4.2f' % [bold(processor.class.processor_name.ljust(8)), filename.cabbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
         end
       end
+
+      return if @deploy_to == nil
+      puts
+      puts bold('Deploying:')
+
+      unless File.exists?(@deploy_to)
+        Dir.mkdir(@deploy_to)
+      end
+      # write out content
+      files.each do |filename|
+        results = @resource_processors[filename]
+        if results == nil
+          putc 'I'
+        else
+          putc '.'
+          results.save(@deploy_to)
+        end
+        STDOUT.flush
+      end
+      puts
     end
 
     # gives an array listing
