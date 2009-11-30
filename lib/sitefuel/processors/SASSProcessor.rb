@@ -21,6 +21,14 @@ module SiteFuel
 
     class SASSProcessor < AbstractProcessor
       
+      def self.default_filterset
+        :generate
+      end
+
+      def self.filterset_generate
+        []
+      end
+
     end
   end
 end

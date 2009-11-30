@@ -18,6 +18,14 @@ module SiteFuel
       def self.file_patterns
         ['.png']
       end
+
+      def self.default_filterset
+        :crush
+      end
+
+      def self.filterset_crush
+        []
+      end
     end
 
   end
