@@ -15,14 +15,18 @@ h2 {
 h3 { 
     font-size: 13pt;
     font-weight: normal;
-    font-style: italic;
+    text-transform: lowercase;
+    font-variant: small-caps;
+    margin-top: 2.5em;
+    margin-left: 1em
 }
-h3:before { 
-    content: '#### ';
+h2 + h3 {
+    margin-top: 0;
 }
 
 p {
     line-height: 130%;
+    margin-left: 1em;
     width: 30em;
 }
 
