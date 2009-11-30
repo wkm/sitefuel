@@ -101,7 +101,8 @@ module SiteFuel
       procs = []
       ObjectSpace.each_object(Class) do |cls|
         if cls.ancestors.include?(Processor::AbstractProcessor) and
-           cls.to_s =~ /^.*Processor$/
+           cls.to_s =~ /^.*Processor$/ and
+           not cls.to_s =~ /^.*Abstract.*Processor$/
         then
           procs << cls
         end
