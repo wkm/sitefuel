@@ -8,8 +8,7 @@
     <body>
         <h1>HTML and CSS deployment test for <span class='l'>site<span class='f'>fuel</span></span></h1>
         <p>
-            This is a baseline test of the HTML and CSS deployment modules
-            in sitefuel.
+            This is a baseline test of the HTML and CSS processors in sitefuel.
         </p>
 
         <h2>Testing tweakers</h2>
@@ -23,8 +22,8 @@
 
         <h3>Quotes</h3>
         <p>
-            The various quotes should be made into their appropriate, side
-            dependent form.
+            The various quotes should be made into their appropriate left or
+            right forms.
         </p>
         <p>
             Single quotes: Richard said 'Hi!'.
@@ -46,13 +45,22 @@
         </p>
 
         <h2>JavaScript Includes</h2>
-        <p>Test the minifier:</p>
-        <code>
-        <script type="text/javascript">
-            // some random java script invented by seriously fudging the
-            // google analytics include
-            var protocol = document.location.protocol
-            document.write("Web protocol used: "+protocol)
-        </script></code>
+        <p>
+            JavaScript elements should automatically be passed through the
+            JavaScript processor for minification.
+        </p>
+<pre>&lt;script type="text/javascript"&gt;
+    // some random java script invented by seriously fudging the
+    // google analytics includes
+    var protocol = document.location.protocol
+    document.write("Web protocol used: "+protocol)
+&lt;/script&gt;</pre>
+
+        <h2>HTML injection</h2>
+        <p>
+            It's possible to specify an HTML fragment to include at the bottom
+            of every page (right above the &lt;body&gt; tag). This is intended
+            for automatically inserting traffic statistics code.
+        </p>
     </body>
 </html>
