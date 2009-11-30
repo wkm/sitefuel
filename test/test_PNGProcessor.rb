@@ -12,20 +12,13 @@ $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'test/unit'
 require 'processors/PNGProcessor'
 
+include SiteFuel::Processor
 
-module SiteFuel
-  module Test
+class TestPNGProcessor < Test::Unit::TestCase
+  def test_file_extensions
+    assert_equal false, PNGProcessor.processes_file?("testpng")
 
-    include SiteFuel::Processor
-
-    class TestPNGProcessor < Test::Unit::TestCase
-      def test_file_extensions
-        assert_equal false, PNGProcessor.processes_file?("testpng")
-
-        assert PNGProcessor.processes_file?("test.png")
-        assert PNGProcessor.processes_file?("test.PNG")
-      end
-    end
-    
+    assert PNGProcessor.processes_file?("test.png")
+    assert PNGProcessor.processes_file?("test.PNG")
   end
 end

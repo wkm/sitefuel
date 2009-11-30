@@ -15,221 +15,214 @@ require 'processors/AbstractProcessor'
 
 require 'extensions/SymbolComparison'
 
-module SiteFuel
-  module Test
+include SiteFuel
+include SiteFuel::Processor
 
+class TestAProcessor < AbstractProcessor
+  def filter_a; end
+  def filter_b; end
+  def filter_c; end
+  def filter_long_name; end
 
-    include SiteFuel
-    include SiteFuel::Processor
+  def self.file_patterns
+    [".testA", ".test-a", ".test.a", "_test_a"]
+  end
 
-    class TestAProcessor < AbstractProcessor
-      def filter_a; end
-      def filter_b; end
-      def filter_c; end
-      def filter_long_name; end
+  def self.default_filterset
+    :normal
+  end
 
-      def self.file_patterns
-        [".testA", ".test-a", ".test.a", "_test_a"]
-      end
+  def self.filterset_normal
+    [:a, :b]
+  end
 
-      def self.default_filterset
-        :normal
-      end
+  def self.filterset_heavy
+    [:a, :b, :c]
+  end
 
-      def self.filterset_normal
-        [:a, :b]
-      end
+  def self.filterset_light
+    [:a]
+  end
+end
 
-      def self.filterset_heavy
-        [:a, :b, :c]
-      end
+class TestBProcessor < AbstractProcessor
+  def self.file_patterns
+    [/tpb.*fitz/, ".tpb"]
+  end
+end
 
-      def self.filterset_light
-        [:a]
-      end
+class TestAbstractProcessor < Test::Unit::TestCase
+
+  def test_filters
+    assert_equal [:a, :b, :c, :long_name], TestAProcessor.filters
+
+    ta = TestAProcessor.new
+    assert_nil ta.run_filter(:a)
+    assert_nil ta.run_filter(:b)
+    assert_nil ta.run_filter(:long_name)
+
+    assert_raise UnknownFilter do
+      ta.run_filter(:foo)
     end
 
-    class TestBProcessor < AbstractProcessor
-      def self.file_patterns
-        [/tpb.*fitz/, ".tpb"]
-      end
-    end
+    assert_equal [], TestBProcessor.filters
+  end
 
-    class TestAbstractProcessor < Test::Unit::TestCase
+  def test_file_patterns_01
+    assert TestAProcessor.processes_file?(".testA")
+    assert TestAProcessor.processes_file?(".test-a")
+    assert TestAProcessor.processes_file?(".test.a")
+    assert TestAProcessor.processes_file?("_test_a")
 
-      def test_filters
-        assert_equal [:a, :b, :c, :long_name], TestAProcessor.filters
+    assert TestAProcessor.processes_file?("foo.testA")
+    assert TestAProcessor.processes_file?("foo.testa")
+    assert TestAProcessor.processes_file?("foo.test-a")
+    assert TestAProcessor.processes_file?("foo.test.a")
+    assert TestAProcessor.processes_file?("foo_test_a")
 
-        ta = TestAProcessor.new
-        assert_nil ta.run_filter(:a)
-        assert_nil ta.run_filter(:b)
-        assert_nil ta.run_filter(:long_name)
+    assert_equal false, TestAProcessor.processes_file?("footestA")
+    assert_equal false, TestAProcessor.processes_file?(":")
+    assert_equal false, TestAProcessor.processes_file?("testA")
+    assert_equal false, TestAProcessor.processes_file?("XtestA")
+    assert_equal false, TestAProcessor.processes_file?("XtestXA")
+  end
 
-        assert_raise UnknownFilter do
-          ta.run_filter(:foo)
-        end
+  def test_file_patterns_02
+    # file extension tests
+    assert TestBProcessor.processes_file?("test.tpb")
+    assert TestBProcessor.processes_file?("foo.tpb")
 
-        assert_equal [], TestBProcessor.filters
-      end
+    # regexp file name test
+    assert TestBProcessor.processes_file?("tpb.foofoofitz")
+    assert_equal false, TestBProcessor.processes_file?("TPB.foofoofitz")
+  end
 
-      def test_file_patterns_01
-        assert TestAProcessor.processes_file?(".testA")
-        assert TestAProcessor.processes_file?(".test-a")
-        assert TestAProcessor.processes_file?(".test.a")
-        assert TestAProcessor.processes_file?("_test_a")
+  def test_processor_names
+    assert_equal "TestA", TestAProcessor.processor_name
+    assert_equal "TestB", TestBProcessor.processor_name
+  end
 
-        assert TestAProcessor.processes_file?("foo.testA")
-        assert TestAProcessor.processes_file?("foo.testa")
-        assert TestAProcessor.processes_file?("foo.test-a")
-        assert TestAProcessor.processes_file?("foo.test.a")
-        assert TestAProcessor.processes_file?("foo_test_a")
+  def test_processor_logging
+    log = SiteFuelLogger.instance
+    proc = TestAProcessor.new
 
-        assert_equal false, TestAProcessor.processes_file?("footestA")
-        assert_equal false, TestAProcessor.processes_file?(":")
-        assert_equal false, TestAProcessor.processes_file?("testA")
-        assert_equal false, TestAProcessor.processes_file?("XtestA")
-        assert_equal false, TestAProcessor.processes_file?("XtestXA")
-      end
+    log.level = Logger::UNKNOWN
 
-      def test_file_patterns_02
-        # file extension tests
-        assert TestBProcessor.processes_file?("test.tpb")
-        assert TestBProcessor.processes_file?("foo.tpb")
+    # test fatal messages
+    fatal = log.fatal_count
+    proc.fatal 'Fatal error: fatal errors don\'t cause program halt.'
+    assert_equal fatal+1, log.fatal_count
 
-        # regexp file name test
-        assert TestBProcessor.processes_file?("tpb.foofoofitz")
-        assert_equal false, TestBProcessor.processes_file?("TPB.foofoofitz")
-      end
+    # test error messages
+    error = log.error_count
+    proc.error 'Error: brain malfunction: cannot find Creativity.'
+    assert_equal error+1, log.error_count
 
-      def test_processor_names
-        assert_equal "TestA", TestAProcessor.processor_name
-        assert_equal "TestB", TestBProcessor.processor_name
-      end
+    # test warning messages
+    warn = log.warn_count
+    proc.warn 'Warning: impending doom...!'
+    assert_equal warn+1, log.warn_count
 
-      def test_processor_logging
-        log = SiteFuelLogger.instance
-        proc = TestAProcessor.new
+    # test info messages
+    info = log.info_count
+    proc.info 'It\'s 77oC outside.'
+    assert_equal info+1, log.info_count
 
-        log.level = Logger::UNKNOWN
+    # test debugging messages
+    debug = log.debug_count
+    proc.debug 'testing the value of "i" :P'
+    assert_equal debug+1, log.debug_count
+  end
 
-        # test fatal messages
-        fatal = log.fatal_count
-        proc.fatal 'Fatal error: fatal errors don\'t cause program halt.'
-        assert_equal fatal+1, log.fatal_count
+  # filter set testing
+  def test_filtersets
+    assert_equal [:heavy, :light, :normal], TestAProcessor.filtersets
+    assert_equal :normal, TestAProcessor.default_filterset
 
-        # test error messages
-        error = log.error_count
-        proc.error 'Error: brain malfunction: cannot find Creativity.'
-        assert_equal error+1, log.error_count
+    assert_equal [:a,:b], TestAProcessor.filters_in_filterset(:normal)
+    assert_equal [:a,:b,:c], TestAProcessor.filters_in_filterset(:heavy)
+    assert_equal [:a], TestAProcessor.filters_in_filterset(:light)
+  end
 
-        # test warning messages
-        warn = log.warn_count
-        proc.warn 'Warning: impending doom...!'
-        assert_equal warn+1, log.warn_count
+  # execution list testing
+  def test_execution_list
+    a = TestAProcessor.new
 
-        # test info messages
-        info = log.info_count
-        proc.info 'It\'s 77oC outside.'
-        assert_equal info+1, log.info_count
+    # with normal filters
+    assert_equal [:b], a.add_filter(:b)
+    assert_equal [:b, :a], a.add_filter(:a)
+    assert_equal [:b, :a], a.execution_list
 
-        # test debugging messages
-        debug = log.debug_count
-        proc.debug 'testing the value of "i" :P'
-        assert_equal debug+1, log.debug_count
-      end
+    assert_equal [:b, :a, :c], a.add_filter(:c)
+    assert_equal [:b, :a, :c], a.execution_list
 
-      # filter set testing
-      def test_filtersets
-        assert_equal [:heavy, :light, :normal], TestAProcessor.filtersets
-        assert_equal :normal, TestAProcessor.default_filterset
+    assert_equal [:a, :c], a.drop_filter(:b)
+    assert_equal [:c], a.drop_filter(:a)
+    assert_equal [], a.drop_filter(:c)
 
-        assert_equal [:a,:b], TestAProcessor.filters_in_filterset(:normal)
-        assert_equal [:a,:b,:c], TestAProcessor.filters_in_filterset(:heavy)
-        assert_equal [:a], TestAProcessor.filters_in_filterset(:light)
-      end
+    assert_equal [:c], a.add_filter(:c)
+    assert_equal [:c, :b], a.add_filter(:b)
 
-      # execution list testing
-      def test_execution_list
-        a = TestAProcessor.new
-
-        # with normal filters
-        assert_equal [:b], a.add_filter(:b)
-        assert_equal [:b, :a], a.add_filter(:a)
-        assert_equal [:b, :a], a.execution_list
-
-        assert_equal [:b, :a, :c], a.add_filter(:c)
-        assert_equal [:b, :a, :c], a.execution_list
-
-        assert_equal [:a, :c], a.drop_filter(:b)
-        assert_equal [:c], a.drop_filter(:a)
-        assert_equal [], a.drop_filter(:c)
-
-        assert_equal [:c], a.add_filter(:c)
-        assert_equal [:c, :b], a.add_filter(:b)
-
-        assert_equal [], a.clear_filters
-        assert_equal [], a.execution_list
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
 
 
-        # test filter sets
-        assert_equal [:a,:b], a.add_filterset(:normal)
-        assert_equal [], a.clear_filters
-        assert_equal [], a.execution_list
+    # test filter sets
+    assert_equal [:a,:b], a.add_filterset(:normal)
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
 
-        assert_equal [:a,:b,:c], a.add_filterset(:heavy)
-        assert_equal [], a.clear_filters
-        assert_equal [], a.execution_list
+    assert_equal [:a,:b,:c], a.add_filterset(:heavy)
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
 
-        # test filters *and* filter sets
-        assert_equal [:c], a.add_filter(:c)
-        assert_equal [:c, :a], a.add_filterset(:light)
-        assert_equal [], a.clear_filters
-        assert_equal [], a.execution_list
+    # test filters *and* filter sets
+    assert_equal [:c], a.add_filter(:c)
+    assert_equal [:c, :a], a.add_filterset(:light)
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
 
-        assert_equal [:a,:b], a.add_filterset(:normal)
-        assert_equal [:a,:b,:c], a.add_filter(:c)
-        assert_equal [], a.clear_filters
-        assert_equal [], a.execution_list
-      end
+    assert_equal [:a,:b], a.add_filterset(:normal)
+    assert_equal [:a,:b,:c], a.add_filter(:c)
+    assert_equal [], a.clear_filters
+    assert_equal [], a.execution_list
+  end
 
-      # configuration testing
-      def test_config_filters
-        a = TestAProcessor.new
+  # configuration testing
+  def test_config_filters
+    a = TestAProcessor.new
 
-        a.configure({:filters => :a})
-        assert_equal [:a], a.execution_list
+    a.configure({:filters => :a})
+    assert_equal [:a], a.execution_list
 
-        # test that filters are cleared before being set
-        a.configure({:filters => :b})
-        assert_equal [:b], a.execution_list
+    # test that filters are cleared before being set
+    a.configure({:filters => :b})
+    assert_equal [:b], a.execution_list
 
-        # test that filters aren't changed if they're not set
-    #    a.configure({})
-    #    assert_equal [:b], a.execution_list
+    # test that filters aren't changed if they're not set
+#    a.configure({})
+#    assert_equal [:b], a.execution_list
 
-        a.configure({:filters => [:a]})
-        assert_equal [:a], a.execution_list
+    a.configure({:filters => [:a]})
+    assert_equal [:a], a.execution_list
 
-        a.configure({:filters => [:a, :b]})
-        assert_equal [:a,:b], a.execution_list
+    a.configure({:filters => [:a, :b]})
+    assert_equal [:a,:b], a.execution_list
 
-        a.configure({:filtersets => [:light]})
-        assert_equal [:a], a.execution_list
+    a.configure({:filtersets => [:light]})
+    assert_equal [:a], a.execution_list
 
-        a.configure({:filtersets => :normal})
-        assert_equal [:a,:b], a.execution_list
+    a.configure({:filtersets => :normal})
+    assert_equal [:a,:b], a.execution_list
 
-        # note: since we're doing #each_pair on a hash, order is not guaranteed,
-        # hence the #sort
-        a.configure({:filters => [:c], :filtersets => :light})
-        assert_equal [:c,:a].sort, a.execution_list.sort
-      end
+    # note: since we're doing #each_pair on a hash, order is not guaranteed,
+    # hence the #sort
+    a.configure({:filters => [:c], :filtersets => :light})
+    assert_equal [:c,:a].sort, a.execution_list.sort
+  end
 
-      # test attempts to add unknown filters/filtersets
-      def test_config_filters_negative
+  # test attempts to add unknown filters/filtersets
+  def test_config_filters_negative
 
-      end
-    end
-    
   end
 end

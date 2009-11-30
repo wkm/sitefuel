@@ -12,27 +12,21 @@ $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 require 'test/unit'
 require 'extensions/ArrayComparisons'
 
-module SiteFuel
-  module Test
+class TestArrayComparisons < Test::Unit::TestCase
+  def test_ends_with
 
-    class TestArrayComparisons < Test::Unit::TestCase
-      def test_ends_with
+    # positive tests
+    assert [1, 2, 3].ends_with?([2,3])
+    assert [1, 2, 3].ends_with?([])
+    assert [1, 2, 3].ends_with?([1, 2, 3])
 
-        # positive tests
-        assert [1, 2, 3].ends_with?([2,3])
-        assert [1, 2, 3].ends_with?([])
-        assert [1, 2, 3].ends_with?([1, 2, 3])
+    assert [].ends_with?([])
+    assert [1].ends_with?([1])
 
-        assert [].ends_with?([])
-        assert [1].ends_with?([1])
-
-        # negative tests
-        assert ![1, 2, 3].ends_with?([1, 2])
-        assert ![].ends_with?([1])
-        assert ![1, 2, 3].ends_with?([1, 2, 3, 4])
-
-      end
-    end
+    # negative tests
+    assert ![1, 2, 3].ends_with?([1, 2])
+    assert ![].ends_with?([1])
+    assert ![1, 2, 3].ends_with?([1, 2, 3, 4])
     
   end
 end

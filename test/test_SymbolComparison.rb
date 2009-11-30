@@ -9,26 +9,19 @@
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
-
 require 'test/unit'
 require 'extensions/SymbolComparison'
 
-module SiteFuel
-  module Test
+class TestSymbolComparisons < Test::Unit::TestCase
+  def test_spaceship
+    assert_equal(-1, :a<=>:b)
+    assert_equal  0, :a<=>:a
+    assert_equal  1, :b<=>:a
 
-    class TestSymbolComparisons < Test::Unit::TestCase
-      def test_spaceship
-        assert_equal(-1, :a<=>:b)
-        assert_equal  0, :a<=>:a
-        assert_equal  1, :b<=>:a
+    assert_equal(-1, :a<=>:ab)
+  end
 
-        assert_equal(-1, :a<=>:ab)
-      end
-
-      def test_sort
-        assert_equal [:a, :b, :c], [:c, :a, :b].sort
-      end
-    end
-    
+  def test_sort
+    assert_equal [:a, :b, :c], [:c, :a, :b].sort
   end
 end

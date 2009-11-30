@@ -13,71 +13,64 @@ require 'test/unit'
 require 'SiteFuelRuntime'
 require 'SiteFuelLogger'
 
+include SiteFuel
 
-module SiteFuel
-  module Test
+class HTMLClasherTest < Processor::AbstractProcessor
+  def self.file_patterns
+    [".html"]
+  end
+end
 
-    include SiteFuel
+class TestSiteFuelRuntime < Test::Unit::TestCase
 
-    class HTMLClasherTest < Processor::AbstractProcessor
-      def self.file_patterns
-        [".html"]
-      end
-    end
+  def setup
+    @runtime = SiteFuelRuntime.new
+  end
 
-    class TestSiteFuelRuntime < Test::Unit::TestCase
+  def test_processor_picking
+    assert_equal Processor::CSSProcessor, @runtime.choose_processor("foo.css")
+    assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.html")
+    assert_equal Processor::HTMLProcessor, @runtime.choose_processor("FOO.HtM")
 
-      def setup
-        @runtime = SiteFuelRuntime.new
-      end
+    assert_equal Processor::CSSProcessor, @runtime.choose_processor!("foo.css")
+    assert_equal Processor::HTMLProcessor, @runtime.choose_processor!("foo.html")
+    assert_equal Processor::HTMLProcessor, @runtime.choose_processor!("FOO.HtM")
 
-      def test_processor_picking
-        assert_equal Processor::CSSProcessor, @runtime.choose_processor("foo.css")
-        assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.html")
-        assert_equal Processor::HTMLProcessor, @runtime.choose_processor("FOO.HtM")
+    assert_nil @runtime.choose_processor("foo.xxxx")
+    assert_nil @runtime.choose_processor("foocss")
+    assert_nil @runtime.choose_processor("foohtml")
 
-        assert_equal Processor::CSSProcessor, @runtime.choose_processor!("foo.css")
-        assert_equal Processor::HTMLProcessor, @runtime.choose_processor!("foo.html")
-        assert_equal Processor::HTMLProcessor, @runtime.choose_processor!("FOO.HtM")
+    assert_nil @runtime.choose_processor!("foo.xxxx")
+    assert_nil @runtime.choose_processor!("foocss")
+    assert_nil @runtime.choose_processor!("foohtml")
+  end
 
-        assert_nil @runtime.choose_processor("foo.xxxx")
-        assert_nil @runtime.choose_processor("foocss")
-        assert_nil @runtime.choose_processor("foohtml")
+  def test_processor_finding
+    # test that we don't have the clasher, since it doesn't end with Processor
+    assert !SiteFuelRuntime.find_processors.include?(HTMLClasherTest), 'HTMLClasherTest included'
 
-        assert_nil @runtime.choose_processor!("foo.xxxx")
-        assert_nil @runtime.choose_processor!("foocss")
-        assert_nil @runtime.choose_processor!("foohtml")
-      end
+    # test that we do have the basic processor test suite
+    assert SiteFuelRuntime.find_processors.include?(Processor::HTMLProcessor)
+    assert SiteFuelRuntime.find_processors.include?(Processor::CSSProcessor)
+    assert SiteFuelRuntime.find_processors.include?(Processor::SassProcessor)
+  end
 
-      def test_processor_finding
-        # test that we don't have the clasher, since it doesn't end with Processor
-        assert !SiteFuelRuntime.find_processors.include?(HTMLClasherTest), 'HTMLClasherTest included'
-
-        # test that we do have the basic processor test suite
-        assert SiteFuelRuntime.find_processors.include?(Processor::HTMLProcessor)
-        assert SiteFuelRuntime.find_processors.include?(Processor::CSSProcessor)
-        assert SiteFuelRuntime.find_processors.include?(Processor::SassProcessor)
-      end
-
-      def test_processor_clashing
-        @runtime.add_processor(HTMLClasherTest)
-
-        assert_raise Processor::MultipleApplicableProcessors do
-          @runtime.choose_processor("foo.html")
-        end
-
-        # test that SiteFuelLogger#choose_processor! doesn't throw
-        # a message but does log a warning
-        warnings = SiteFuelLogger.instance.warn_count
-        assert_nothing_raised do
-          @runtime.choose_processor!("foo.html")
-        end
-        assert_equal warnings+1, SiteFuelLogger.instance.warn_count
-
-        assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.htm")
-
-      end
-    end
+  def test_processor_clashing
+    @runtime.add_processor(HTMLClasherTest)
     
+    assert_raise Processor::MultipleApplicableProcessors do
+      @runtime.choose_processor("foo.html")
+    end
+
+    # test that SiteFuelLogger#choose_processor! doesn't throw
+    # a message but does log a warning
+    warnings = SiteFuelLogger.instance.warn_count
+    assert_nothing_raised do
+      @runtime.choose_processor!("foo.html")
+    end
+    assert_equal warnings+1, SiteFuelLogger.instance.warn_count
+
+    assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.htm")
+
   end
 end
