@@ -63,7 +63,7 @@ module SiteFuel
       end
 
       def self.filterset_beautify
-        [:beautifytext, :beautifyquotes, :beautifydashes]
+        [:beautify_text, :beautify_quotes, :beautify_dashes]
       end
 
 
@@ -71,18 +71,30 @@ module SiteFuel
       # FILTERS
       #
 
+      # before any filters are run parse the document with hpricot
+      def setup_filters
+        @htmlstruc = Hpricot.parse(document, :fixtags)
+      end
+
+      # after all the filters are run dump the HTML as a string
+      def finish_filters
+        @document = @htmlstruc.to_s
+      end
+
       def filter_whitespace
-        htmlstruc = Hpricot.parse(document, :fixtags)
-        htmlstruc.traverse_text do |txt|
+        @htmlstruc.traverse_text do |txt|
           if /\A\s+\z/ =~ txt.content then
             txt.content = ''
           else
             txt.content = txt.content.gsub(/\s+/m, ' ')
           end
         end
-
-        @document = htmlstruc.to_s
       end
+
+      def filter_beautify_quotes
+        
+      end
+
 
       # cleans up double and single quotes in textual objects
       # <pre>"hello world"  =>  &#8220;hello world&#8221;</pre>

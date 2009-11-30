@@ -251,12 +251,25 @@ module SiteFuel
         end
       end
 
+      # called in #execute _before_ running the execution list of filters; note
+      # that #setup_filters is only called _once_ before all of the filters are
+      # batch executed. It is not called before every filter executes.
+      def setup_filters; end
+
+      # called in #execute _after_ running the execution list of filters
+      def finish_filters; end
+
       # runs all filters in the execution list
       def execute
+        setup_filters
         @execution_list.uniq.each do |filter|
           run_filter(filter)
         end
+        finish_filters
       end
+
+
+
 
       def save(basepath)
         File.open(File.join(basepath, resource_name), 'w') do |fhndl|
