@@ -37,4 +37,8 @@ class TestHTMLProcessor < Test::Unit::TestCase
   def test_name
     assert_equal "HTML", HTMLProcessor.processor_name
   end
+
+  def test_beautifyquotes
+    
+  end
 end

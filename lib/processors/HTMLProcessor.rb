@@ -18,6 +18,36 @@ module SiteFuel
 
     class HTMLProcessor < AbstractStringBasedProcessor
 
+      #
+      # HTML ENTITIES
+      #
+
+      # quotes
+      SINGLE_QUOTE_OPEN        = '&#8216;'
+      SINGLE_QUOTE_CLOSE       = '&#8217;'
+      DOUBLE_QUOTE_OPEN        = '&#8220;'
+      DOUBLE_QUOTE_CLOSE       = '&#8221;'
+
+      # dashes
+      EN_DASH                  = '&#8211;'
+      EM_DASH                  = '&#8212;'
+
+      # ellipsis
+      ELLIPSIS                 = '&#8230;'
+
+      # arrows
+      ARROW_LEFTWARD           = '&#8592;'
+      ARROW_RIGHTWARD          = '&#8594;'
+      ARROW_LEFTRIGHT          = '&#8596;'
+      ARROW_DOUBLE_LEFTWARD    = '&#8656;'
+      ARROW_DOUBLE_RIGHTWARD   = '&#8658;'
+      ARROW_DOUBLE_LEFTRIGHT   = '&#8660;'
+
+      # math operators
+      MULTIPLICATION_SIGN      = '&#215;'
+
+
+
       # gives the file patterns which this processor will match
       def self.file_patterns
         # TODO: add rhtml, php, etc.
@@ -42,30 +72,26 @@ module SiteFuel
       #
 
       def filter_whitespace
-        return if document == nil
-
         htmlstruc = Hpricot.parse(document, :fixtags)
         htmlstruc.traverse_text do |txt|
-          if txt.content =~ /^\s+$/ then
+          if /\A\s+\z/ =~ txt.content then
             txt.content = ''
           else
-            txt.content = txt.content.gsub(/\s+/, ' ')
+            txt.content = txt.content.gsub(/\s+/m, ' ')
           end
         end
 
         @document = htmlstruc.to_s
       end
 
-      def filter_beautifytext
-        run_filter :beautifyquotes
-        run_filter :beautifydashes
-      end
-
-      # cleans up all the quotes in
+      # cleans up double and single quotes in textual objects
+      # <pre>"hello world"  =>  &#8220;hello world&#8221;</pre>
       def filter_beautifyquotes
       end
 
       # cleans up the various dash forms:
+      # <pre>12--13  =>  12&#8211;13</pre>
+      # <pre>the car---it was red---was destroyed  =>  ...&#8212;it was red&#8212;...</pre>
       def filter_beautifydashes
         
       end
