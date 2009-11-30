@@ -52,7 +52,7 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
     # test that we do have the basic processor test suite
     assert SiteFuelRuntime.find_processors.include?(Processor::HTMLProcessor)
     assert SiteFuelRuntime.find_processors.include?(Processor::CSSProcessor)
-    assert SiteFuelRuntime.find_processors.include?(Processor::SassProcessor)
+    assert SiteFuelRuntime.find_processors.include?(Processor::SASSProcessor)
   end
 
   def test_processor_clashing
