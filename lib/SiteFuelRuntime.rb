@@ -146,8 +146,7 @@ module SiteFuel
       end
     end
 
-    # create a deployment
-    def deploy
+    def process
       return nil if @deploy_from == nil
 
       puts bold('Processing:')
@@ -173,9 +172,18 @@ module SiteFuel
           puts '%s %s' %['--'.ljust(8), filename.cabbrev(65)]
         else
           processor.generate
-          puts '%s %s %4.2f' % [bold(processor.class.processor_name.ljust(8)), filename.cabbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
+          puts '%s %s %4.2f' % [cyan(processor.class.processor_name.ljust(8)), filename.cabbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
         end
       end
+
+    end
+
+    # create a deployment
+    def deploy
+      # first we have to process the files
+      process
+
+      files = find_all_files @deploy_from
 
       return if @deploy_to == nil
       puts

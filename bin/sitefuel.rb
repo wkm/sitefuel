@@ -124,9 +124,14 @@ def parse_command_line(runtime)
   puts_and_exit opts if commands[0].downcase == 'help'
 
   case commands[0].downcase
-  when 'deploy':
+  when 'deploy'
     runtime.deploy_from = commands[1]
     runtime.deploy
+
+  when 'process'
+    runtime.deploy_from = commands[1]
+    runtime.process
+    
   else
     puts_and_exit "unknown command: '#{commands[0]}'", $HELP_HINT_LINE
   end
