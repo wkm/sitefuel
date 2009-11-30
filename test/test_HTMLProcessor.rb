@@ -39,6 +39,12 @@ class TestHTMLProcessor < Test::Unit::TestCase
   end
 
   def test_beautifyquotes
-    
+    assert_equal(
+      %q{<p>&#8220;Really?&#8221; Alice asked.<br>&#8220;Yes. Just yesterday.&#8221; said Bob.</p>},
+      HTMLProcessor.filter_string(
+        :beautify_quotes,
+        %q{<p>"Really?" Alice asked.<br>"Yes. Just yesterday." said Bob.}
+      )
+    )
   end
 end
