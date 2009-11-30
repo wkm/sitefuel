@@ -24,11 +24,11 @@ module SiteFuel
         "JS"
       end
 
-      def default_filterset
+      def self.default_filterset
         :minify
       end
 
-      def filterset_minify
+      def self.filterset_minify
         [:minify]
       end
 
