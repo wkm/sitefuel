@@ -44,4 +44,29 @@ class String
       '...' + self[(length - (len-3)) .. length]
     end
   end
+
+  # removes leading whitespace from a set of lines, preserving indentation
+  # relative to the first non-empty line
+  def align
+    return self if empty?
+
+    # split by lines
+    lines = split("\n")
+
+    # get rid of the first line if it is null
+    if lines.first == ''
+      lines = lines[1..-1]
+    end
+
+    # take the first line and extract the leading whitespace
+    leading = lines.first[/^[ \t]*/]
+
+    # iterate over each line dumping the leading whitespace
+    lines = lines.map do |l|
+      l.gsub!(Regexp.new('^'+leading), '')
+    end
+
+    lines.join("\n")
+  end
+
 end

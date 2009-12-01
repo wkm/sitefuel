@@ -36,4 +36,16 @@ class TestString < Test::Unit::TestCase
     assert_equal "the quick...", "the quick brown dog".labbrev(12)
     assert_equal 12, "the quick brown dog".labbrev(12).length
   end
+
+  def test_align
+    assert_equal(
+      "hi\n  hello world\nyup there\n  it is!\n",
+      %q{
+        hi
+          hello world
+        yup there
+          it is!
+      }.align
+    )
+  end
 end
