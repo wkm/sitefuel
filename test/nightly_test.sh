@@ -13,8 +13,18 @@ tmpfile="/tmp/sitefuel-nightlytestreport-"$RANDOM
 
 echo 'Putting results in: '$tmpfile
 
-echo 'Date: ' $(date -u)
+echo 'DATE: ' $(date -u)
+echo 'DIFF:' >> $tmpfile
 
+git diff --stat master master@{1} >> $tmpfile
+
+
+echo >> $tmpfile
+echo >> $tmpfile
+echo >> $tmpfile
+echo >> $tmpfile
+echo >> $tmpfile
+echo >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
 echo 'Unit tests' >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
@@ -65,4 +75,4 @@ echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >
 echo 'Test Sanity Checks' >> $tmpfile
 ./run_tests_individually.sh >> $tmpfile
 
-mail -s '[sitefuel] Nightly Test Report' wmacura@gmail.com < $tmpfile
+mail -s '[sitefuel] Nightly Test Report' testing@sitefuel.org < $tmpfile
