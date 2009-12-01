@@ -163,5 +163,35 @@ class TestHTMLProcessor < Test::Unit::TestCase
 
   def test_embedded_css
 
+    assert_equal(
+      %q{<style>body{font-family:"lucida grande",sans-serif;}</style>},
+      HTMLProcessor.filter_string(:minify_styles,
+        <<-END
+          <style>
+            body {
+              font-family: "lucida grande", sans-serif;
+            }
+          </style>
+        END
+      ).strip
+    )
+
+  end
+
+  def test_embedded_javascript
+    assert_equal(
+      "<script>var protocol=document.location.protocol\ndocument.write(\"Web protocol used: \"+protocol)</script>",
+
+      HTMLProcessor.filter_string(:minify_javascript,
+        <<-END
+          <script>
+            // some random java script invented by seriously fudging the
+            // google analytics includes
+            var protocol = document.location.protocol
+            document.write("Web protocol used: "+protocol)
+          </script>
+        END
+      ).strip
+    )
   end
 end
