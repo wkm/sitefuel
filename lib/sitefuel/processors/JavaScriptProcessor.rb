@@ -33,7 +33,7 @@ module SiteFuel
       end
 
       def filter_minify
-        @document = JSMin.minfy(@document)
+        @document = JSMin.minify(@document).strip
       end
 
     end
