@@ -10,7 +10,7 @@ module SiteFuel
     require 'rubygems'
     require 'jsmin'
 
-    require 'sitefuel/processors/AbstractProcessor'
+    require 'sitefuel/processors/AbstractStringBasedProcessor'
 
     class JavaScriptProcessor < AbstractStringBasedProcessor
 
