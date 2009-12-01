@@ -70,7 +70,7 @@ module SiteFuel
       end
 
       def self.filterset_beautify
-        [:beautify_quotes, :beautify_dashes, :beautify_arrows]
+        [:beautify_quotes, :beautify_dashes, :beautify_arrows, :beautify_symbols]
       end
 
 
@@ -98,6 +98,8 @@ module SiteFuel
         end
       end
 
+      # strips excess whitespace in most HTML tags. Notably, +pre+ tags are
+      # left alone.
       def filter_whitespace
         @htmlstruc.traverse_text do |txt|
           if /\A\s+\z/ =~ txt.content then
@@ -108,14 +110,18 @@ module SiteFuel
         end
       end
 
-      # minifies embedded JavaScript code
+      # minifies embedded JavaScript code using the JavaScriptProcessor
       def filter_minify_javascript
-
+        traverse('script') do |tag,txt|
+          txt.content = JavaScriptProcessor.process_string(txt.content)
+        end
       end
 
-      # minifies embedded CSS styles
+      # minifies embedded CSS styles using the CSSProcessor
       def filter_minify_styles
-        
+        traverse('style') do |tag,txt|
+          txt.content = CSSProcessor.process_string(txt.content)
+        end
       end
 
       # cleans up double and single quotes in textual objects
