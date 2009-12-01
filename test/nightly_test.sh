@@ -73,6 +73,19 @@ echo >> $tmpfile
 echo >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
 echo 'Test Sanity Checks' >> $tmpfile
+echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
 ./run_tests_individually.sh >> $tmpfile
 
-mail -s '[sitefuel] Nightly Test Report' testing@sitefuel.org < $tmpfile
+
+echo >> $tmpfile
+echo >> $tmpfile
+echo >> $tmpfile
+echo >> $tmpfile
+echo >> $tmpfile
+echo >> $tmpfile
+echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
+echo 'File require checks' >> $tmpfile
+echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
+./load_files_individually.sh >> $tmpfile
+
+mail -s 'SiteFuel Nightly Test Report' testing@sitefuel.org < $tmpfile
