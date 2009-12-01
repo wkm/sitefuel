@@ -112,6 +112,7 @@ module SiteFuel
 
       # minifies embedded JavaScript code using the JavaScriptProcessor
       def filter_minify_javascript
+        # TODO check the language attribute to make sure it's javascript
         traverse('script') do |tag,txt|
           txt.content = JavaScriptProcessor.process_string(txt.content)
         end
@@ -156,6 +157,7 @@ module SiteFuel
         end
       end
 
+      # cleans up a few arrow forms
       def filter_beautify_arrows
         traverse do |tag,txt|
           txt.content = txt.content.
