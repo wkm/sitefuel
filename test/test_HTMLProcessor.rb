@@ -183,14 +183,13 @@ class TestHTMLProcessor < Test::Unit::TestCase
       "<script>var protocol=document.location.protocol\ndocument.write(\"Web protocol used: \"+protocol)</script>",
 
       HTMLProcessor.filter_string(:minify_javascript,
-        <<-END
+        %q{
           <script>
             // some random java script invented by seriously fudging the
             // google analytics includes
             var protocol = document.location.protocol
             document.write("Web protocol used: "+protocol)
-          </script>
-        END
+        }.align
       ).strip
     )
   end

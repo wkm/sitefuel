@@ -15,18 +15,36 @@ module SiteFuel
 
     # since the haml gem gives exec() warnings, we temporarily lower the verbosity
     # (last tested with 2.2.14, this might not be needed with a future version)
-    silently { require 'haml' }
+    silently { require 'sass' }
 
-    require 'sitefuel/processors/AbstractProcessor'
+    require 'sitefuel/processors/AbstractStringBasedProcessor'
+    require 'sitefuel/processors/CSSProcessor'
 
-    class SASSProcessor < AbstractProcessor
+    class SASSProcessor < AbstractStringBasedProcessor
+
+      def self.file_patterns
+        [".sass"]
+      end
       
       def self.default_filterset
         :generate
       end
 
       def self.filterset_generate
-        []
+        [:generate, :minify]
+      end
+
+      # generates the raw .CSS file from a .sass file
+      #
+      # TODO it's very important that generate be the first filter run
+      def filter_generate
+        engine = Sass::Engine.new(document)
+        @document = engine.render
+      end
+
+      # runs the CSSProcessor's minify filter
+      def filter_minify
+        @document = CSSProcessor.filter_string(:minify, document)
       end
 
     end
