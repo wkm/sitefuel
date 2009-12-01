@@ -7,7 +7,7 @@
 
 module SiteFuel
   
-  require 'Logger'
+  require 'logger'
   require 'singleton'
 
   # Singleton abstraction around the Logger:: library, typically every processor
