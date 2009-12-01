@@ -32,8 +32,11 @@ module SiteFuel
       EN_DASH                  = '&#8211;'
       EM_DASH                  = '&#8212;'
 
-      # ellipsis
+      # signs
       ELLIPSIS                 = '&#8230;'
+      COPYRIGHT                = '&#169;'
+      TRADEMARK                = '&#8482;'
+      REGISTERED               = '&#174;'
 
       # arrows
       ARROW_LEFTWARD           = '&#8592;'
@@ -170,9 +173,21 @@ module SiteFuel
         end
       end
 
+      # converts 'x' signs between numbers into the unicode symbol
+      def filter_beautify_math
+
+      end
+
       # convert a few shorthands like (c), (tm) to their unicode symbols
       def filter_beautify_symbols
+        traverse do |tag,txt|
+          txt.content = txt.content.
+            gsub(/\(tm\)/i, TRADEMARK).
+            gsub(/\(c\)/i,  COPYRIGHT).
+            gsub(/\(r\)/i,  REGISTERED).
+            gsub(/(\b| )\.\.\.(\.)?/, "\\1#{ELLIPSIS}\\2")
 
+        end
       end
 
     end
