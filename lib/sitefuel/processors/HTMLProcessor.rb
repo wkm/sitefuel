@@ -155,6 +155,11 @@ module SiteFuel
             # this would be a bit cleaner with (negative) lookbehind
             gsub(/(\d)--(\d)/,        "\\1#{EN_DASH}\\2").
 
+            # we can also have multiple en-dashes
+            gsub(/\b(--(--)+)(\b|\z|\s)/) do ||
+              EN_DASH * ($1.length / 2) + $3
+            end.
+
             # three dashes in general are an em dash
             gsub(/(\s|\b)---(\s|\b)/, "\\1#{EM_DASH}\\2")
         end

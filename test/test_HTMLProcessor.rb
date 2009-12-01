@@ -85,6 +85,16 @@ class TestHTMLProcessor < Test::Unit::TestCase
         %q{<p>These--are left alone</p>}
       )
     )
+
+    # test --'s use as a filler for "bad words"
+    assert_equal(
+      %q{<p>f&#8211;&#8211;</p>},
+
+      HTMLProcessor.filter_string(
+        :beautify_dashes,
+        %q{<p>f----</p>}
+      )
+    )
   end
 
   def test_beautify_arrows
