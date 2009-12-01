@@ -13,7 +13,7 @@ tmpfile="/tmp/sitefuel-nightlytestreport-"$RANDOM
 
 echo 'Putting results in: '$tmpfile
 
-echo 'DATE: ' $(date -u)
+echo 'DATE: ' $(date -u) >> $tmpfile
 echo 'DIFF:' >> $tmpfile
 
 git diff --stat master master@{1} >> $tmpfile
@@ -29,7 +29,7 @@ echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >
 echo 'Unit tests' >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
 
-./ts_all.rb >> $tmpfile
+ruby -w ./ts_all.rb >> $tmpfile
 
 echo >> $tmpfile
 echo >> $tmpfile
@@ -52,7 +52,7 @@ echo >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
 echo 'Processors' >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
-./processor_listing.rb >> $tmpfile
+ruby -w ./processor_listing.rb >> $tmpfile
 
 echo >> $tmpfile
 echo >> $tmpfile
