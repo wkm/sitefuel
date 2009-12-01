@@ -156,6 +156,8 @@ class TestHTMLProcessor < Test::Unit::TestCase
     # test tags which shouldn't get modified
     assert_equal %q{<pre>(tm)</pre>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<pre>(tm)</pre>})
     assert_equal %q{<code>(tm)</code>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<code>(tm)</code>})
+    assert_equal %q{<html>(tm)</html>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<html>(tm)</html>})
+    assert_equal %q{<head>(tm)</head>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<head>(tm)</head>})
 
   end
 
