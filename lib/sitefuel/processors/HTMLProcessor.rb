@@ -139,13 +139,15 @@ module SiteFuel
       # <pre>12--13  =>  12&#8211;13</pre>
       # <pre>the car---it was red---was destroyed  =>  ...&#8212;it was red&#8212;...</pre>
       def filter_beautify_dashes
-        txt.content = txt.content.
-          # between two numbers we have an en dash
-          # this would be a bit cleaner with (negative) lookbehind
-          gsub(/(\d)--(\d)/,        "\\1#{EN_DASH}\\2").
+        traverse do |tag,txt|
+          txt.content = txt.content.
+            # between two numbers we have an en dash
+            # this would be a bit cleaner with (negative) lookbehind
+            gsub(/(\d)--(\d)/,        "\\1#{EN_DASH}\\2").
 
-          # three dashes in general are an em dash
-          gsub(/(\s|\b)---(\s|\b)/, "\\1#{EM_DASH}\\2")
+            # three dashes in general are an em dash
+            gsub(/(\s|\b)---(\s|\b)/, "\\1#{EM_DASH}\\2")
+        end
       end
 
       def filter_beautify_arrows

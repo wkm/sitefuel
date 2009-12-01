@@ -58,6 +58,26 @@ class TestHTMLProcessor < Test::Unit::TestCase
     )
   end
 
+  def test_beautify_dashes
+    assert_equal(
+      %q{<p>Alice&#8212;having just finished&#8212;shouted</p>},
+
+      HTMLProcessor.filter_string(
+        :beautify_dashes,
+        %q{<p>Alice---having just finished---shouted</p>}
+      )
+    )
+
+    assert_equal(
+      %q{<p>See ppg. 12&#8211;15</p>},
+
+      HTMLProcessor.filter_string(
+        :beautify_dashes,
+        %q{<p>See ppg. 12--15</p>}
+      )
+    )
+  end
+
   def test_beautify_arrows
     assert_equal(
       %q{<p>a &#8594; b &#8592; c &#8596; d</p>},
@@ -76,9 +96,5 @@ class TestHTMLProcessor < Test::Unit::TestCase
         %q{<p>a ==> b <== c <=> d</p>}
       )
     )
-  end
-
-  def test_beautify_dashes
-
   end
 end
