@@ -51,7 +51,9 @@ module SiteFuel
 
 
       # list of tags which have proper text items inside them
-      TEXTUAL_TAGS             = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+      TEXTUAL_TAGS             = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                                  'p', 'b', 'i', 'ul', 'a', 'li', 'td',
+                                  'th']
       
       # filter for use with XPath searches
       TEXTUAL_TAGS_FILTER      = TEXTUAL_TAGS.join('|')

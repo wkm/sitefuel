@@ -118,14 +118,9 @@ class TestHTMLProcessor < Test::Unit::TestCase
   end
 
   def test_beautify_symbols
-    assert_equal(
-      %q{<p>&#8482;</p>},
-
-      HTMLProcessor.filter_string(
-        :beautify_symbols,
-        %q{<p>(tm)</p>}
-      )
-    )
+    assert_equal %q{<p>&#8482;</p>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<p>(tm)</p>})
+    assert_equal %q{<p>&#169;</p>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<p>(c)</p>})
+    assert_equal %q{<p>&#174;</p>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<p>(r)</p>})
 
     assert_equal(
       %q{<p>Hello&#8230; Hi&#8230; And finally &#8230; that was it.</p>},
@@ -135,5 +130,36 @@ class TestHTMLProcessor < Test::Unit::TestCase
         %q{<p>Hello... Hi... And finally ... that was it.</p>}
       )
     )
+  end
+
+  def test_traverse
+
+    # test tags which should get modified
+    # TODO these really should get generated programatically
+    assert_equal %q{<h1>&#8482;</h1>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<h1>(tm)</h1>})
+    assert_equal %q{<h2>&#8482;</h2>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<h2>(tm)</h2>})
+    assert_equal %q{<h3>&#8482;</h3>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<h3>(tm)</h3>})
+    assert_equal %q{<h4>&#8482;</h4>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<h4>(tm)</h4>})
+    assert_equal %q{<h5>&#8482;</h5>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<h5>(tm)</h5>})
+    assert_equal %q{<h6>&#8482;</h6>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<h6>(tm)</h6>})
+
+    assert_equal %q{<p>&#8482;</p>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<p>(tm)</p>})
+    assert_equal %q{<b>&#8482;</b>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<b>(tm)</b>})
+    assert_equal %q{<i>&#8482;</i>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<i>(tm)</i>})
+    assert_equal %q{<ul>&#8482;</ul>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<ul>(tm)</ul>})
+    assert_equal %q{<a>&#8482;</a>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<a>(tm)</a>})
+    assert_equal %q{<li>&#8482;</li>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<li>(tm)</li>})
+    assert_equal %q{<td>&#8482;</td>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<td>(tm)</td>})
+    assert_equal %q{<th>&#8482;</th>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<th>(tm)</th>})
+
+
+    # test tags which shouldn't get modified
+    assert_equal %q{<pre>(tm)</pre>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<pre>(tm)</pre>})
+    assert_equal %q{<code>(tm)</code>}, HTMLProcessor.filter_string(:beautify_symbols, %q{<code>(tm)</code>})
+
+  end
+
+  def test_embedded_css
+
   end
 end
