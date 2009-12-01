@@ -125,7 +125,7 @@ module SiteFuel
           txt.content = txt.content.
             # apostrophes
             gsub(/(\S)'(s)/i,   '\1%s\2' % SINGLE_QUOTE_CLOSE).
-            gsub(/(\Ss)'(\s)/i,     '\1%s\2'   % SINGLE_QUOTE_CLOSE).
+            gsub(/(\Ss)'(\s)/i, '\1%s\2'   % SINGLE_QUOTE_CLOSE).
 
             # double quotes
             gsub(/"(\S.*?\S)"/, '%s\1%s' % [DOUBLE_QUOTE_OPEN, DOUBLE_QUOTE_CLOSE]).
@@ -139,20 +139,24 @@ module SiteFuel
       # <pre>12--13  =>  12&#8211;13</pre>
       # <pre>the car---it was red---was destroyed  =>  ...&#8212;it was red&#8212;...</pre>
       def filter_beautify_dashes
-        # TODO en-dashes between two numbers
-        # TODO em-dashes between words
-        # ...
+        txt.content = txt.content.
+          # between two numbers we have an en dash
+          # this would be a bit cleaner with (negative) lookbehind
+          gsub(/(\d)--(\d)/,        "\\1#{EN_DASH}\\2").
+
+          # three dashes in general are an em dash
+          gsub(/(\s|\b)---(\s|\b)/, "\\1#{EM_DASH}\\2")
       end
 
       def filter_beautify_arrows
         traverse do |tag,txt|
           txt.content = txt.content.
-            gsub(/\b-->\b/, ARROW_RIGHTWARD).
-            gsub(/\b<--\b/, ARROW_LEFTWARD).
-            gsub(/\b<->\b/, ARROW_LEFTRIGHT).
-            gsub(/\b==>\b/, ARROW_DOUBLE_RIGHTWARD).
-            gsub(/\b<==\b/, ARROW_DOUBLE_LEFTWARD).
-            gsub(/\b<=>\b/, ARROW_DOUBLE_LEFTRIGHT)
+            gsub(/(\s|\b)-->(\s|\b)/, "\\1#{ARROW_RIGHTWARD}\\2").
+            gsub(/(\s|\b)<--(\s|\b)/, "\\1#{ARROW_LEFTWARD}\\2").
+            gsub(/(\s|\b)<->(\s|\b)/, "\\1#{ARROW_LEFTRIGHT}\\2").
+            gsub(/(\s|\b)==>(\s|\b)/, "\\1#{ARROW_DOUBLE_RIGHTWARD}\\2").
+            gsub(/(\s|\b)<==(\s|\b)/, "\\1#{ARROW_DOUBLE_LEFTWARD}\\2").
+            gsub(/(\s|\b)<=>(\s|\b)/, "\\1#{ARROW_DOUBLE_LEFTRIGHT}\\2")
         end
       end
 
