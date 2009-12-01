@@ -15,6 +15,8 @@ module SiteFuel
     require 'hpricot'
 
     require 'sitefuel/processors/AbstractStringBasedProcessor'
+    require 'sitefuel/processors/CSSProcessor'
+    require 'sitefuel/processors/JavaScriptProcessor'
 
     class HTMLProcessor < AbstractStringBasedProcessor
 
