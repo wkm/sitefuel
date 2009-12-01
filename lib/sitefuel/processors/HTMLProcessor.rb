@@ -157,7 +157,7 @@ module SiteFuel
         end
       end
 
-      # cleans up a few arrow forms
+      # convert basic arrow forms to unicode characters
       def filter_beautify_arrows
         traverse do |tag,txt|
           txt.content = txt.content.
@@ -168,6 +168,11 @@ module SiteFuel
             gsub(/(\s|\b)<==(\s|\b)/, "\\1#{ARROW_DOUBLE_LEFTWARD}\\2").
             gsub(/(\s|\b)<=>(\s|\b)/, "\\1#{ARROW_DOUBLE_LEFTRIGHT}\\2")
         end
+      end
+
+      # convert a few shorthands like (c), (tm) to their unicode symbols
+      def filter_beautify_symbols
+
       end
 
     end
