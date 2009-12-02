@@ -23,7 +23,7 @@ module SiteFuel
     class SASSProcessor < AbstractStringBasedProcessor
 
       def self.file_patterns
-        [".sass"]
+        ['.sass']
       end
       
       def self.default_filterset
@@ -34,7 +34,7 @@ module SiteFuel
         [:generate, :minify]
       end
 
-      # generates the raw .CSS file from a .sass file
+      # generates the raw .css file from a .sass file
       #
       # TODO it's very important that generate be the first filter run
       def filter_generate

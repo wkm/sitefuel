@@ -17,16 +17,32 @@ module SiteFuel
     # (last tested with 2.2.14, this might not be needed with a future version)
     silently { require 'haml' }
 
-    require 'sitefuel/processors/AbstractProcessor'
+    require 'sitefuel/processors/AbstractStringBasedProcessor'
+    require 'sitefuel/processors/HTMLProcessor'
 
-    class HAMLProcessor < AbstractProcessor
+    class HAMLProcessor < AbstractStringBasedProcessor
+
+      def self.file_patterns
+        ['.haml']
+      end
 
       def self.default_filterset
         :generate
       end
 
       def self.filterset_generate
-        []
+        [:generate, :minify]
+      end
+
+      # generate the raw .html file from a .haml file
+      def filter_generate
+        engine = Haml::Engine.new(document)
+        @document = engine.render
+      end
+
+      # run the HTMLProcessor's whitespace filter
+      def filter_minify
+        @document = HTMLProcessor.filter_string(:whitespace, document)
       end
 
     end
