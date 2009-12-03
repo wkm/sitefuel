@@ -159,6 +159,8 @@ module SiteFuel
       # find all files under deploy_from
       files = find_all_files @deploy_from
 
+      total_original_size = 0
+      total_processed_size = 0
       @resource_processors = {}
       files.each do |filename|
         processor = choose_processor!(filename)
@@ -167,13 +169,7 @@ module SiteFuel
         else
           @resource_processors[filename] = processor.process_file(filename)
         end
-      end
-
-
-      # print all results
-      total_original_size = 0
-      total_processed_size = 0
-      files.each do |filename|
+        
         processor = @resource_processors[filename]
         if processor == nil
           puts '%s %s' %['--'.ljust(8), filename.cabbrev(65)]
