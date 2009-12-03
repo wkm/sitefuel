@@ -78,7 +78,7 @@ module SiteFuel
       end
 
       def self.default_filterset
-        :beautify
+        :minify
       end
 
       def self.filterset_minify

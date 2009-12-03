@@ -171,15 +171,22 @@ module SiteFuel
 
 
       # print all results
+      total_original_size = 0
+      total_processed_size = 0
       files.each do |filename|
         processor = @resource_processors[filename]
         if processor == nil
           puts '%s %s' %['--'.ljust(8), filename.cabbrev(65)]
         else
           processor.generate
+          total_original_size += processor.original_size
+          total_processed_size += processor.processed_size
           puts '%s %s %4.2f' % [cyan(processor.class.processor_name.ljust(8)), filename.cabbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
         end
       end
+
+      puts '='*80
+      puts 'Size delta:         %+5d bytes; %4.2f' % [total_processed_size - total_original_size, total_processed_size.prec_f/total_original_size.prec_f]
 
     end
 
