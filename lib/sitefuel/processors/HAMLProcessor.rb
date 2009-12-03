@@ -36,8 +36,11 @@ module SiteFuel
 
       # generate the raw .html file from a .haml file
       def filter_generate
-        engine = Haml::Engine.new(document)
-        @document = engine.render
+        # to silence instance variable not initialized warnings from haml
+        silently {
+          engine = Haml::Engine.new(document)
+          @document = engine.render
+        }
       end
 
       # run the HTMLProcessor's whitespace filter

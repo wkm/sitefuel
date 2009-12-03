@@ -45,7 +45,7 @@ class TestHAMLProcessor < Test::Unit::TestCase
 
   def test_minify
     assert_equal(
-      "#main{background-color:#f00;width:98%;}",
+      "<quote><p><strong class=\"code\" id=\"message\">Hello, World!</strong></p></quote>",
 
       HAMLProcessor.filter_string([:generate, :minify],
         %q{

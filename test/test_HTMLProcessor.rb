@@ -193,4 +193,26 @@ class TestHTMLProcessor < Test::Unit::TestCase
       ).strip
     )
   end
+
+
+  def test_rhtml
+    assert_equal(
+      "<html><head><title>Goodbye, World.</title></head><body><h1>Goodbye!</h1> <% 5.times do || %> <p>and again...</p> <% end %> </body></html>",
+      HTMLProcessor.filter_string(:whitespace,
+        %q{
+          <html>
+            <head>
+              <title>Goodbye, World.</title>
+            </head>
+            <body>
+              <h1>Goodbye!</h1>
+              <% 5.times do || %>
+                <p>and again...</p>
+              <% end %>
+            </body>
+          </html>
+        }
+      )
+    )
+  end
 end
