@@ -89,6 +89,12 @@ module SiteFuel
         procs
       end
 
+      # gives the type of the processor, usually implemented
+      # by the more specific abstract processors.
+      def self.processor_type
+        ''
+      end
+
 
       #
       # PROCESSOR INFORMATION

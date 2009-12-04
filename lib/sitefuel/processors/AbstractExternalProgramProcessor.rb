@@ -19,6 +19,10 @@ module SiteFuel
     # parameters to pass to the program.
     class AbstractExternalProgramProcessor < AbstractProcessor
 
+      def self.processor_type
+        'External'
+      end
+
       # gives the name of the external program used to process files
       def self.program_name
         self.program_binary

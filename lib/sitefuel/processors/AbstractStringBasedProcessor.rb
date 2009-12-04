@@ -16,6 +16,10 @@ module SiteFuel
     require 'sitefuel/processors/AbstractProcessor'
 
     class AbstractStringBasedProcessor < AbstractProcessor
+      
+      def self.processor_type
+        'String'
+      end
 
       # lightweight wrapper for opening a resource and generating the file
       def self.process_file(filename, config = {})
