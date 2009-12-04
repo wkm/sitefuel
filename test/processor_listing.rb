@@ -23,6 +23,6 @@ processors.each do |proc|
           [
                   proc.processor_name.ljust(10),
                   proc.file_patterns.join(', ').ljust(30),
-                  proc.processor_type.ljust(7)
+                  proc.processor_type.ljust(8)
           ]
 end
