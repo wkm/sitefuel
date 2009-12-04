@@ -50,7 +50,7 @@ module SiteFuel
       self.logger = SiteFuelLogger.instance
     end
 
-    # gives true if the given file (typially a processor) has already been
+    # gives true if the given file (typically a processor) has already been
     # loaded (by looking into $")
     def self.processor_loaded?(file)
       $".map do |f|
@@ -91,13 +91,11 @@ module SiteFuel
     # SiteFuel::Processor::AbstractProcessor
     #
     # for a processor to be automatically included it has to:
-    # * be loaded (TODO: all processors under processors/ are automatically loaded)
+    # * be loaded (see #load_processors)
     # * be a child class of AbstractProcessor
     # * the class name must end with Processor
     #
     def self.find_processors
-      # TODO: really profile this sucker; it seems quite scary to iterate over
-      # all of the classes
       procs = []
       ObjectSpace.each_object(Class) do |cls|
         if cls.ancestors.include?(Processor::AbstractProcessor) and
