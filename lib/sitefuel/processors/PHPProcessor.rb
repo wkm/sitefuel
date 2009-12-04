@@ -20,7 +20,8 @@ module SiteFuel
 
       # PHP specific file patterns
       def self.file_patterns
-        ['.php', '.phtml', '.php3']
+        # TODO: should we really handle .phps files?
+        ['.php', '.phtml', '.php5', '.phps']
       end
 
     end
