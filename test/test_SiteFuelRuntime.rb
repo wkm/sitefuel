@@ -28,6 +28,9 @@ class HTMLClasherTest < Processor::AbstractProcessor
   end
 end
 
+class OtherProcessorA < Processor::AbstractProcessor; end
+class OtherProcessorB < Processor::AbstractProcessor; end
+
 class TestSiteFuelRuntime < Test::Unit::TestCase
 
   def setup
@@ -64,12 +67,15 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
 
   def test_processor_clashing
 
-    original = @runtime.processors
-    p original
+    # test adding of a single processor
+    original = @runtime.processors.clone
     @runtime.add_processor(HTMLClasherTest)
-    p @runtime.processors
-    p @runtime.processors - original
     assert_equal [HTMLClasherTest], @runtime.processors - original
+
+    # test adding of an array of processors
+    original = @runtime.processors.clone
+    @runtime.add_processor([OtherProcessorA, OtherProcessorB])
+    assert_equal [OtherProcessorA, OtherProcessorB], @runtime.processors - original
     
     assert_raise Processor::MultipleApplicableProcessors do
       @runtime.choose_processor("foo.html")
