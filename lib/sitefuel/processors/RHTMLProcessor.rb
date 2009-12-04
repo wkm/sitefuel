@@ -15,7 +15,7 @@ module SiteFuel
     class RHTMLProcessor < HTMLProcessor
 
       def self.file_patterns
-        ['.rhtml']
+        ['.rhtml', '.erb']
       end
 
 
