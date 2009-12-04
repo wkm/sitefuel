@@ -64,16 +64,9 @@ module SiteFuel
 
       # gives the file patterns which this processor will match
       def self.file_patterns
-        # TODO: add rhtml, php, etc.
         [
           # plain html
-          ".html", ".htm",
-         
-          # rhtml
-          ".rhtml",
-          
-          # php
-          ".php"
+          ".html", ".htm"
         ]
       end
 
