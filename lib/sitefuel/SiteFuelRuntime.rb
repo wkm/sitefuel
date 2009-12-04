@@ -119,8 +119,16 @@ module SiteFuel
     # gives the array of processors available to this runtime
     attr_reader :processors
 
+    # adds one processor or an array of processors
     def add_processor(proc)
-      @processors << proc
+      case proc
+      when Array
+        proc.each { |p|
+          @processors << p
+        }
+      else
+        @processors << proc
+      end
     end
 
     # gives the processor to use for a given file

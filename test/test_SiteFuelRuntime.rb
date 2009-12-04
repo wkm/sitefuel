@@ -63,7 +63,13 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
   end
 
   def test_processor_clashing
+
+    original = @runtime.processors
+    p original
     @runtime.add_processor(HTMLClasherTest)
+    p @runtime.processors
+    p @runtime.processors - original
+    assert_equal [HTMLClasherTest], @runtime.processors - original
     
     assert_raise Processor::MultipleApplicableProcessors do
       @runtime.choose_processor("foo.html")
