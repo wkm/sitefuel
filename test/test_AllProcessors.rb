@@ -11,6 +11,7 @@ $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
 require 'sitefuel/SiteFuelRuntime'
+require 'sitefuel/processors/AbstractStringBasedProcessor'
 
 include SiteFuel
 
@@ -19,10 +20,16 @@ class TestAllProcessors < Test::Unit::TestCase
   def setup
     SiteFuelRuntime.load_processors
     @processors = SiteFuelRuntime.
-      find_processors.
-      delete_if do |proc|
-        proc.to_s =~ /.*Test.*Processor/
-      end
+            find_processors.
+            delete_if do |proc|
+              proc.to_s =~ /.*Test.*Processor/
+            end
+
+    @string_processors = Processor::AbstractStringBasedProcessor.
+            find_processors.
+            delete_if do |proc|
+              proc.to_s =~ /.*Test.*Processor/
+            end
   end
 
   # ensure that every filter in every filter set is known
@@ -40,9 +47,19 @@ class TestAllProcessors < Test::Unit::TestCase
     end
   end
 
+  # test that every processor has a default filterset
   def test_default_filter_sets
     @processors.each do |proc|
       assert proc.filterset?(proc.default_filterset), 'Default filterset %s for %s isn\'t known'%[proc.default_filterset, proc]
+    end
+  end
+
+  # test that every string based processor's filters can handle the empty string
+  def test_string_based_empty_string
+    @string_processors.each do |proc|
+      proc.filters.each do |filter|
+        assert_nothing_raised { proc.filter_string(filter, '') }
+      end
     end
   end
 end
