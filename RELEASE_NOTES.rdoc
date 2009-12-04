@@ -1,0 +1,46 @@
+
+                                   SiteFuel
+                           v0.1.0 (initial release)
+
+A program and API for minifying websites and web applications and deploying from version control.
+
+
+== Introduction 
+SiteFuel is a Ruby program 
+
+
+== Using Version Control Systems to Design Websites
+Dynamic 
+
+== Requirements
+
+
+
+== Installation
+
+SiteFuel is deployed a RubyGem through http://gemcutter.org. You should be able to install it directly using 
+
+     $ gem install -t sitefuel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
