@@ -74,6 +74,22 @@ module SiteFuel
       end
 
 
+      # gives a list of processors that implement AbstractProcessor
+      def self.find_processors
+        procs = []
+        ObjectSpace.each_object(Class) do |cls|
+          if cls.ancestors.include?(self) and
+             cls.to_s =~ /^.*Processor$/ and
+             not cls.to_s =~ /^.*Abstract.*Processor$/
+          then
+            procs << cls
+          end
+        end
+
+        procs
+      end
+
+
       #
       # PROCESSOR INFORMATION
       #

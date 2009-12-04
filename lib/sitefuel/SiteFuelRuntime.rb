@@ -96,17 +96,7 @@ module SiteFuel
     # * the class name must end with Processor
     #
     def self.find_processors
-      procs = []
-      ObjectSpace.each_object(Class) do |cls|
-        if cls.ancestors.include?(Processor::AbstractProcessor) and
-           cls.to_s =~ /^.*Processor$/ and
-           not cls.to_s =~ /^.*Abstract.*Processor$/
-        then
-          procs << cls
-        end
-      end
-
-      procs
+      Processor::AbstractProcessor.find_processors
     end
 
     # lists the actions which are possible with this runtime.
