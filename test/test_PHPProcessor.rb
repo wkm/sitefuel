@@ -26,5 +26,27 @@ class TestPHPProcessor < Test::Unit::TestCase
   def test_name
     assert_equal 'PHP', PHPProcessor.processor_name
   end
+
+  # test support for PHP documents
+  def test_php
+    assert_equal(
+      "<html><head><title>PHP test</title></head><body><?php echo '<?>Hello World' ?> <p>Some filler text.</p> <? echo 'some more php! Weeee' ?> </body></html>",
+
+      PHPProcessor.filter_string(:whitespace,
+        %q{
+          <html>
+            <head>
+              <title>PHP test</title>
+            </head>
+            <body>
+              <?php echo '<p>Hello World</p>' ?>
+              <p>Some filler text.</p>
+              <? echo 'some more php! Weeee' ?>
+            </body>
+          </html>
+        }
+      )
+    )
+  end
   
 end

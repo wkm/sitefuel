@@ -194,49 +194,4 @@ class TestHTMLProcessor < Test::Unit::TestCase
       ).strip
     )
   end
-
-
-  # test support for RHTML documents (really testing hpricot here)
-  def test_rhtml
-    assert_equal(
-      "<html><head><title>Goodbye, World.</title></head><body><h1>Goodbye!</h1> <% 5.times do || %> <p>and again...</p> <% end %> </body></html>",
-      HTMLProcessor.filter_string(:whitespace,
-        %q{
-          <html>
-            <head>
-              <title>Goodbye, World.</title>
-            </head>
-            <body>
-              <h1>Goodbye!</h1>
-              <% 5.times do || %>
-                <p>and again...</p>
-              <% end %>
-            </body>
-          </html>
-        }
-      )
-    )
-  end
-
-  # test support for PHP documents
-  def test_php
-    assert_equal(
-      "<html><head><title>PHP test</title></head><body><?php echo '<?>Hello World' ?> <p>Some filler text.</p> <? echo 'some more php! Weeee' ?> </body></html>",
-
-      HTMLProcessor.filter_string(:whitespace,
-        %q{
-          <html>
-            <head>
-              <title>PHP test</title>
-            </head>
-            <body>
-              <?php echo '<p>Hello World</p>' ?>
-              <p>Some filler text.</p>
-              <? echo 'some more php! Weeee' ?>
-            </body>
-          </html>
-        }
-      )
-    )
-  end
 end
