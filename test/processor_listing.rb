@@ -19,5 +19,10 @@ processors = processors.delete_if do |proc|
   proc.processor_name =~ /Abstract.*/ 
 end
 processors.each do |proc|
-  puts ' | %s | %s | '% [proc.processor_name.ljust(10), proc.file_patterns.join(', ').ljust(30)]
+  puts ' | %s | %s | %s | '%
+          [
+                  proc.processor_name.ljust(10),
+                  proc.file_patterns.join(', ').ljust(30),
+                  proc.processor_type.ljust(7)
+          ]
 end
