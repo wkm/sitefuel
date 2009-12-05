@@ -86,7 +86,7 @@ module SiteFuel
       # given the output of a program gives the version number or nil
       # if not available
       def self.extract_program_version(version_output)
-        version_output[/(\d+\.\d+(\.\d+))/]
+        version_output[/(\d+\.\d+(\.\d+)?([a-zA-Z]+)?)/]
       end
 
       # gives the version of the program

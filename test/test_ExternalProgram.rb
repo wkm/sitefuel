@@ -35,6 +35,24 @@ class TestProgramA < External::ExternalProgram
   end
 end
 
+class TestProgramB < TestProgramA
+  def self.option_version
+    '--version-2'
+  end
+end
+
+class TestProgramC < TestProgramA
+  def self.option_version
+    '--version-3'
+  end
+end
+
+class TestProgramD < TestProgramA
+  def self.option_version
+    '--version-4'
+  end
+end
+
 class TestExternalProgram < Test::Unit::TestCase
 
   def test_program_finding
@@ -46,8 +64,14 @@ class TestExternalProgram < Test::Unit::TestCase
 
   def test_getting_program_version
 
-    BashProgram.program_version
-    TestProgramA.program_version
+    # no real point testing against the bash version, who knows
+    # what they're running
+    assert_not_nil BashProgram.program_version
+
+    assert_equal '0.1.2', TestProgramA.program_version
+    assert_equal '0.1.2asdad', TestProgramB.program_version
+    assert_equal '0.2', TestProgramC.program_version
+    assert_equal '0.1.2', TestProgramD.program_version
 
   end
   
