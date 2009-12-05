@@ -11,6 +11,7 @@
 module SiteFuel
   module External
 
+    require 'sitefuel/external/ExternalProgram'
 
     # Defines a gentle wrapper around the pngcrush program. This wrapper is
     # specifically intended for use with the -reduce and -brute options.
