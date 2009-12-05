@@ -15,7 +15,6 @@ module SiteFuel
 
   require 'optparse'
   
-  require 'rubygems'
   require 'ruby-debug'
   require 'term/ansicolor'
 

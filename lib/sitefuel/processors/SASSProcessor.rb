@@ -9,8 +9,6 @@
 
 module SiteFuel
   module Processor
-    require 'rubygems'
-
     require 'sitefuel/extensions/Silently'
 
     # since the haml gem gives exec() warnings, we temporarily lower the verbosity

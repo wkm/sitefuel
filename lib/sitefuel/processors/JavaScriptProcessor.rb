@@ -7,7 +7,7 @@
 
 module SiteFuel
   module Processor
-    require 'rubygems'
+    
     require 'jsmin'
 
     require 'sitefuel/processors/AbstractStringBasedProcessor'

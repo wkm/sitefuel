@@ -9,7 +9,6 @@
 
 module SiteFuel
   module Processor
-    require 'rubygems'
 
     require 'sitefuel/extensions/Silently'
 

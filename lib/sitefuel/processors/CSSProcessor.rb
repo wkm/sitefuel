@@ -11,7 +11,6 @@
 module SiteFuel
   module Processor
 
-    require 'rubygems'
     require 'cssmin'
 
     require 'sitefuel/processors/AbstractStringBasedProcessor'

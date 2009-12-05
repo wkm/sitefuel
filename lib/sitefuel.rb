@@ -64,7 +64,6 @@
 # add source/ to the load path
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 
-require 'rubygems'
 require 'rdoc/usage'
 require 'term/ansicolor'
 
