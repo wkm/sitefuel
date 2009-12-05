@@ -68,19 +68,39 @@ module SiteFuel
         true
       end
 
-      # gives a list of compatible versions
+      # gives a condition on the compatible versions. A version is considered compatible
+      # if it's greater than the given version. Eventually we'll probably need a way to
+      # give a version range and allow excluding particular versions.
       def self.compatible_versions
-        '> 0.0.0.'
+        '> 0.0.0'
       end
 
       # gives true if a binary with a compatible version exists
       def self.compatible_version?
-
+        compatible_version_number?(program_version)
       end
 
       # gives true if a given version number is compatible
-      def self.compatible_version_number?(versionnumber)
+      def self.compatible_version_number?(version_number)
 
+        # ensure we're dealing with an array
+        version_scheme = compatible_versions
+        if not version_scheme.kind_of? Array
+          version_scheme = [version_scheme]
+        end
+
+        version_scheme.each do |ver|
+          case ver[0..0]
+            when '>'
+              return true if version_number > ver[1..-1].strip
+            when '<'
+              return true if version_number < ver[1..-1].strip
+            else
+              # ignore this version spec
+          end
+        end
+
+        return false
       end
 
       # given the output of a program gives the version number or nil
