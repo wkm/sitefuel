@@ -1,5 +1,14 @@
+#
+# File::      Rakefile
+# Author::    wkm
+# Copyright:: 2009
+# License::   GPL
+#
+# Contains tasks for building gems and running tests.
+#
+
+
 require 'rubygems'
-#Gem::manage_gems
 require 'rake/gempackagetask'
 
 spec = Gem::Specification.new do |s|
@@ -9,12 +18,14 @@ spec = Gem::Specification.new do |s|
   s.email      = 'wkm@sitefuel.org'
   s.homepage   = 'http://sitefuel.org'
   s.platform   = Gem::Platform::RUBY
-  s.summary    = 'A lightweight Ruby framework for processing, optimizing, and deploying websites'
+  s.summary    = 'A lightweight framework for processing, optimizing, and deploying websites'
   s.files      = FileList["{bin,test,lib,docs}/**/*"].exclude("rdoc").to_a
   s.require_path     = 'lib'
   s.test_file        = 'test/ts_gem.rb'
   s.has_rdoc         = true
   s.extra_rdoc_files = ['README']
+
+  s.description = File.read('RELEASE_NOTES.rdoc')
   
   # Gem dependencies
   
