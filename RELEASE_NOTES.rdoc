@@ -1,46 +1,65 @@
 
                                    SiteFuel
+                             http://sitefuel.org
                            v0.1.0 (initial release)
 
-A program and API for minifying websites and web applications and deploying from version control.
+A program and API for minifying websites and web applications and deploying them from version control.
+
+
+== Table of Contents
+
+  1. Introduction
+   . System Requirements
+   . Installation
+   . Getting Started
+   . Using Version Control Systems to Design Websites
+   . Reporting a Bug
+   . Further Reading
 
 
 == Introduction 
 SiteFuel is a Ruby program 
 
+Use SiteFuel to:
+  * deploy your website out of SVN or GIT
+  * minify your 
 
-== Using Version Control Systems to Design Websites
-Dynamic 
 
-== Requirements
+== System Requirements
 
+  * Ruby 1.8.6
 
 
 == Installation
 
-SiteFuel is deployed a RubyGem through http://gemcutter.org. You should be able to install it directly using 
+SiteFuel is deployed a RubyGem through http://gemcutter.org. You should be able to install it directly using RubyGems:
 
      $ gem install -t sitefuel
 
+You can also download a .ZIP containing SiteFuel and all of it's dependencies
 
 
 
+== Getting Started
 
 
 
+== Using Version Control Systems to Design Websites
+Dynamic
 
 
+== Reporting a Bug
+SiteFuel comes with a facility for reporting bugs. For example, if the command:
+
+     $ sitefuel stage fancysite/
+
+Has a bug, you can report a bug using:
+
+     $ sitefuel stage fancysite/ --report-bug
+
+This will 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+== Further Reading
+   * http://sitefuel.org       - main sitefuel website
+   * http://sitefuel.org/help  - pointers to various resources
