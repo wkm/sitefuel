@@ -4,16 +4,17 @@
 # Copyright:: 2009
 # License::   GPL
 #
-# An abstraction around calling an external program
+# An abstraction around calling an external program.
+#
+# TODO: make this less dependent on the OS behaving like Linux/OS X.
 #
 
 module SiteFuel
 
   class ExternalProgram
 
-    def self.program_binary
-
-    end
+    # classes which implement ExternalProgram need to define
+    # a self.program_binary class
 
     # gives the name of the external program
     def self.program_name
