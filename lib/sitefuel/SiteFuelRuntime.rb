@@ -15,7 +15,6 @@ module SiteFuel
 
   require 'optparse'
   
-  require 'ruby-debug'
   require 'term/ansicolor'
 
   include Term::ANSIColor
