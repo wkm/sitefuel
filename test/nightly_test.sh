@@ -16,7 +16,7 @@ echo 'Putting results in: '$tmpfile
 echo 'DATE: ' $(date -u) >> $tmpfile
 echo 'DIFF:' >> $tmpfile
 
-git diff --stat master master@{1} >> $tmpfile
+git diff --stat master@{1} master >> $tmpfile
 
 
 echo >> $tmpfile
