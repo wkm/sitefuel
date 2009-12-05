@@ -97,5 +97,9 @@ class TestExternalProgram < Test::Unit::TestCase
     assert TestProgramC.compatible_version?
     assert_equal false, TestProgramD.compatible_version?
   end
+
+  def test_compatible_version_number?
+    
+  end
   
 end

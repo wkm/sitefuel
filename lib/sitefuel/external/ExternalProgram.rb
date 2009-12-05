@@ -20,6 +20,12 @@ module SiteFuel
       end
     end
 
+
+
+
+
+
+    
     # lightweight abstraction around a program external to Ruby. The class
     # is designed to make it easy to use an external program in a batch
     # fashion. Note that the abstraction does not well support interacting
@@ -27,6 +33,7 @@ module SiteFuel
     class ExternalProgram
 
       @@program_binary = {}
+      @@program_options = {}
 
       # classes which implement ExternalProgram need to define
       # a self.program_name method.
@@ -55,7 +62,6 @@ module SiteFuel
       # Similar to Kernel#exec, but returns a string of the output
       def self.capture_output(command, *args)
         cli = command + ' ' + args.join(' ')
-        #File.read(cli).chop
         IO.popen(cli, 'r').read.chop
       end
 
@@ -80,11 +86,10 @@ module SiteFuel
         compatible_version_number?(program_version)
       end
 
-      # gives true if a given version number is compatible
-      def self.compatible_version_number?(version_number)
-
+      # tests a version number against a list of compatible version specifications
+      def self.test_version_number(compatible, version_number)
         # ensure we're dealing with an array
-        version_scheme = compatible_versions
+        version_scheme = compatible
         if not version_scheme.kind_of? Array
           version_scheme = [version_scheme]
         end
@@ -101,6 +106,11 @@ module SiteFuel
         end
 
         return false
+      end
+
+      # gives true if a given version number is compatible
+      def self.compatible_version_number?(version_number)
+        self.test_version_number(compatible_versions, version_number)
       end
 
       # given the output of a program gives the version number or nil
@@ -121,9 +131,14 @@ module SiteFuel
         return nil
       end
 
-      # describes options for the program
+      # gives the listing of declared options for the program
       def self.options
-        []
+        
+      end
+
+      # class method which declares an option for this program
+      def self.option(name, string = nil, default = nil)
+
       end
 
 
@@ -131,7 +146,15 @@ module SiteFuel
       #
       # INSTANCE METHODS
       #
-      def add_option()
+
+      # adds an option to be passed to this instance
+      def add_option(name, value=nil)
+
+      end
+
+
+      # executes the given ExternalProgram instance
+      def execute
 
       end
 
