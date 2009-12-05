@@ -20,6 +20,20 @@ module SiteFuel
       end
     end
 
+    class UnallowedOptionName < StandardError
+      attr_reader :program, :option_name, :excluded_names
+      def initialize(program, option_name, excluded_names)
+        @program = program
+        @option_name = option_name
+        @excluded_names = excluded_names
+      end
+
+      def to_s
+        'Program %s declares option %s which has one of the illegal option names: %s' %
+        [program, option_name, excluded_names]
+      end
+    end
+
 
 
 
@@ -34,6 +48,8 @@ module SiteFuel
 
       @@program_binary = {}
       @@program_options = {}
+
+      @@option_struct = Struct.new('ExternalProgramOption', 'name', 'template', 'default')
 
       # classes which implement ExternalProgram need to define
       # a self.program_name method.
@@ -131,14 +147,61 @@ module SiteFuel
         return nil
       end
 
-      # gives the listing of declared options for the program
-      def self.options
-        
+      # calls an option
+      def self.call_option(option_name)
+        method_name = "option_"+option_name
+        self.send(method_name.to_sym)
       end
 
-      # class method which declares an option for this program
-      def self.option(name, string = nil, default = nil)
+      # gives the listing of declared options for the program
+      def self.options
+        names = methods
+        names = names.delete_if { |method| not method =~ /^option_.*$/ }
+        names.sort!
 
+        names = names.map { |option_name| option_name.sub(/^option_(.*)$/, '\1').to_sym }
+        names - excluded_option_names
+      end
+
+      # list of excluded option names
+      def self.excluded_option_names
+        [:default, :template]
+      end
+
+      # tests whether a given option name is allowed
+      def self.allowed_option_name?(name)
+        not excluded_option_names.include?(name.to_sym)
+      end
+
+      # gives the default value for an option
+      def self.option_default(option_name)
+        self.call_option(option_name).default
+      end
+
+      # gives the template for an option
+      def self.option_template(option_name)
+        self.call_option(option_name).template
+      end
+
+      # declares an option for this program
+      def self.option(name, string = nil, default = nil)
+        unless name.kind_of? String
+          name = name.to_s
+        end
+
+        unless allowed_option_name?(name)
+          raise UnallowedOptionName.new(self, name, excluded_option_names)
+        end
+        
+        method_name = "option_"+name
+        struct = @@option_struct.new(name, string, default)
+        create_child_class_method(method_name.to_sym) { struct }
+      end
+
+      # allow the super class to programmatically create class methods
+      # in child classes. This isn't a hack. Really. ;-) 
+      def self.create_child_class_method(method_name, &block)
+        self.class.send(:define_method, method_name, block)
       end
 
 
