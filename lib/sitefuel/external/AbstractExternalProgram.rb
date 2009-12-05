@@ -1,5 +1,5 @@
 #
-# File::      ExternalProgram.rb
+# File::      AbstractExternalProgram.rb
 # Author::    wkm
 # Copyright:: 2009
 # License::   GPL
@@ -44,14 +44,14 @@ module SiteFuel
     # is designed to make it easy to use an external program in a batch
     # fashion. Note that the abstraction does not well support interacting
     # back and forth with external programs.
-    class ExternalProgram
+    class AbstractExternalProgram
 
       @@program_binary = {}
       @@program_options = {}
 
       @@option_struct = Struct.new('ExternalProgramOption', 'name', 'template', 'default')
 
-      # classes which implement ExternalProgram need to define
+      # classes which implement AbstractExternalProgram need to define
       # a self.program_name method.
 
       # gives the location of the external program; uses the =which=
@@ -216,7 +216,7 @@ module SiteFuel
       end
 
 
-      # executes the given ExternalProgram instance
+      # executes the given AbstractExternalProgram instance
       def execute
 
       end

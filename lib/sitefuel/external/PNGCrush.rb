@@ -11,11 +11,11 @@
 module SiteFuel
   module External
 
-    require 'sitefuel/external/ExternalProgram'
+    require 'sitefuel/external/AbstractExternalProgram'
 
     # Defines a gentle wrapper around the pngcrush program. This wrapper is
     # specifically intended for use with the -reduce and -brute options.
-    class PNGCrush < ExternalProgram
+    class PNGCrush < AbstractExternalProgram
 
       def self.program_name
         'pngcrush'

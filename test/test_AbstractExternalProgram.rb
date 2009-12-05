@@ -1,35 +1,35 @@
 #
-# File::         test_ExternalProgram.rb
+# File::         test_AbstractExternalProgram.rb
 # Author::       wkm
 # Copyright::    2009
 # License::      GPL
 #
-# Unit tests for the ExternalProgram wrapper.
+# Unit tests for the AbstractExternalProgram wrapper.
 #
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'test/unit'
 
-require 'sitefuel/external/ExternalProgram'
+require 'sitefuel/external/AbstractExternalProgram'
 
 include SiteFuel
 
 # a wrapper around a generic program
-class BashProgram < External::ExternalProgram
+class BashProgram < External::AbstractExternalProgram
   def self.program_name
     'bash'
   end
 end
 
 # a wrapper around a program which hopefully doesn't exist ;)
-class BadProgram < External::ExternalProgram
+class BadProgram < External::AbstractExternalProgram
   def self.program_name
     'foo183127cowsaydog'
   end
 end
 
-class TestProgramA < External::ExternalProgram
+class TestProgramA < External::AbstractExternalProgram
   def self.program_name
     './test_programs/versioning.rb'
   end

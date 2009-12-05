@@ -10,9 +10,9 @@
 module SiteFuel
   module External
 
-    require 'sitefuel/external/ExternalProgram'
+    require 'sitefuel/external/AbstractExternalProgram'
 
-    class JPEGTran < ExternalProgram
+    class JPEGTran < AbstractExternalProgram
 
       def self.program_name
         'jpegtran'
