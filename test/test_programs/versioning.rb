@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 #
 # File::      versioning.rb
 # Author::    wkm
