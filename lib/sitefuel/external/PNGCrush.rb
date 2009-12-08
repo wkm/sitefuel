@@ -29,11 +29,11 @@ module SiteFuel
 
       # define options
       option :version, '-version'
-      option :brute, '-brute'
-      option :reduce, '-reduce'
-      option :method, '-method ${value}', '115'
-      option :input, '${value}'
-      option :output, '${value}'
+      option :brute,   '-brute'
+      option :reduce,  '-reduce'
+      option :method,  '-method ${value}', '115'
+      option :input,   '${value}'
+      option :output,  '${value}'
       
 
       # command line builder

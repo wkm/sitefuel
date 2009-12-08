@@ -29,6 +29,11 @@ class TestPNGCrush < Test::Unit::TestCase
 
   def test_crush
     # test the crush capability against one of the test files
+    PNGCrush.execute :brute,
+                     :reduce,
+                     :input, 'test/file.png',
+                     :output, 'test/file-out.png',
+                     :reduce
   end
 
 end

@@ -13,23 +13,23 @@ require 'test/unit'
 
 require 'sitefuel/external/AbstractExternalProgram'
 
-include SiteFuel
+include SiteFuel::External
 
 # a wrapper around a generic program
-class BashProgram < External::AbstractExternalProgram
+class BashProgram < AbstractExternalProgram
   def self.program_name
     'bash'
   end
 end
 
 # a wrapper around a program which hopefully doesn't exist ;)
-class BadProgram < External::AbstractExternalProgram
+class BadProgram < AbstractExternalProgram
   def self.program_name
     'foo183127cowsaydog'
   end
 end
 
-class TestProgramA < External::AbstractExternalProgram
+class TestProgramA < AbstractExternalProgram
   def self.program_name
     './test_programs/versioning.rb'
   end
@@ -100,6 +100,29 @@ class TestExternalProgram < Test::Unit::TestCase
 
   def test_compatible_version_number?
     
+  end
+
+  def test_option_organizing
+    assert_equal [], AbstractExternalProgram.organize_options()
+    assert_equal [[:a],[:b],[:c]], AbstractExternalProgram.organize_options(:a, :b, :c)
+    assert_equal(
+            [[:a], [:b, 'val'], [:c]],
+            AbstractExternalProgram.organize_options(:a,
+                                                     :b, 'val',
+                                                     :c)
+    )
+
+    assert_equal(
+            [[:a, 'val1'], [:b, 'val2'], [:c, 'val3']],
+            AbstractExternalProgram.organize_options(:a, 'val1',
+                                                     :b, 'val2',
+                                                     :c, 'val3')
+    )
+
+    assert_equal(
+            [[:a, 'val1', 'val2']],
+            AbstractExternalProgram.organize_options(:a, 'val1', 'val2')
+    )
   end
   
 end

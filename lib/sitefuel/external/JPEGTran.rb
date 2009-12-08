@@ -36,7 +36,11 @@ module SiteFuel
 
 
       def self.compress_losslessly(in_file, out_file)
-        self.execute(:copy, :optimize, :perfect, :input => in_file, :output => out_file)
+        self.execute :copy,
+                     :optimize,
+                     :perfect,
+                     :input => in_file,
+                     :output => out_file
       end
 
     end

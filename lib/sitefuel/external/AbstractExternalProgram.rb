@@ -12,6 +12,8 @@
 module SiteFuel
   module External
 
+    require 'sitefuel/SiteFuelLogger'
+
     # raised when an external program can't be found
     class ProgramNotFound < StandardError
       attr_reader :program_name
@@ -34,6 +36,19 @@ module SiteFuel
       end
     end
 
+    class MalformedOptions < StandardError
+      attr_reader :program, :options
+      def initialize(program, options)
+        @program = program
+        @options = options
+      end
+
+      def to_s
+        'Program %s called with a malformed options pattern: %s' %
+        [program, options]
+      end
+    end
+
 
 
 
@@ -45,6 +60,8 @@ module SiteFuel
     # fashion. Note that the abstraction does not well support interacting
     # back and forth with external programs.
     class AbstractExternalProgram
+
+      include SiteFuel::Logging
 
       @@program_binary = {}
       @@program_options = {}
@@ -217,8 +234,61 @@ module SiteFuel
         self.class.send(:define_method, method_name, block)
       end
 
-      # creates and executes an instance of this external program
+      # organizes a list of options into a ragged array of arrays
+      #
+      #  organize_options(:setflag, :paramsetting, 'val1', 'val2')
+      #  # =>[[:setflag], [:paramsetting, 'val1', 'val2']]
+      def self.organize_options(*options)
+        organized = []
+        i = 0
+
+        while i < options.length
+          # if we see a symbol are at a new option
+          if options[i].kind_of? Symbol
+            option_row = [options[i]]
+            organized << option_row
+
+            j = i+1
+            while j < options.length
+              case options[j]
+                when String
+                  # adds this value
+                  option_row << options[j]
+                  j += 1
+                
+                when Symbol
+                  # the zoom below will cause this spot to get looked at
+                  break
+                
+                else
+                  # the zoom below will force us to look at this spot again
+                  # and bail
+                  break
+              end
+            end
+
+            # zoom i ahead to this spot
+            i = j
+          else
+            raise MalformedOptions(self, options)
+          end
+        end
+
+        return organized
+      end
+
+
+
+      # creates and executes an instance of this external program by taking
+      # a list of parameters and their values
+      #
+      #  self.execute :setflag,                       # set a flag
+      #               :paramsetting, "param value",   # pass a single value
+      #               :paramsetting2, "val1", "val2"  # pass multiple values
       def self.execute(*options)
+
+        # organize options
+
         instance = self.new
         options.each do |opt|
           instance.add_option(opt)
