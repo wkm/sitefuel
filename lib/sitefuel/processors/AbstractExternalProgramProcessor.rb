@@ -55,6 +55,10 @@ module SiteFuel
           return versions[0]
         end
       end
+
+      def self.process_file(filename, config = {})
+        # TODO: implement... ;)
+      end
       
     end
 
