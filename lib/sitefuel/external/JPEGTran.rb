@@ -18,6 +18,7 @@ module SiteFuel
         'jpegtran'
       end
 
+      # the versioning scheme for jpegtran is a little weird
       def self.compatible_versions
         ['6']
       end
