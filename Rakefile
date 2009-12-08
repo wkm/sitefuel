@@ -19,11 +19,11 @@ spec = Gem::Specification.new do |s|
   s.homepage   = 'http://sitefuel.org'
   s.platform   = Gem::Platform::RUBY
   s.summary    = 'A lightweight framework for processing, optimizing, and deploying websites'
-  s.files      = FileList["{bin,test,lib,docs}/**/*"].exclude("rdoc").to_a
+  s.files      = FileList["{bin,test,lib,docs}/**/*"].exclude("rdoc", "pxm", "sh").to_a
   s.require_path     = 'lib'
   s.test_file        = 'test/ts_gem.rb'
   s.has_rdoc         = true
-  s.extra_rdoc_files = ['README']
+  s.extra_rdoc_files = ['README', 'RELEASE_NOTES']
 
   s.description = File.read('RELEASE_NOTES.rdoc')
   

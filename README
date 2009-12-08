@@ -1,27 +1,66 @@
-                                  SiteFuel
-                            
-     A lightweight ruby framework for processing and deploying websites.
+~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+ 
+ 
+                                   SiteFuel
+                             http://sitefuel.org
+                           v0.1.0 (initial release)
+ 
 
-   * Website: http://sitefuel.org/
+~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+
+A program and API for minifying websites and web applications and deploying them from version control.
+
    * Get started: http://sitefuel.org/getstarted
    * Lists: http://sitefuel.org/mailinglists
    * Report a bug: http://sitefuel.org/bug
-
-          Contribute! http://sitefuel.org/contribute
-
-== License
-SiteFuel is Copyright 2009, Zanoccio LLC. Released under the General Public License, v2. See the section GPL for details.
-
-== Introduction
-SiteFuel is a lightweight ruby program and API for processing, generating, and deploying websites directly from version control. SiteFuel includes support for minifying HTML, CSS, and JavaScript; crushing PNGs; compressing JPEGs; generating HTML and CSS from HAML and SASS.
-
-SiteFuel also supports compression of HTML fragments in rhtml and php files.
-
-== Performance
-SiteFuel is intended for use as a deployment tool throughout the entire development processor. However, it can be used to process a third-party web application. For example, SiteFuel can be used to process a redmine deployment.
-
-== More Information
+   
+   * Contribute! http://sitefuel.org/contribute
 
 
-== GPL
-$(gpl text)
+== Table of Contents
+
+  1. Introduction
+   . System Requirements
+   . Supported Formats
+   . Installation
+   . Getting Started
+   . Reporting a Bug
+   . Further Reading
+
+
+== Introduction 
+SiteFuel is a Ruby program 
+
+Use SiteFuel to:
+  * deploy your website out of SVN or GIT
+  * minify your 
+
+
+== System Requirements
+
+  * Ruby 1.8.6
+
+
+== Installation
+
+SiteFuel is deployed a RubyGem through http://gemcutter.org. You should be able to install it directly using RubyGems:
+
+     $ gem install -t sitefuel
+
+You can also download a ZIP-file containing SiteFuel and all of the gems it depends on from http://sitefuel.org/download/sitefuel-complete.zip
+
+
+
+== Getting Started
+
+
+
+
+
+== Reporting a Bug
+
+
+
+== Further Reading
+   * http://sitefuel.org       - main sitefuel website
+   * http://sitefuel.org/help  - pointers to various resources
