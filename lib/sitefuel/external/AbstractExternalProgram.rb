@@ -207,7 +207,7 @@ module SiteFuel
         # option_<name>= method
         if string.count("${value}") > 0
           method_name = "option_"+name+"="
-          create_child_class_method
+#          create_child_class_method(method_name.to_sym) { }
         end
       end
 

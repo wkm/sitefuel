@@ -14,7 +14,6 @@
 module SiteFuel
 
   require 'optparse'
-  
   require 'term/ansicolor'
 
   include Term::ANSIColor
@@ -25,7 +24,7 @@ module SiteFuel
   require 'sitefuel/extensions/StringFormatting'
   require 'sitefuel/extensions/FileComparison'
 
-  # we need the AbstractProcessor symbol when we go child hunting
+  # we need the AbstractProcessor symbol when we go child-class hunting
   require 'sitefuel/processors/AbstractProcessor'
 
   class SiteFuelRuntime
@@ -41,6 +40,7 @@ module SiteFuel
     # what is the source *to* which we are deploying
     attr_accessor :deploy_to
 
+    # configuration loaded from a deployment.yml file
     attr_accessor :deploymentconfiguration
 
     def initialize
@@ -49,7 +49,9 @@ module SiteFuel
     end
 
     # gives true if the given file (typically a processor) has already been
-    # loaded (by looking into $")
+    # loaded (by looking into $"). Unfortunately #require is easily tricked,
+    # so this function uses some heuristics to prevent processors from being
+    # loaded twice (by basically comparing the "core" part of the filename)
     def self.processor_loaded?(file)
       $".map do |f|
         if File.equivalent?(file, f)
@@ -67,24 +69,25 @@ module SiteFuel
       dir = File.join(*dir[0..-2]) + File::SEPARATOR
 
       # build up the search pattern by taking this file's directory and shoving
-      # on the search patt
+      # it onto the search pattern
       patt = File.join(dir, 'sitefuel/processors/*Processor.rb')
 
-      # find all file matching pattern
+      # find all file matching that pattern
       files = Dir[patt]
       
-      # rip off the path prefix so 'sitefuel/lib/foo.rb' becomes 'foo.rb'
+      # rip off the path prefix eg. 'sitefuel/lib/b/foo.rb' becomes 'b/foo.rb'
       files = files.map do |filename|
         filename.gsub(Regexp.new("^"+Regexp.escape(dir)), '')
       end
 
-      # get rid of anything we've loaded
+      # get rid of anything we've already loaded
       files = files.delete_if { |file| processor_loaded?(file) }
 
       # load whatever files we're left with
       files.each { |f| require f }
     end
 
+    
     # returns a list of processors found by looking for all children of
     # SiteFuel::Processor::AbstractProcessor
     #
@@ -105,15 +108,15 @@ module SiteFuel
     # gives the array of processors available to this runtime
     attr_reader :processors
 
-    # adds one processor or an array of processors
+    # adds a processor or an array of processors to the runtime
     def add_processor(proc)
       case proc
-      when Array
-        proc.each { |p|
-          @processors << p
-        }
-      else
-        @processors << proc
+        when Array
+          proc.each { |p|
+            @processors << p
+          }
+        else
+          @processors << proc
       end
     end
 
@@ -122,13 +125,13 @@ module SiteFuel
       matchingprocs = processors.clone.delete_if {|proc| not proc.processes_file?(filename) }
 
       case
-      when matchingprocs.length > 1
-        chosen = matchingprocs.first
-        raise Processor::MultipleApplicableProcessors.new(filename, matchingprocs, chosen)
-      when matchingprocs.length == 1
-        return matchingprocs.first
-      else
-        return nil
+        when matchingprocs.length > 1
+          chosen = matchingprocs.first
+          raise Processor::MultipleApplicableProcessors.new(filename, matchingprocs, chosen)
+        when matchingprocs.length == 1
+          return matchingprocs.first
+        else
+          return nil
       end
     end
 
@@ -138,13 +141,19 @@ module SiteFuel
     def choose_processor!(filename)
       begin
         choose_processor(filename)
-      rescue Processor::MultipleApplicableProcessors => excep
+      rescue Processor::MultipleApplicableProcessors => exception
         # log the exception
-        warn excep
-        excep.chosen_processor
+        warn exception
+        exception.chosen_processor
       end
     end
 
+
+    # implements the stage command. Staging, by itself, will give statistics on
+    # the deployment; how many bytes were saved by minification; etc.
+    #
+    # However, #stage when part of #deploy will go and create the requisite files
+    # in a temporary directory
     def stage
       return nil if @deploy_from == nil
 
@@ -208,22 +217,19 @@ module SiteFuel
       puts
     end
 
-    # gives an array listing
+    # gives an array listing of all files on a given path
+    #
+    # This is a very lightweight wrapper around Dir.
     def find_all_files(path)
       Dir[File.join(path, "**/*")]
     end
 
+    # changes the verbosity of the runtime by adjusting the log level
     def verbosity(level = 1)
       case level
       when 1
 
       end
-    end
-
-    def findfiles(path)
-      Dir.foreach(path) { |fname|
-        puts "gots #{fname}"
-      }
     end
   end
 

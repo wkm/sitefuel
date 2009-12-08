@@ -29,7 +29,6 @@ class TestPNGCrush < Test::Unit::TestCase
 
   def test_crush
     # test the crush capability against one of the test files
-    PNGCrush.
   end
 
 end
