@@ -69,4 +69,7 @@ class String
     lines.join("\n")
   end
 
+
+  alias :format :%
+
 end
