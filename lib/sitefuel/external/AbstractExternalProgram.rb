@@ -183,6 +183,10 @@ module SiteFuel
         self.call_option(option_name).template
       end
 
+      def self.option?(name)
+        self.options.include?(name)
+      end
+
       # declares an option for this program
       def self.option(name, string = nil, default = nil)
         unless name.kind_of? String
@@ -192,16 +196,35 @@ module SiteFuel
         unless allowed_option_name?(name)
           raise UnallowedOptionName.new(self, name, excluded_option_names)
         end
-        
+
+
+        # give a method for the option
         method_name = "option_"+name
         struct = @@option_struct.new(name, string, default)
         create_child_class_method(method_name.to_sym) { struct }
+
+        # if the string contains ${value} it's settable, so add a
+        # option_<name>= method
+        if string.count("${value}") > 0
+          method_name = "option_"+name+"="
+          create_child_class_method
+        end
       end
 
       # allow the super class to programmatically create class methods
       # in child classes. This isn't a hack. Really. ;-) 
       def self.create_child_class_method(method_name, &block)
         self.class.send(:define_method, method_name, block)
+      end
+
+      # creates and executes an instance of this external program
+      def self.execute(*options)
+        instance = self.new
+        options.each do |opt|
+          instance.add_option(opt)
+        end
+
+        instance.execute
       end
 
 
