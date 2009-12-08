@@ -148,7 +148,7 @@ module SiteFuel
     def stage
       return nil if @deploy_from == nil
 
-      puts bold('Staging:')
+      puts '== %s '.format('Staging').ljust(80, '=')
 
       # find all files under deploy_from
       files = find_all_files @deploy_from
