@@ -25,15 +25,18 @@ class TestPNGCrush < Test::Unit::TestCase
     assert PNGCrush.option?(:method)
     assert PNGCrush.option?(:input)
     assert PNGCrush.option?(:output)
+
+    assert_equal '-brute',   PNGCrush.option_template(:brute)
+#    assert_equal '-version', PNGCrush.option_template(:version)
   end
 
-  def test_crush
+  def test_brute
     # test the crush capability against one of the test files
-    PNGCrush.execute :brute,
-                     :reduce,
-                     :input, 'test/file.png',
-                     :output, 'test/file-out.png',
-                     :reduce
+    PNGCrush.brute 'test_images/sample_png01.png',
+                   'test_images/sample_png01-brute.png'
+
+    PNGCrush.quick 'test_images/sample_png01.png',
+                   'test_images/sample_png01-quick.png'
   end
 
 end
