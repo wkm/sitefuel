@@ -13,6 +13,8 @@ module SiteFuel
     require 'sitefuel/processors/AbstractExternalProgramProcessor'
     require 'sitefuel/external/PNGCrush'
 
+    include SiteFuel::External
+
     # processor for handling Portable Network Graphics images
     # currently operates as a lightweight wrapper around 'pngcrush'
     class PNGProcessor < AbstractExternalProgramProcessor
@@ -62,11 +64,11 @@ module SiteFuel
       #
       
       def filter_brute
-        PNGCrush.brute(resource_name, output_file)
+        PNGCrush.brute(resource_name, output_filename)
       end
 
       def filter_quick
-        PNGCrush.quick(resource_name, output_file)
+        PNGCrush.quick(resource_name, output_filename)
       end
     end
 

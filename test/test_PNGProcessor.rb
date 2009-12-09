@@ -21,4 +21,12 @@ class TestPNGProcessor < Test::Unit::TestCase
     assert PNGProcessor.processes_file?("test.png")
     assert PNGProcessor.processes_file?("test.PNG")
   end
+
+  def test_name
+    assert_equal 'PNG', PNGProcessor.processor_name
+  end
+
+  def test_crush
+    PNGProcessor.process_file('test_images/sample_png01.png')
+  end
 end
