@@ -121,9 +121,9 @@ def parse_command_line(runtime)
     puts iopt
     puts_and_exit $HELP_HINT_LINE
   rescue => exception
-    # TODO: add better handling for the various exceptions (unncessary
+    # TODO: add better handling for the various exceptions (unnecessary
     #       argument, missing argument, etc.)
-    puts_and_exit "couldn\'t parse command line: #{exception}", $HELP_HINT_LINE
+    puts_and_exit "couldn't parse command line: #{exception}", $HELP_HINT_LINE
   end
 
 
