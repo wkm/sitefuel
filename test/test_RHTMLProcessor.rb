@@ -45,6 +45,18 @@ class TestRHTMLProcessor < Test::Unit::TestCase
         }
       )
     )
+
+    assert_equal(
+      "<html> <%= page.title %> </html>",
+
+      RHTMLProcessor.filter_string(:whitespace,
+        %q{
+          <html>
+            <%= page.title %>
+          </html>
+        }
+      )
+    )
   end
 
 end
