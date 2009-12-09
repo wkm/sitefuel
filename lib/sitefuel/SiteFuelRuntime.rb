@@ -49,6 +49,7 @@ module SiteFuel
     def initialize
       @processors = SiteFuelRuntime.find_processors
       self.logger = SiteFuelLogger.instance
+      SiteFuelLogger.instance.log_style = :clean
 
       @only_list_recognized_files = false
     end

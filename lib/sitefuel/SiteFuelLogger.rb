@@ -9,6 +9,9 @@ module SiteFuel
   
   require 'logger'
   require 'singleton'
+  require 'term/ansicolor'
+
+  include Term::ANSIColor
 
   # Singleton abstraction around the Logger:: library, typically every processor
   # will hook into using this logger while letting us control it's placement
@@ -31,14 +34,24 @@ module SiteFuel
     # the number of debug messages logged so far (even if lower than #level)
     attr_reader :debug_count
 
+    # adjust the style of logging:
+    #
+    # default:: use the Logger logging style
+    # clean:: gives a clean logging output intended for human use
+    attr_accessor :log_style
+
     def initialize(filename = STDOUT)
+      super(filename)
+      
       @fatal_count = 0
       @error_count = 0
       @warn_count = 0
       @info_count = 0
       @debug_count = 0
-      
-      super(filename)
+
+      self.level = WARN
+      @log_style = :default
+      @progname = 'SiteFuel'
     end
 
     def fatal(*args)
@@ -64,6 +77,28 @@ module SiteFuel
     def debug(*args)
       @debug_count += 1
       super(*args)
+    end
+
+    # implement our own #add so we can have cleaner logs
+    def format_message(severity, date_time, program_name, msg)
+      case @log_style
+        when :default
+          super(severity, date_time, program_name, msg)
+
+        when :clean
+          string = "#{severity}: #{msg}\n"
+          case severity
+            when 'ERROR', 'FATAL'
+              string = bold(red(string))
+
+            when 'WARN'
+              string = yellow(string)
+
+            when 'DEBUG'
+              string = string
+          end
+          string
+      end
     end
   end
 
