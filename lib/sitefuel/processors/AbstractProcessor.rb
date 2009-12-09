@@ -294,7 +294,7 @@ module SiteFuel
         end
         finish_filters
       rescue => exception
-        error 'from %s:%s: %s' % [self, resource_name, exception]
+        error 'from %s:%s: %s' % [self.class, resource_name, exception]
       end
 
 
@@ -325,34 +325,38 @@ module SiteFuel
     private
       def set_configuration(key, value)
         case key
-        when :filters
-          if not @filters_cleared
-            clear_filters
-            @filters_cleared = true
-          end
-          
-          case value
-          when Array
-            value.each { |v| add_filter(v) }
-          when Symbol, String
-            add_filter(value)
-          end
+          when :resource_name
+            @resource_name = value
 
-        when :filtersets
-          if not @filters_cleared
-            clear_filters
-            @filters_cleared = true
-          end
 
-          case value
-          when Array
-            value.each { |v| add_filterset(v) }
-          when Symbol, String
-            add_filterset(value)
-          end
+          when :filters
+            if not @filters_cleared
+              clear_filters
+              @filters_cleared = true
+            end
 
-        else
-          raise UnknownConfigurationOption(self.class, key, value)
+            case value
+              when Array
+                value.each { |v| add_filter(v) }
+              when Symbol, String
+                add_filter(value)
+            end
+
+          when :filtersets
+            if not @filters_cleared
+              clear_filters
+              @filters_cleared = true
+            end
+
+            case value
+              when Array
+                value.each { |v| add_filterset(v) }
+              when Symbol, String
+                add_filterset(value)
+            end
+
+          else
+            raise UnknownConfigurationOption(self.class, key, value)
         end
       end
 
