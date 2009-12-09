@@ -32,6 +32,8 @@ module SiteFuel
       option :brute,   '-brute'
       option :reduce,  '-reduce'
       option :method,  '-method ${value}', '115'
+      option :rem,     '-rem ${value}', 'alla'
+      option :z,       '-z ${value}', '1'
       option :input,   '${value}'
       option :output,  '${value}'
 
@@ -46,7 +48,15 @@ module SiteFuel
 
       # quick 
       def self.quick(in_file, out_file)
-        execute :reduce,
+        execute :input, in_file,
+                :output, out_file
+      end
+
+      # strips out all data except the RGBA values (any copyrights, gamma, etc.)
+      def self.chainsaw (in_file, out_file)
+        execute :rem, 'alla',
+                :reduce,
+                :z, '1',
                 :input, in_file,
                 :output, out_file
       end

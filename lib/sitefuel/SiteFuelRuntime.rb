@@ -185,7 +185,6 @@ module SiteFuel
             puts '%s %s' %['--'.ljust(8), filename.cabbrev(65)]
           end
         else
-          processor.generate
           total_original_size += processor.original_size
           total_processed_size += processor.processed_size
 

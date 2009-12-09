@@ -24,6 +24,11 @@ module SiteFuel
     # parameters to pass to the program.
     class AbstractExternalProgramProcessor < AbstractProcessor
 
+      def initialize
+        super
+        @output_filename = nil
+      end
+
       def self.processor_type
         'External'
       end
@@ -47,7 +52,11 @@ module SiteFuel
       # gives the output filename for this processor; typically this will
       # be a temporary file.
       def output_filename
-       Tempfile.new(File.basename(resource_name)).path
+        if @output_filename == nil
+          @output_filename = Tempfile.new(File.basename(resource_name)).path
+        end
+
+        @output_filename
       end
 
       # generates the new document using external programs

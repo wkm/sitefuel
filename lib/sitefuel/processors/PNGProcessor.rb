@@ -13,7 +13,7 @@ module SiteFuel
     require 'sitefuel/processors/AbstractExternalProgramProcessor'
     require 'sitefuel/external/PNGCrush'
 
-    include SiteFuel::External
+    include External
 
     # processor for handling Portable Network Graphics images
     # currently operates as a lightweight wrapper around 'pngcrush'
@@ -47,7 +47,7 @@ module SiteFuel
       #
 
       def self.default_filterset
-        :quick
+        :max
       end
 
       def self.filterset_quick
@@ -55,7 +55,7 @@ module SiteFuel
       end
 
       def self.filterset_max
-        [:brute]
+        [:brute_chainsaw]
       end
 
 
@@ -64,11 +64,15 @@ module SiteFuel
       #
       
       def filter_brute
-        PNGCrush.brute(resource_name, output_filename)
+        SiteFuel::External::PNGCrush.brute(resource_name, output_filename)
       end
 
       def filter_quick
-        PNGCrush.quick(resource_name, output_filename)
+        SiteFuel::External::PNGCrush.quick(resource_name, output_filename)
+      end
+
+      def filter_brute_chainsaw
+        SiteFuel::External::PNGCrush.chainsaw(resource_name, output_filename)
       end
     end
 
