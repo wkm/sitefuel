@@ -35,15 +35,23 @@ module SiteFuel
       CDATA_START = '//<![CDATA['
       CDATA_END   = '//]]>'
       def filter_minify
-        @document.gsub!(CDATA_START, '[[CDATA_START]]').
-                  gsub!(CDATA_END,   '[[CDATA_END]]')
+        return nil if @document == nil
+        return nil if @document.length == 0
 
+        # JSMin doesn't like having files without any newlines
+        @document << "\n"
+
+        # put in CDATA placeholders
+        @document.gsub!(CDATA_START, '[[CDATA_START]]')
+        @document.gsub!(CDATA_END,   '[[CDATA_END]]')
+
+        # run the minification
         @document = JSMin.minify(@document).strip
 
-        @document.gsub!('[[CDATA_START]]', CDATA_START).
-                  gsub!('[[CDATA_END]]',   CDATA_END)
+        # put back CDATA
+        @document.gsub!('[[CDATA_START]]', CDATA_START)
+        @document.gsub!('[[CDATA_END]]',   CDATA_END)
       end
-
     end
   end
 end
