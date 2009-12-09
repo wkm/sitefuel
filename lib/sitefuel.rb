@@ -40,7 +40,7 @@
 #
 #
 # == Author
-# wkm, Zanoccio, LLC.
+# Zanoccio, LLC.
 #
 # == Copyright
 # Copyright (c) 2009 Zanoccio.
