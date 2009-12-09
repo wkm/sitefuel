@@ -24,40 +24,40 @@ module SiteFuel
       #
 
       # quotes
-      SINGLE_QUOTE_OPEN        = '&#8216;'
-      SINGLE_QUOTE_CLOSE       = '&#8217;'
-      DOUBLE_QUOTE_OPEN        = '&#8220;'
-      DOUBLE_QUOTE_CLOSE       = '&#8221;'
+      SINGLE_QUOTE_OPEN        = '&#8216;'.freeze
+      SINGLE_QUOTE_CLOSE       = '&#8217;'.freeze
+      DOUBLE_QUOTE_OPEN        = '&#8220;'.freeze
+      DOUBLE_QUOTE_CLOSE       = '&#8221;'.freeze
 
       # dashes
-      EN_DASH                  = '&#8211;'
-      EM_DASH                  = '&#8212;'
+      EN_DASH                  = '&#8211;'.freeze
+      EM_DASH                  = '&#8212;'.freeze
 
       # signs
-      ELLIPSIS                 = '&#8230;'
-      COPYRIGHT                = '&#169;'
-      TRADEMARK                = '&#8482;'
-      REGISTERED               = '&#174;'
+      ELLIPSIS                 = '&#8230;'.freeze
+      COPYRIGHT                = '&#169;'.freeze
+      TRADEMARK                = '&#8482;'.freeze
+      REGISTERED               = '&#174;'.freeze
 
       # arrows
-      ARROW_LEFTWARD           = '&#8592;'
-      ARROW_RIGHTWARD          = '&#8594;'
-      ARROW_LEFTRIGHT          = '&#8596;'
-      ARROW_DOUBLE_LEFTWARD    = '&#8656;'
-      ARROW_DOUBLE_RIGHTWARD   = '&#8658;'
-      ARROW_DOUBLE_LEFTRIGHT   = '&#8660;'
+      ARROW_LEFTWARD           = '&#8592;'.freeze
+      ARROW_RIGHTWARD          = '&#8594;'.freeze
+      ARROW_LEFTRIGHT          = '&#8596;'.freeze
+      ARROW_DOUBLE_LEFTWARD    = '&#8656;'.freeze
+      ARROW_DOUBLE_RIGHTWARD   = '&#8658;'.freeze
+      ARROW_DOUBLE_LEFTRIGHT   = '&#8660;'.freeze
 
       # math operators
-      MULTIPLICATION_SIGN      = '&#215;'
+      MULTIPLICATION_SIGN      = '&#215;'.freeze
 
 
       # list of tags which have proper text items inside them
       TEXTUAL_TAGS             = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6',
                                   'p', 'b', 'i', 'ul', 'a', 'li', 'td',
-                                  'th']
+                                  'th'].freeze
       
       # filter for use with XPath searches
-      TEXTUAL_TAGS_FILTER      = TEXTUAL_TAGS.join('|')
+      TEXTUAL_TAGS_FILTER      = TEXTUAL_TAGS.join('|').freeze
 
 
 
