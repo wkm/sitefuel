@@ -37,6 +37,9 @@ class TestPNGCrush < Test::Unit::TestCase
 
     PNGCrush.quick 'test_images/sample_png01.png',
                    'test_images/tmp-sample_png01-quick.png'
+
+    PNGCrush.chainsaw 'test_images/sample_png01.png',
+                      'test_images/tmp-sample_png01-chainsaw.png'
   end
 
 end
