@@ -24,7 +24,7 @@ module SiteFuel
       # most likely earlier versions of pngcrush would work as well
       # but we've only ever tested it with 1.5.10
       def self.compatible_versions
-        ['1.5']
+        ['> 1.5']
       end
 
       # define options
@@ -34,19 +34,23 @@ module SiteFuel
       option :method,  '-method ${value}', '115'
       option :input,   '${value}'
       option :output,  '${value}'
-      
 
-      # command line builder
-      def self.command_line(options)
-        [
-          # first we put any normal options
-          option_value(options),
-          option_value(options, :output)
+      # uses -brute with PNGCrush to find the smallest file size, but at the
+      # expense of taking quite a while to run.
+      def self.brute(in_file, out_file)
+        execute :brute,
+                :reduce,
+                :input, in_file,
+                :output, out_file
+      end
 
-        ]
+      # quick 
+      def self.quick(in_file, out_file)
+        execute :reduce,
+                :input, in_file,
+                :output, out_file
       end
 
     end
-
   end
 end
