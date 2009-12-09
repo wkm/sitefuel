@@ -32,8 +32,16 @@ module SiteFuel
         [:minify]
       end
 
+      CDATA_START = '//<![CDATA['
+      CDATA_END   = '//]]>'
       def filter_minify
+        @document.gsub!(CDATA_START, '[[CDATA_START]]').
+                  gsub!(CDATA_END,   '[[CDATA_END]]')
+
         @document = JSMin.minify(@document).strip
+
+        @document.gsub!('[[CDATA_START]]', CDATA_START).
+                  gsub!('[[CDATA_END]]',   CDATA_END)
       end
 
     end
