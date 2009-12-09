@@ -293,6 +293,8 @@ module SiteFuel
           run_filter(filter)
         end
         finish_filters
+      rescue => exception
+        error 'from %s:%s: %s' % [self, resource_name, exception]
       end
 
 
