@@ -170,6 +170,7 @@ module SiteFuel
       total_original_size = 0
       total_processed_size = 0
       @resource_processors = {}
+      @processor_statistics = Hash.new([0, 0, 0])
       files.each do |filename|
         processor = choose_processor!(filename)
         if processor == nil
@@ -187,13 +188,53 @@ module SiteFuel
           processor.generate
           total_original_size += processor.original_size
           total_processed_size += processor.processed_size
-          puts '%s %s %4.2f' % [cyan(processor.class.processor_name.ljust(8)), filename.cabbrev(65).ljust(65), processor.processed_size.prec_f/processor.original_size.prec_f]
+
+          stats = @processor_statistics[processor.class.processor_name].clone
+          stats[0] += 1
+          stats[1] += processor.original_size
+          stats[2] += processor.processed_size
+          @processor_statistics[processor.class.processor_name] = stats
+
+          puts '%s %s %4.3f' %
+               [
+                 cyan(processor.class.processor_name.ljust(8)),
+                 filename.cabbrev(65).ljust(65),
+                 processor.processed_size.prec_f/processor.original_size.prec_f
+               ]
         end
       end
 
       puts '='*80
-      puts 'Size delta:         %+5d bytes; %4.2f' % [total_processed_size - total_original_size, total_processed_size.prec_f/total_original_size.prec_f]
+      puts 'Size delta:         %+5d bytes; %4.3f' %
+              [
+                total_processed_size - total_original_size,
+                total_processed_size.prec_f/total_original_size.prec_f
+              ]
 
+      staging_statistics
+    end
+
+    # outputs a little grid showing the number of files of each processor
+    # and the total savings
+    #
+    # todo: this should be computed in the staging step
+    def staging_statistics
+      puts ''
+      puts '     %s | %s  |    %s    | %s' %
+           ['processor', '# files', 'delta', 'ratio'].map{|v| bold(v)}
+      puts '    -----------+----------+-------------+-------'
+      
+      @processor_statistics.keys.sort.each do |key|
+        puts '     %s|%9d |%+12d | %4.3f' %
+             [
+               key.ljust(10),
+               @processor_statistics[key][0],
+               @processor_statistics[key][2] - @processor_statistics[key][1],
+               @processor_statistics[key][2].prec_f / @processor_statistics[key][1].prec_f
+             ]
+      end
+      puts '    -----------+----------+-------------+-------'
+      puts ''
     end
 
     # create a deployment
