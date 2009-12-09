@@ -7,6 +7,7 @@
 # An abstraction around calling an external program.
 #
 # TODO: make this less dependent on the OS behaving like Linux/OS X.
+# TODO: the general API here is still far from thought out.
 #
 
 module SiteFuel
@@ -19,6 +20,20 @@ module SiteFuel
       attr_reader :program_name
       def initialize(program_name)
         @program_name = program_name
+      end
+    end
+
+    class VersionNotFound < StandardError
+      attr_reader :program_name, :compatible_version, :actual_version
+      def initialize(program_name, compatible_version, actual_version)
+        @program_name = program_name
+        @compatible_version = compatible_version
+        @actual_version = actual_version
+      end
+
+      def to_s
+        'Compatible versions of program %s are %s. Found version %s' %
+        [program_name, compatible_version, actual_version]
       end
     end
 
@@ -45,7 +60,7 @@ module SiteFuel
 
       def to_s
         'Program %s called with a malformed options pattern: %s' %
-        [program, options]
+        [program, options.join(' ')]
       end
     end
 
@@ -63,6 +78,12 @@ module SiteFuel
 
       include SiteFuel::Logging
 
+      VERSION_SEPARATOR = '.'
+
+      # cache of whether compatible versions exist
+      @@compatible_versions = {}
+
+      # todo: do we actually use these??
       @@program_binary = {}
       @@program_options = {}
 
@@ -86,7 +107,6 @@ module SiteFuel
         else
           # ensure the binary is resolved with respect to the root path
           binary = File.expand_path(binary, capture_output('pwd'))
-#          binary = '\"%s\"' % binary
           @@program_binary[self] = binary
           binary
         end
@@ -119,7 +139,31 @@ module SiteFuel
         compatible_version_number?(program_version)
       end
 
+      def self.version_less?(lhs, rhs)
+        return true if lhs == rhs
+
+        # split into separate version chunks
+        lhs = lhs.split(VERSION_SEPARATOR)
+        rhs = rhs.split(VERSION_SEPARATOR)
+
+        # if lhs is shorter than the rhs must be greater than or equal to the
+        # lhs; but if the lhs is *longer* than the rhs must be greater than the
+        # lhs.
+        if lhs.length > rhs.length
+          lhs = lhs[0...rhs.length]
+          method = :<
+        else
+          method = :<=
+          rhs = rhs[0...lhs.length]
+        end
+
+        # now compare
+        lhs.join(VERSION_SEPARATOR).send(method, rhs.join(VERSION_SEPARATOR))
+      end
+
       # tests a version number against a list of compatible version specifications
+      # should be made into a Version class. We could also expand the Gem::Version
+      # class and use that....
       def self.test_version_number(compatible, version_number)
         # ensure we're dealing with an array
         version_scheme = compatible
@@ -130,9 +174,9 @@ module SiteFuel
         version_scheme.each do |ver|
           case ver[0..0]
             when '>'
-              return true if version_number > ver[1..-1].strip
+              return version_less?(ver[1..-1].strip, version_number)
             when '<'
-              return true if version_number < ver[1..-1].strip
+              return !version_less?(ver[1..-1].strip, version_number)
             else
               # ignore this version spec
           end
@@ -144,6 +188,24 @@ module SiteFuel
       # gives true if a given version number is compatible
       def self.compatible_version_number?(version_number)
         self.test_version_number(compatible_versions, version_number)
+      end
+
+      # raises the VersionNotFound error if a compatible version isn't found.
+      # the verification is cached using a class variable so the verification
+      # only actually happens the first time.
+      #
+      # Because of the caching this function is generally very fast and should
+      # be called by every method that actually will execute the program.
+      def self.verify_compatible_version
+        if @@compatible_versions[self] == nil
+          @@compatible_versions[self] = compatible_version?
+        end
+
+        if @@compatible_versions[self] == true
+          return true
+        else
+          raise VersionNotFound.new(self, self.compatible_versions, self.program_version)
+        end
       end
 
       # given the output of a program gives the version number or nil
@@ -166,7 +228,7 @@ module SiteFuel
 
       # calls an option
       def self.call_option(option_name)
-        method_name = "option_"+option_name
+        method_name = "option_"+option_name.to_s
         self.send(method_name.to_sym)
       end
 
@@ -178,6 +240,13 @@ module SiteFuel
 
         names = names.map { |option_name| option_name.sub(/^option_(.*)$/, '\1').to_sym }
         names - excluded_option_names
+      end
+
+      # controls what happens with the output from the program
+      # =capture=:: output is captured into a string and returned from #execute
+      # =forward=:: output is forwarded to the terminal as normal
+      def self.output_handling
+        :capture
       end
 
       # list of excluded option names
@@ -270,7 +339,7 @@ module SiteFuel
             # zoom i ahead to this spot
             i = j
           else
-            raise MalformedOptions(self, options)
+            raise MalformedOptions.new(self, options)
           end
         end
 
@@ -286,11 +355,10 @@ module SiteFuel
       #               :paramsetting, "param value",   # pass a single value
       #               :paramsetting2, "val1", "val2"  # pass multiple values
       def self.execute(*options)
-
-        # organize options
-
         instance = self.new
-        options.each do |opt|
+        organized = organize_options(*options)
+
+        organized.each do |opt|
           instance.add_option(opt)
         end
 
@@ -299,19 +367,63 @@ module SiteFuel
 
 
 
+
+      
       #
       # INSTANCE METHODS
       #
 
-      # adds an option to be passed to this instance
-      def add_option(name, value=nil)
+      attr_reader :options
 
+      def initialize
+        # check that a compatible version exists
+        self.class.verify_compatible_version
+
+        self.logger = SiteFuelLogger.instance
+        @options = []
+      end
+
+      # adds an option to be passed to this instance
+      def add_option(option_row)
+        case option_row
+          when Array
+            @options << option_row
+        end
       end
 
 
+      def option_template(name)
+        self.class.option_template(name)
+      end
+
       # executes the given AbstractExternalProgram instance
       def execute
+        self.class.verify_compatible_version
 
+        exec_string = self.class.program_binary.clone
+        @options.each do |option_row|
+          case option_row.length
+            when 1
+              option_string = option_template(option_row.first)
+
+            when 2
+              option_string = option_template(option_row.first).gsub('${value}', option_row[1])
+
+            else
+              option_string = ''
+          end
+          exec_string << ' ' << option_string
+        end
+
+        info 'Executing: '+exec_string
+
+        case self.class.output_handling
+          when :capture
+            self.class.capture_output(exec_string)
+
+          when :forward
+            exec(exec_string)
+        end
       end
 
     end
