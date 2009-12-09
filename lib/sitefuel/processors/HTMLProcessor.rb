@@ -122,14 +122,20 @@ module SiteFuel
       def filter_minify_javascript
         # TODO check the language attribute to make sure it's javascript
         traverse('script') do |tag,txt|
-          txt.content = JavaScriptProcessor.process_string(txt.content)
+          txt.content = JavaScriptProcessor.process_string(
+                  txt.content,
+                  :resource_name => resource_name+'<embedded_JS>'
+          )
         end
       end
 
       # minifies embedded CSS styles using the CSSProcessor
       def filter_minify_styles
         traverse('style') do |tag,txt|
-          txt.content = CSSProcessor.process_string(txt.content)
+          txt.content = CSSProcessor.process_string(
+                  txt.content,
+                  :resource_name => resource_name+'<embedded_CSS>'
+          )
         end
       end
 
