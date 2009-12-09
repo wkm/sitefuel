@@ -221,6 +221,12 @@ class TestAbstractProcessor < Test::Unit::TestCase
     assert_equal [:c,:a].sort, a.execution_list.sort
   end
 
+  def test_config_resource_name
+    a = TestAProcessor.new
+    a.configure :resource_name => 'foo.file'
+    assert_equal 'foo.file', a.resource_name
+  end
+
   # test attempts to add unknown filters/filtersets
   def test_config_filters_negative
 
