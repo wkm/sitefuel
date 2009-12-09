@@ -33,10 +33,10 @@ class TestPNGCrush < Test::Unit::TestCase
   def test_brute
     # test the crush capability against one of the test files
     PNGCrush.brute 'test_images/sample_png01.png',
-                   'test_images/sample_png01-brute.png'
+                   'test_images/tmp-sample_png01-brute.png'
 
     PNGCrush.quick 'test_images/sample_png01.png',
-                   'test_images/sample_png01-quick.png'
+                   'test_images/tmp-sample_png01-quick.png'
   end
 
 end
