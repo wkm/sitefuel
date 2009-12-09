@@ -124,7 +124,7 @@ module SiteFuel
         traverse('script') do |tag,txt|
           txt.content = JavaScriptProcessor.process_string(
                   txt.content,
-                  :resource_name => resource_name+'<embedded_JS>'
+                  {:resource_name => resource_name+'<embedded_JS>'}
           )
         end
       end

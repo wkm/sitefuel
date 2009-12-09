@@ -312,12 +312,14 @@ module SiteFuel
       #
       def configure(config)
         @filters_cleared = false
-        if config == nil  or  config == {}
-          add_filterset(self.class.default_filterset)
-        else
+        unless config == nil  or  config == {}
           config.each_pair do |k, v|
             set_configuration(k, v)
           end
+        end
+
+        if execution_list.empty?
+          add_filterset(self.class.default_filterset)
         end
         @filters_cleared = false
       end
