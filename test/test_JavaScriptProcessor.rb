@@ -40,5 +40,24 @@ class TestJavaScriptProcessor < Test::Unit::TestCase
     )
   end
 
+  # test comment-only javascripts
+  def test_comments_only
+    assert_equal(
+      '',
+      JavaScriptProcessor.filter_string(:minify,
+        %q{
+          // just a comment....
+        }
+      )
+    )
+
+    assert_equal(
+      '',
+      JavaScriptProcessor.filter_string(:minify,
+        %q{//just a comment...}
+      )
+    )
+  end
+
 end
 
