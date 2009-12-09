@@ -20,7 +20,7 @@ module SiteFuel
       
       # override AbstractProcessor#processor_name so output shows up as +JS+
       # instead of +JavaScript+.
-      def processor_name
+      def self.processor_name
         "JS"
       end
 
