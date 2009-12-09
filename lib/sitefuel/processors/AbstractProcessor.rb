@@ -44,7 +44,7 @@ module SiteFuel
       end
     end
 
-    # raised when multipe processors trigger off of a single file
+    # raised when multiple processors trigger off of a single file
     class MultipleApplicableProcessors < StandardError
       attr_reader :filename, :processors, :chosen_processor
 
