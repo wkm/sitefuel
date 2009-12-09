@@ -90,8 +90,18 @@ def parse_command_line(runtime)
           'Where to put a deployed site') do |out|
     runtime.deploy_to = out
   end
-  opts.on('-v', '--version', 'Gives the version of sitefuel') {|| puts 'sitefuel ' + $SiteFuelVersion.join('.')}
-  opts.on('--[no-]verbose', 'Cause sitefuel to be verbose, listing actions as they are preformed') {|| puts 'cause sitefuel to be verbose listing actions as they are preformed' }
+  opts.on('-v', '--version', 'Gives the version of sitefuel') do
+    puts 'sitefuel ' + $SiteFuelVersionText
+  end
+
+  opts.on('--[no-]verbose', 'Cause sitefuel to be verbose, listing actions as they are preformed') do
+     puts 'cause sitefuel to be verbose listing actions as they are preformed'
+  end
+  
+  opts.on('--only-list-recognized-files', 'Only list summaries for files which were changed') do
+    runtime.only_list_recognized_files = true
+  end
+
   opts.on('-h', '--help', '-?', '--about', 'Gives help for a specific command.') do
     RDoc::usage_no_exit('Synopsis', 'Usage', 'Introduction')
     puts opts

@@ -43,9 +43,14 @@ module SiteFuel
     # configuration loaded from a deployment.yml file
     attr_accessor :deploymentconfiguration
 
+    # only lists file which have a known processor
+    attr_accessor :only_list_recognized_files
+
     def initialize
       @processors = SiteFuelRuntime.find_processors
       self.logger = SiteFuelLogger.instance
+
+      @only_list_recognized_files = false
     end
 
     # gives true if the given file (typically a processor) has already been
@@ -175,7 +180,9 @@ module SiteFuel
         
         processor = @resource_processors[filename]
         if processor == nil
-          puts '%s %s' %['--'.ljust(8), filename.cabbrev(65)]
+          if only_list_recognized_files == false
+            puts '%s %s' %['--'.ljust(8), filename.cabbrev(65)]
+          end
         else
           processor.generate
           total_original_size += processor.original_size
