@@ -36,3 +36,4 @@ puts
 
 puts $Divider
 puts bold('Results:')
+
