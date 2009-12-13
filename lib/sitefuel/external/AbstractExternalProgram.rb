@@ -139,6 +139,8 @@ module SiteFuel
         compatible_version_number?(program_version)
       end
 
+      # gives true if the given version is newer.
+      # TODO should be renamed to #version_newer?
       def self.version_less?(lhs, rhs)
         return true if lhs == rhs
 
@@ -190,6 +192,22 @@ module SiteFuel
         self.test_version_number(compatible_versions, version_number)
       end
 
+      # raises the ProgramNotFound error if the progam can't be found
+      # See also AbstractExternalProgram.verify_compatible_version
+      def self.verify_program_exists
+        if @@program_exists[self] == nil
+          @@program_exists[self] = program_found?
+        end
+        
+        if @@program_exists[self] == true
+          return true
+        else
+          raise ProgramNotFound(self)
+        end
+      end
+
+      
+      # raises the ProgramNotFound error if the program can't be found
       # raises the VersionNotFound error if a compatible version isn't found.
       # the verification is cached using a class variable so the verification
       # only actually happens the first time.
@@ -197,6 +215,8 @@ module SiteFuel
       # Because of the caching this function is generally very fast and should
       # be called by every method that actually will execute the program.
       def self.verify_compatible_version
+        verify_program_exists
+      
         if @@compatible_versions[self] == nil
           @@compatible_versions[self] = compatible_version?
         end
