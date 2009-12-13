@@ -82,6 +82,8 @@ module SiteFuel
 
       # cache of whether compatible versions exist
       @@compatible_versions = {}
+      
+      @@program_exists = {}
 
       # todo: do we actually use these??
       @@program_binary = {}
