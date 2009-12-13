@@ -9,15 +9,17 @@
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
-require 'test/unit'
-
+require 'sitefuel/external/ExternalProgramTestCase'
 require 'sitefuel/external/PNGCrush'
 
 include SiteFuel::External
 
 class TestPNGCrush < Test::Unit::TestCase
+  include ExternalProgramTestCase
 
   def test_options
+    return false unless PNGCrush.program_found?
+  
     # test that we have all options
     assert PNGCrush.option?(:version)
     assert PNGCrush.option?(:brute)
@@ -31,6 +33,8 @@ class TestPNGCrush < Test::Unit::TestCase
   end
 
   def test_brute
+    return false unless PNGCrush.program_found?
+  
     # test the crush capability against one of the test files
     PNGCrush.brute 'test_images/sample_png01.png',
                    'test_images/tmp-sample_png01-brute.png'
