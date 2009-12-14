@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w -rubygems
+#!/usr/bin/ruby -wrubygems
 
 # == Synopsis
 #
@@ -26,6 +26,7 @@
 #
 # deploy::      Deploy a site using sitefuel.
 # process::     Modify an existing website inplace.
+# stage::       Simulates a deployment without actually changing anything.
 # help::        Show this message.
 #
 # == Examples

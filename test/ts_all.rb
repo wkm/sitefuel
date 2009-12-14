@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w -rubygems
+#!/usr/bin/ruby -wrubygems
 
 #
 # File::      ts_all.rb
