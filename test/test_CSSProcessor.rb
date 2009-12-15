@@ -38,12 +38,12 @@ class TestCSSProcessor < Test::Unit::TestCase
       CSSProcessor.filter_string(
         :strip_comments,
         %q{
-        // this is a line comment on its own
-        body {
-          margin: 5em; // at the end of a line
-        /* and here
-           is a multi-line comment... */
-        }
+          // this is a line comment on its own
+          body {
+            margin: 5em; // at the end of a line
+          /* and here
+             is a multi-line comment... */
+          }
         }.align
       )
     )
@@ -55,11 +55,28 @@ class TestCSSProcessor < Test::Unit::TestCase
       CSSProcessor.filter_string(
         :clean_whitespace,
         %q{
-        body {
-          // here's a little line comment. We want to be sure
-          // it isn't mashed with the margin stuff below.
-          margin: 5em;
-        }
+          body {
+            // here's a little line comment. We want to be sure
+            // it isn't mashed with the margin stuff below.
+            margin: 5em;
+          }
+        }.align
+      )
+    )
+
+
+    # finally, let's test the strip_comments and clean_whitespace filters
+    # all together. (and incidentally test giving #filter_string an array)
+    assert_equal(
+      "body {\nmargin: 5em;\n}\n",
+      CSSProcessor.filter_string(
+        [:strip_comments, :clean_whitespace],
+        %q{
+          body {
+            // here's a little line comment. We want to be sure
+            // it isn't mashed with the margin stuff below.
+            margin: 5em;
+          }
         }.align
       )
     )
