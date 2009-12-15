@@ -39,8 +39,8 @@ module SiteFuel
         self.execute :copy,
                      :optimize,
                      :perfect,
-                     :input => in_file,
-                     :output => out_file
+                     :input, in_file,
+                     :output, out_file
       end
 
     end
