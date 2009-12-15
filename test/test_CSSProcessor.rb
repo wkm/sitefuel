@@ -11,6 +11,7 @@ $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
 require 'sitefuel/processors/CSSProcessor'
+require 'sitefuel/extensions/StringFormatting'
 
 include SiteFuel::Processor
 
@@ -29,6 +30,39 @@ class TestCSSProcessor < Test::Unit::TestCase
 
   def test_name
     assert_equal "CSS", CSSProcessor.processor_name
+  end
+
+  def test_filter_strip_comments
+    assert_equal(
+      "\nbody {\n  margin: 5em; \n//\n}\n",
+      CSSProcessor.filter_string(
+        :strip_comments,
+        %q{
+        // this is a line comment on its own
+        body {
+          margin: 5em; // at the end of a line
+        /* and here
+           is a multi-line comment... */
+        }
+        }.align
+      )
+    )
+  end
+
+  def test_filter_clean_whitespace
+    assert_equal(
+      "body {\n// here's a little line comment. We want to be sure\n// it isn't mashed with the margin stuff below.\nmargin: 5em;\n}\n",
+      CSSProcessor.filter_string(
+        :clean_whitespace,
+        %q{
+        body {
+          // here's a little line comment. We want to be sure
+          // it isn't mashed with the margin stuff below.
+          margin: 5em;
+        }
+        }.align
+      )
+    )
   end
 
   # note that minification is based on CSSMin, so it's not too heavily tested

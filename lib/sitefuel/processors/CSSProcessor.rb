@@ -49,12 +49,23 @@ module SiteFuel
 
       # strips comments out of CSS using Regexp
       def filter_strip_comments
-
+        @document.gsub!(/\/\/.*?$/m, '')
+        @document.gsub!(/\*(.*?)\*/m, '')
       end
 
       # lightweight minification by removing excess whitespace
       def filter_clean_whitespace
-
+        @document.gsub!(/(\s\s+)/) do |text_block|
+          # if there's a newline we keep it. This is necessary for comments.
+          # in general, however, this filter should really be run after the
+          # strip_comments filter because it's silly to clip whitespace but
+          # not comments....
+          if text_block.count("\n") > 0
+            "\n"
+          else
+            text_block[0..0]
+          end
+        end
       end
 
       # lightweight beautifier that works through Regexp, adds whitespace above
