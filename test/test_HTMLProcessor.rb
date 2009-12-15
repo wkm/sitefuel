@@ -147,7 +147,6 @@ class TestHTMLProcessor < Test::Unit::TestCase
     # test tags which should be unmodified
     unmodifiable_tags.each do |tag|
       assert_equal "<#{tag}>(tm)</#{tag}>", HTMLProcessor.filter_string(:beautify_symbols, "<#{tag}>(tm)</#{tag}>")
-
     end
 
   end
