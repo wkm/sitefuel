@@ -20,8 +20,10 @@ module SiteFuel
 
       # PHP specific file patterns
       def self.file_patterns
-        # TODO: should we really handle .phps files?
-        ['.php', '.phtml', '.php5', '.phps']
+        # it doesn't really make sense to handle phps files, so we're leaving
+        # them alone. It might make sense to have a dummy empty processor for
+        # the files so it's clear we recognize them.
+        ['.php', '.phtml', '.php5']
       end
 
     end
