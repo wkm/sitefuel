@@ -231,7 +231,6 @@ module SiteFuel
       end
 
       # gives true if the given filter is known for this processor instance
-      # TODO: should this use #filters
       def filter?(filter)
         respond_to?("filter_" + filter.to_s)
       end

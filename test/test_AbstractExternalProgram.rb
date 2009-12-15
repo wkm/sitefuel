@@ -101,35 +101,35 @@ class TestExternalProgram < Test::Unit::TestCase
   def test_version_less?
 
     # practical tests
-    assert AbstractExternalProgram.version_less?('1.5', '1.5')
+    assert AbstractExternalProgram.version_older?('1.5', '1.5')
 
-    assert AbstractExternalProgram.version_less?('1.5', '1.5.10')
+    assert AbstractExternalProgram.version_older?('1.5', '1.5.10')
 
-    assert !AbstractExternalProgram.version_less?('1.5', '1.4')
+    assert !AbstractExternalProgram.version_older?('1.5', '1.4')
 
-    assert AbstractExternalProgram.version_less?('1.5', '1.5a')
-    assert AbstractExternalProgram.version_less?('1.5', '1.5A')
-    assert AbstractExternalProgram.version_less?('1.5', '1.5.a')
-    assert AbstractExternalProgram.version_less?('1.5', '1.5.A')
+    assert AbstractExternalProgram.version_older?('1.5', '1.5a')
+    assert AbstractExternalProgram.version_older?('1.5', '1.5A')
+    assert AbstractExternalProgram.version_older?('1.5', '1.5.a')
+    assert AbstractExternalProgram.version_older?('1.5', '1.5.A')
 
-    assert AbstractExternalProgram.version_less?('1.5', '1.51')
-    assert AbstractExternalProgram.version_less?('1.5', '1.5.1')
-    assert AbstractExternalProgram.version_less?('1.5', '1.5.0')
+    assert AbstractExternalProgram.version_older?('1.5', '1.51')
+    assert AbstractExternalProgram.version_older?('1.5', '1.5.1')
+    assert AbstractExternalProgram.version_older?('1.5', '1.5.0')
 
-    assert AbstractExternalProgram.version_less?('1.5', '2')
-    assert AbstractExternalProgram.version_less?('1.5', '2.0')
-    assert AbstractExternalProgram.version_less?('1.5', '2.1')
-    assert AbstractExternalProgram.version_less?('1.5', '5.1.5')
+    assert AbstractExternalProgram.version_older?('1.5', '2')
+    assert AbstractExternalProgram.version_older?('1.5', '2.0')
+    assert AbstractExternalProgram.version_older?('1.5', '2.1')
+    assert AbstractExternalProgram.version_older?('1.5', '5.1.5')
 
-    assert AbstractExternalProgram.version_less?('1.5.2', '1.5.2')
-    assert AbstractExternalProgram.version_less?('1.5.2', '1.5.3')
-    assert AbstractExternalProgram.version_less?('1.5.2', '1.5.2')
-    assert AbstractExternalProgram.version_less?('1.5.2', '1.6')
-    assert AbstractExternalProgram.version_less?('1.5.2', '2')
+    assert AbstractExternalProgram.version_older?('1.5.2', '1.5.2')
+    assert AbstractExternalProgram.version_older?('1.5.2', '1.5.3')
+    assert AbstractExternalProgram.version_older?('1.5.2', '1.5.2')
+    assert AbstractExternalProgram.version_older?('1.5.2', '1.6')
+    assert AbstractExternalProgram.version_older?('1.5.2', '2')
 
-    assert !AbstractExternalProgram.version_less?('1.5.2', '1.5')
+    assert !AbstractExternalProgram.version_older?('1.5.2', '1.5')
     
-    assert !AbstractExternalProgram.version_less?('1a', '1')
+    assert !AbstractExternalProgram.version_older?('1a', '1')
   end
 
   def test_test_version_number

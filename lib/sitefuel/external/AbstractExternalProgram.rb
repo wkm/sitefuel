@@ -142,8 +142,7 @@ module SiteFuel
       end
 
       # gives true if the given version is newer.
-      # TODO should be renamed to #version_newer?
-      def self.version_less?(lhs, rhs)
+      def self.version_older? (lhs, rhs)
         return true if lhs == rhs
 
         # split into separate version chunks
@@ -178,9 +177,9 @@ module SiteFuel
         version_scheme.each do |ver|
           case ver[0..0]
             when '>'
-              return version_less?(ver[1..-1].strip, version_number)
+              return version_older?(ver[1..-1].strip, version_number)
             when '<'
-              return !version_less?(ver[1..-1].strip, version_number)
+              return !version_older?(ver[1..-1].strip, version_number)
             else
               # ignore this version spec
           end
