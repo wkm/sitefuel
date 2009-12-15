@@ -19,7 +19,6 @@ class TestPHPProcessor < Test::Unit::TestCase
   def test_file_extensions
     assert PHPProcessor.processes_file?('test.php')
     assert PHPProcessor.processes_file?('test.php5')
-    assert PHPProcessor.processes_file?('test.phps')
     assert PHPProcessor.processes_file?('test.phtml')
   end
 
