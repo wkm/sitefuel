@@ -174,6 +174,12 @@ module SiteFuel
         respond_to?("filterset_" + name.to_s)
       end
 
+      # the ignore filter set is used when configuring sitefuel to not process
+      # certain kinds of files.
+      def self.filterset_ignore
+        []
+      end
+
       # returns the filters in the given filter set, [] if no such filters
       # exist
       def self.filters_in_filterset(name)
@@ -317,7 +323,7 @@ module SiteFuel
           end
         end
 
-        if execution_list.empty?
+        if !@filters_cleared && execution_list.empty?
           add_filterset(self.class.default_filterset)
         end
         @filters_cleared = false
