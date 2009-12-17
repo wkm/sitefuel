@@ -17,9 +17,9 @@ include SiteFuel::External
 class TestPNGCrush < Test::Unit::TestCase
   include ExternalProgramTestCase
 
-  def test_options
-    return false unless PNGCrush.program_found?
-  
+  SAMPLE_IMAGE = 'test_images/sample_png01.png'
+
+  def test_option
     # test that we have all options
     assert PNGCrush.option?(:version)
     assert PNGCrush.option?(:brute)
@@ -33,17 +33,26 @@ class TestPNGCrush < Test::Unit::TestCase
   end
 
   def test_brute
-    return false unless PNGCrush.program_found?
-  
     # test the crush capability against one of the test files
-    PNGCrush.brute 'test_images/sample_png01.png',
-                   'test_images/tmp-sample_png01-brute.png'
+    new_image = 'test_images/tmp-sample_png01-brute.png'
+    PNGCrush.brute SAMPLE_IMAGE, new_image
 
-    PNGCrush.quick 'test_images/sample_png01.png',
-                   'test_images/tmp-sample_png01-quick.png'
+    assert File.size(SAMPLE_IMAGE) > File.size(new_image)
 
-    PNGCrush.chainsaw 'test_images/sample_png01.png',
-                      'test_images/tmp-sample_png01-chainsaw.png'
+  end
+
+  def test_quick
+    new_image = 'test_images/tmp-sample_png01-quick.png'
+    PNGCrush.quick SAMPLE_IMAGE, new_image
+
+    assert File.size(SAMPLE_IMAGE) > File.size(new_image)
+  end
+
+  def test_chainsaw
+    new_image = 'test_images/tmp-sample_png01-chainsaw.png'
+    PNGCrush.chainsaw SAMPLE_IMAGE, new_image
+
+    assert File.size(SAMPLE_IMAGE) > File.size(new_image)
   end
 
 end
