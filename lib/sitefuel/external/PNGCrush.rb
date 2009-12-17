@@ -46,7 +46,7 @@ module SiteFuel
                 :output, out_file
       end
 
-      # quick 
+      # quick uses the default png crush configuration to smash up PNGs
       def self.quick(in_file, out_file)
         execute :input, in_file,
                 :output, out_file
