@@ -20,12 +20,18 @@ module SiteFuel
 
   require 'sitefuel/SiteFuelLogger'
 
-  require 'sitefuel/environment'
   require 'sitefuel/extensions/StringFormatting'
   require 'sitefuel/extensions/FileComparison'
 
   # we need the AbstractProcessor symbol when we go child-class hunting
   require 'sitefuel/processors/AbstractProcessor'
+
+  # version of SiteFuel
+  VERSION = [0, 0, 1].freeze
+
+  # a human readable version
+  VERSION_TEXT = VERSION.join('.').freeze
+  
 
   class SiteFuelRuntime
 
