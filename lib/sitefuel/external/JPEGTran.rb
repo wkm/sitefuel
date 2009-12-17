@@ -18,13 +18,30 @@ module SiteFuel
         'jpegtran'
       end
 
-      # the versioning scheme for jpegtran is a little weird
+      # the versioning scheme for jpegtran is a little weir and not all
+      # versions of jpegtran actually give a version number. So the best
+      # we can do is check if the program exists and hope for the best.
       def self.compatible_versions
         ['6']
       end
 
-      def self.extract_program_version(version_output)
-        version_output[/\d[a-z]/]
+      # since jpegtran by default writes jpeg files to stdout it's
+      # a little obsessed about writing everything that isn't a jpeg
+      # to stderr.
+      #
+      # this is to circumvent that.
+      def self.capture_stderr
+        true
+      end
+
+      # if the program exists... hope for the best.
+      def self.test_version_number(compatible, version_number)
+        true
+      end
+
+      # this rarely actually gives the option...
+      def self.option_version
+        '--help'
       end
 
       option :copy, '-copy ${value}', 'none'
@@ -32,7 +49,7 @@ module SiteFuel
       option :perfect, '-perfect'
 
       option :input, '${value}'
-      option :output, '${value}'
+      option :output, '-outfile ${value}'
 
 
       def self.compress_losslessly(in_file, out_file)
