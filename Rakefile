@@ -23,9 +23,10 @@ spec = Gem::Specification.new do |s|
   s.bindir     = 'bin'
   s.executables = ['sitefuel']
   s.default_executable = 'sitefuel'
-  s.files      = FileList["{bin,test,lib,docs}/**/*"].exclude("rdoc", "pxm", "sh").to_a
+  s.files      = FileList["{bin,test,lib,docs}/**/*"].exclude(".pxm", ".rdoc", ".sh").to_a
+  puts s.files.join("\n")
   s.require_path     = 'lib'
-  s.test_file        = 'test/ts_gem.rb'
+  s.test_file        = 'test/ts_all.rb'
   s.has_rdoc         = true
   s.extra_rdoc_files = ['README', 'RELEASE_NOTES']
 
