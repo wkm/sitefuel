@@ -99,7 +99,7 @@ def parse_command_line(runtime)
     runtime.deploy_to = out
   end
   opts.on('-v', '--version', 'Gives the version of sitefuel') do
-    puts 'SiteFuel ' + $SiteFuelVersionText
+    puts 'SiteFuel ' + VERSION_TEXT
   end
 
   opts.on('--[no-]verbose', 'List actions as they are preformed') do
