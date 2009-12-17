@@ -136,7 +136,7 @@ class TestAbstractProcessor < Test::Unit::TestCase
 
   # filter set testing
   def test_filtersets
-    assert_equal [:heavy, :light, :normal], TestAProcessor.filtersets
+    assert_equal [:heavy, :light, :normal, :ignore].sort, TestAProcessor.filtersets.sort
     assert_equal :normal, TestAProcessor.default_filterset
 
     assert_equal [:a,:b], TestAProcessor.filters_in_filterset(:normal)
@@ -219,6 +219,9 @@ class TestAbstractProcessor < Test::Unit::TestCase
     # hence the #sort
     a.configure({:filters => [:c], :filtersets => :light})
     assert_equal [:c,:a].sort, a.execution_list.sort
+
+    a.configure({:filtersets => :ignore})
+    assert_equal [], a.execution_list
   end
 
   def test_config_resource_name
