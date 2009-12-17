@@ -23,8 +23,10 @@ spec = Gem::Specification.new do |s|
   s.bindir     = 'bin'
   s.executables = ['sitefuel']
   s.default_executable = 'sitefuel'
+
+  # for proper testing we need to include the .png and .jpg test images
   s.files      = FileList["{bin,test,lib,docs}/**/*"].exclude(".pxm", ".rdoc", ".sh").to_a
-  puts s.files.join("\n")
+  
   s.require_path     = 'lib'
   s.test_file        = 'test/ts_all.rb'
   s.has_rdoc         = true
@@ -83,7 +85,7 @@ CLOBBER.include('pkg/*')
 
 
 task :install do
-  exec 'sudo gem install pkg/*.gem'
+  exec 'sudo gem install -t pkg/*.gem --no-ri --no-rdoc'
 end
 
 task :uninstall do
