@@ -9,6 +9,7 @@
 
 
 require 'rubygems'
+require 'rake/clean'
 require 'rake/gempackagetask'
 
 spec = Gem::Specification.new do |s|
@@ -25,7 +26,7 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc         = true
   s.extra_rdoc_files = ['README', 'RELEASE_NOTES']
 
-  s.description = File.read('RELEASE_NOTES.rdoc')
+  s.description = File.read('RELEASE_NOTES')
   
   # Gem dependencies
   
@@ -34,3 +35,5 @@ end
 Rake::GemPackageTask.new(spec) do |pkg|
   pkg.need_tar = true
 end
+
+CLEAN.include('**/tmp-*')
