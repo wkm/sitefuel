@@ -1,5 +1,5 @@
 #
-# File::      test_AbstractStringBasedProcesso.rb
+# File::      test_AbstractStringBasedProcessor.rb
 # Author::    wkm
 # Copyright:: 2009
 # License::   GPL
