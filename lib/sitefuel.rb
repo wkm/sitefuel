@@ -65,6 +65,13 @@
 # add source/ to the load path
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 
+begin
+  require 'rubygems'
+rescue LoadError
+  # attempt to continue running the program
+end
+
+
 require 'rdoc/usage'
 require 'term/ansicolor'
 
@@ -85,18 +92,18 @@ def parse_command_line(runtime)
   #### BUILD THE OPTIONS PARSER
   opts = OptionParser.new
 
-  # the banner text comes from the header comment for sitefuel.rb
+  # the banner text comes from the header comment for this file
 
   opts.on('-oARG', '-o=ARG', '-o PLACE', '--output=ARG', '--output PLACE', String,
           'Where to put a deployed site') do |out|
     runtime.deploy_to = out
   end
   opts.on('-v', '--version', 'Gives the version of sitefuel') do
-    puts 'sitefuel ' + $SiteFuelVersionText
+    puts 'SiteFuel ' + $SiteFuelVersionText
   end
 
   opts.on('--[no-]verbose', 'List actions as they are preformed') do
-     puts 'cause sitefuel to be verbose listing actions as they are preformed'
+     puts 'cause SiteFuel to be verbose listing actions as they are preformed'
   end
   
   opts.on('--only-list-recognized-files', 'Only list summaries for files which were changed') do
