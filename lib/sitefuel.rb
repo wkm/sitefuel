@@ -95,7 +95,7 @@ def parse_command_line(runtime)
     puts 'sitefuel ' + $SiteFuelVersionText
   end
 
-  opts.on('--[no-]verbose', 'Cause sitefuel to be verbose, listing actions as they are preformed') do
+  opts.on('--[no-]verbose', 'List actions as they are preformed') do
      puts 'cause sitefuel to be verbose listing actions as they are preformed'
   end
   
