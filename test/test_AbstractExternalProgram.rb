@@ -31,7 +31,7 @@ end
 
 class TestProgramA < AbstractExternalProgram
   def self.program_name
-    './test_programs/versioning.rb'
+    './test/test_programs/versioning.rb'
   end
 
   def self.compatible_versions

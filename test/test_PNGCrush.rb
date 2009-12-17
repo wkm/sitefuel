@@ -17,7 +17,7 @@ include SiteFuel::External
 class TestPNGCrush < Test::Unit::TestCase
   include ExternalProgramTestCase
 
-  SAMPLE_IMAGE = 'test_images/sample_png01.png'
+  SAMPLE_IMAGE = 'test/test_images/sample_png01.png'
 
   def test_option
     # test that we have all options
@@ -34,7 +34,7 @@ class TestPNGCrush < Test::Unit::TestCase
 
   def test_brute
     # test the crush capability against one of the test files
-    new_image = 'test_images/tmp-sample_png01-brute.png'
+    new_image = './test/test_images/tmp-sample_png01-brute.png'
     PNGCrush.brute SAMPLE_IMAGE, new_image
 
     assert File.size(SAMPLE_IMAGE) > File.size(new_image)
@@ -42,14 +42,14 @@ class TestPNGCrush < Test::Unit::TestCase
   end
 
   def test_quick
-    new_image = 'test_images/tmp-sample_png01-quick.png'
+    new_image = './test/test_images/tmp-sample_png01-quick.png'
     PNGCrush.quick SAMPLE_IMAGE, new_image
 
     assert File.size(SAMPLE_IMAGE) > File.size(new_image)
   end
 
   def test_chainsaw
-    new_image = 'test_images/tmp-sample_png01-chainsaw.png'
+    new_image = './test/test_images/tmp-sample_png01-chainsaw.png'
     PNGCrush.chainsaw SAMPLE_IMAGE, new_image
 
     assert File.size(SAMPLE_IMAGE) > File.size(new_image)

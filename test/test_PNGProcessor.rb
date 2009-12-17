@@ -27,6 +27,6 @@ class TestPNGProcessor < Test::Unit::TestCase
   end
 
   def test_crush
-    PNGProcessor.process_file('test_images/sample_png01.png')
+    PNGProcessor.process_file('test/test_images/sample_png01.png')
   end
 end
