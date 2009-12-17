@@ -8,7 +8,8 @@
 
 ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
-A program and API for minifying websites and web applications and deploying them from version control.
+A program and API for minifying websites and web applications and 
+deploying them from version control.
 
    * Get started: http://sitefuel.org/getstarted
    * Lists: http://sitefuel.org/mailinglists
@@ -39,21 +40,33 @@ Use SiteFuel to:
 
 == System Requirements
 
-  * Ruby 1.8.6
+  * Ruby 1.8.6 or greater.
+  * pngcrush (for PNG compression)
+  * jpegtran (for JPEG compression)
+  * git (for deploying sites from Git repositories)
+  * svn (for deploying sites from SVN repositories)
+
+SiteFuel hasn't been tested on Windows machines.
 
 
 == Installation
 
-SiteFuel is deployed a RubyGem through http://gemcutter.org. You should be able to install it directly using RubyGems:
+SiteFuel is deployed as a RubyGem through http://gemcutter.org. You 
+should be able to install it directly using RubyGems:
 
      $ gem install -t sitefuel
 
-You can also download a ZIP-file containing SiteFuel and all of the gems it depends on from http://sitefuel.org/download/sitefuel-complete.zip
+You can also download a ZIP-file containing SiteFuel and all of the gems 
+it depends on from http://sitefuel.org/download/sitefuel-complete.zip
+
+Note that for PNG and JPEG compression to be enabled you must install 
+the 'pngcrush' and 'jpegtran' programs.
 
 
 
 == Getting Started
 
+SiteFuel 
 
 
 
@@ -62,7 +75,10 @@ You can also download a ZIP-file containing SiteFuel and all of the gems it depe
 
 
 == A Note About the API
-The general API in SiteFuel should be considered unstable while SiteFuel is <1. For practical reasons we can't increment the major version number each time there is a non-backwards compatible API change....
+
+The general API in SiteFuel should be considered unstable while SiteFuel 
+is <1.0. For practical reasons we can't increment the major version 
+number each time there is a non-backwards compatible API change....
 
 
 == Further Reading

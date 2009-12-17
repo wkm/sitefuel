@@ -1,6 +1,7 @@
 == 0.1.0
 * initial public release of the SiteFuel alpha
 * support for trivial minification of HTML, RHTML, and PHP.
-* uses CSSMin and JSMin to minify CSS and JavaScript; both in individual files and embedded in HTML.
+* uses CSSMin and JSMin to minify CSS and JavaScript; both in individual
+  files and embedded in HTML.
 * uses pngcrush and jpegtran to minify PNG and JPEG images.
 * support for the Git and SVN version control systems.
