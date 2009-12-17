@@ -32,10 +32,10 @@ spec = Gem::Specification.new do |s|
   s.description = File.read('RELEASE_NOTES')
 
 
-  s.add_dependency('hpricot', '=> 0.8')
-  s.add_dependency('jsmin',   '=> 1.0')
-  s.add_dependency('cssmin',  '=> 1.0')
-  s.add_dependency('haml',    '=> 2.2')
+  s.add_dependency('hpricot', '>= 0.8')
+  s.add_dependency('jsmin',   '>= 1.0')
+  s.add_dependency('cssmin',  '>= 1.0')
+  s.add_dependency('haml',    '>= 2.2')
   
 
   s.post_install_message = <<END
