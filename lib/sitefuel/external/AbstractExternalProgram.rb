@@ -309,13 +309,6 @@ module SiteFuel
         method_name = "option_"+name
         struct = @@option_struct.new(name, string, default)
         create_child_class_method(method_name.to_sym) { struct }
-
-        # if the string contains ${value} it's settable, so add a
-        # option_<name>= method
-        if string.count("${value}") > 0
-          method_name = "option_"+name+"="
-#          create_child_class_method(method_name.to_sym) { }
-        end
       end
 
       # allow the super class to programmatically create class methods
@@ -417,18 +410,39 @@ module SiteFuel
         self.class.option_template(name)
       end
 
+      # generally we don't want to capture stderr since it helps users
+      # with finding out why things don't work. In certain cases we do
+      # need to capture it, however.
+      def self.capture_stderr
+        false
+      end
+
+      # applies a given value into an option template
+      def apply_value(option_template, value)
+        option_template.gsub('${value}', value)
+      end
+
+      # returns true if a given option takes a value
+      # TODO this should be precomputed
+      def takes_value(name)
+        option_template(name).count('${value}') > 0
+      end
+
       # executes the given AbstractExternalProgram instance
       def execute
         self.class.verify_compatible_version
 
         exec_string = self.class.program_binary.clone
         @options.each do |option_row|
+          option_string = option_template(option_row.first)
           case option_row.length
             when 1
-              option_string = option_template(option_row.first)
+              if takes_value(option_row.first)
+                option_string = apply_value(option_string, self.class.option_default(option_row.first))
+              end
 
             when 2
-              option_string = option_template(option_row.first).gsub('${value}', option_row[1])
+              option_string = apply_value(option_string, option_row[1])
 
             else
               option_string = ''
@@ -436,6 +450,12 @@ module SiteFuel
           exec_string << ' ' << option_string
         end
 
+        # if we want to capture stderr we need to redirect to stdout
+        if self.class.capture_stderr
+          exec_string << '2>&1'
+        end
+
+        puts 'Executing: '+exec_string
         info 'Executing: '+exec_string
 
         case self.class.output_handling
