@@ -13,6 +13,7 @@
 module SiteFuel
   module External
 
+    require 'sitefuel/extensions/DynamicClassMethods'
     require 'sitefuel/SiteFuelLogger'
 
     # raised when an external program can't be found
@@ -423,13 +424,7 @@ module SiteFuel
         # give a method for the option
         method_name = "option_"+name
         struct = @@option_struct.new(name, template, default)
-        create_child_class_method(method_name.to_sym) { struct }
-      end
-
-      # allow the super class to programmatically create class methods
-      # in child classes. This isn't a hack. Really. ;-) 
-      def self.create_child_class_method(method_name, &block)
-        self.class.send(:define_method, method_name, block)
+        define_class_method(method_name.to_sym) { struct }
       end
 
       # organizes a list of options into a ragged array of arrays
