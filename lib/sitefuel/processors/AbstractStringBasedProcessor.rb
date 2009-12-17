@@ -77,9 +77,11 @@ module SiteFuel
         generate_string
         return self
       end
-
+      
+      attr_reader :document
+      
       protected
-      attr_accessor :document
+      attr_writer :document
     end
     
   end
