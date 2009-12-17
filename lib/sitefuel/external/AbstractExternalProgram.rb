@@ -23,6 +23,10 @@ module SiteFuel
       end
     end
 
+
+    
+    # raised when the program appears to be found but it's version is not
+    # compatible
     class VersionNotFound < StandardError
       attr_reader :program_name, :compatible_version, :actual_version
       def initialize(program_name, compatible_version, actual_version)
@@ -37,6 +41,11 @@ module SiteFuel
       end
     end
 
+
+
+    # because of the AbstractExternalProgram's API design there are certain
+    # option names that are disallowed (see
+    # AbstractExternalProgram#excluded_option_names)
     class UnallowedOptionName < StandardError
       attr_reader :program, :option_name, :excluded_names
       def initialize(program, option_name, excluded_names)
@@ -51,6 +60,11 @@ module SiteFuel
       end
     end
 
+
+
+    # AbstractExternalProgram#execute and friends have a somewhat strange syntax
+    # for accepting options and flags. This exception is raised when the syntax
+    # is malformed.
     class MalformedOptions < StandardError
       attr_reader :program, :options
       def initialize(program, options)
@@ -61,6 +75,40 @@ module SiteFuel
       def to_s
         'Program %s called with a malformed options pattern: %s' %
         [program, options.join(' ')]
+      end
+    end
+
+
+
+    # raised when a default is specified for an option without a value slot in
+    # the option template
+    class NoOptionValueSlot < StandardError
+      attr_reader :program, :option_name
+      def initialize(program, option_name)
+        @program = program
+        @option_name = option_name
+      end
+
+      def to_s
+        'Program %s has default value but no option slot for option %s' %
+        [program, option_name]
+      end
+    end
+
+
+
+    # raised when a option requires a value (because no default is specified)
+    # but none is given
+    class NoValueForOption < StandardError
+      attr_reader :program, :option_name
+      def initialize(program, option_name)
+        @program = program
+        @option_name = option_name
+      end
+
+      def to_s
+        'Program %s option %s requires a value, but no value was specified' %
+        [program, option_name]
       end
     end
 
@@ -80,12 +128,13 @@ module SiteFuel
 
       VERSION_SEPARATOR = '.'
 
-      # cache of whether compatible versions exist
+      # cache of whether compatible versions of programs exist
       @@compatible_versions = {}
-      
+
+      # cache of whether the actual programs that are abstracted exist
       @@program_exists = {}
 
-      # todo: do we actually use these??
+      #
       @@program_binary = {}
       @@program_options = {}
 
@@ -142,6 +191,8 @@ module SiteFuel
       end
 
       # gives true if the given version is newer.
+      # TODO this should be replaced by a proper version handling library (eg.
+      # versionometry (sp?))
       def self.version_older? (lhs, rhs)
         return true if lhs == rhs
 
@@ -193,7 +244,7 @@ module SiteFuel
         self.test_version_number(compatible_versions, version_number)
       end
 
-      # raises the ProgramNotFound error if the progam can't be found
+      # raises the ProgramNotFound error if the program can't be found
       # See also AbstractExternalProgram.verify_compatible_version
       def self.verify_program_exists
         if @@program_exists[self] == nil
@@ -235,7 +286,7 @@ module SiteFuel
         version_output[/(\d+\.\d+(\.\d+)?([a-zA-Z]+)?)/]
       end
 
-      # gives the version of the program
+      # option for giving the version of the program
       def self.option_version
         '--version'
       end
@@ -295,7 +346,7 @@ module SiteFuel
       end
 
       # declares an option for this program
-      def self.option(name, string = nil, default = nil)
+      def self.option(name, template = nil, default = nil)
         unless name.kind_of? String
           name = name.to_s
         end
@@ -304,10 +355,15 @@ module SiteFuel
           raise UnallowedOptionName.new(self, name, excluded_option_names)
         end
 
+        # if a default is given but the template has no value slot...
+        if default != nil and not template.include?('${value}')
+          raise NoOptionValueSlot.new(self, name)
+        end
+
 
         # give a method for the option
         method_name = "option_"+name
-        struct = @@option_struct.new(name, string, default)
+        struct = @@option_struct.new(name, template, default)
         create_child_class_method(method_name.to_sym) { struct }
       end
 
@@ -397,8 +453,31 @@ module SiteFuel
         @options = []
       end
 
+      
+      # ensures the option specification makes sense
+      def ensure_option_validity(option_row)
+        name = option_row.first
+        if requires_value?(name) and option_row.length < 2
+          raise NoValueForOption.new(self.class, name) 
+        end
+
+        true
+      end
+
+
+      # gives true if the given option is valid
+      def valid_option?(option_row)
+        ensure_option_validity(option_row)
+        return true
+      rescue
+        return false
+      end
+
+
       # adds an option to be passed to this instance
       def add_option(option_row)
+        ensure_option_validity(option_row)
+
         case option_row
           when Array
             @options << option_row
@@ -406,9 +485,11 @@ module SiteFuel
       end
 
 
+      # gives the template for an option
       def option_template(name)
         self.class.option_template(name)
       end
+
 
       # generally we don't want to capture stderr since it helps users
       # with finding out why things don't work. In certain cases we do
@@ -417,16 +498,31 @@ module SiteFuel
         false
       end
 
+        
       # applies a given value into an option template
       def apply_value(option_template, value)
         option_template.gsub('${value}', value)
       end
+        
 
       # returns true if a given option takes a value
       # TODO this should be precomputed
-      def takes_value(name)
-        option_template(name).count('${value}') > 0
+      def takes_value? (name)
+        option_template(name).include?('${value}')
       end
+
+
+      # gives true if an option has a default
+      def has_default?(name)
+        self.class.option_default(name) != nil
+      end
+
+
+      # gives true if an option takes a value but has no default
+      def requires_value?(name)
+        takes_value?(name) and not has_default?(name)
+      end
+        
 
       # executes the given AbstractExternalProgram instance
       def execute
@@ -437,7 +533,7 @@ module SiteFuel
           option_string = option_template(option_row.first)
           case option_row.length
             when 1
-              if takes_value(option_row.first)
+              if takes_value?(option_row.first)
                 option_string = apply_value(option_string, self.class.option_default(option_row.first))
               end
 
@@ -452,7 +548,7 @@ module SiteFuel
 
         # if we want to capture stderr we need to redirect to stdout
         if self.class.capture_stderr
-          exec_string << '2>&1'
+          exec_string << ' 2>&1'
         end
 
         puts 'Executing: '+exec_string

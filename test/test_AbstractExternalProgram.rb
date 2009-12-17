@@ -161,5 +161,26 @@ class TestExternalProgram < Test::Unit::TestCase
             AbstractExternalProgram.organize_options(:a, 'val1', 'val2')
     )
   end
+
+
+  def test_option_creation
+    # here we want to test the sanity checks that are preformed when an option
+    # is created
+
+    # if there is a default there must be ${value} slot
+    assert_raises NoOptionValueSlot do
+      TestProgramA.option(:option1, '--someflag', 'defaultvalue')
+    end
+
+    # make sure the option wasn't added
+    assert !TestProgramA.options.include?(:option1)
+
+    # if there is a ${value} slot and no default, the option must
+    # have a value when it's being set
+    assert_nothing_raised { TestProgramA.option(:optionNoDef, '--someopt ${value}') }
+    assert_raises NoValueForOption do
+      TestProgramA.execute(:optionNoDef)
+    end
+  end
   
 end
