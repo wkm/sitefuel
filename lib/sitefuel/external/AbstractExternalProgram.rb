@@ -43,6 +43,22 @@ module SiteFuel
 
 
 
+    # raised when an option is given that isn't known
+    class UnknownOption < StandardError
+      attr_reader :program, :option_name
+      def initialize(program, option_name)
+        @program = program
+        @option_name = option_name
+      end
+
+      def to_s
+        'Program %s doesn\'t have option %s' %
+        [program, option_name]
+      end
+    end
+
+
+
     # because of the AbstractExternalProgram's API design there are certain
     # option names that are disallowed (see
     # AbstractExternalProgram#excluded_option_names)
@@ -143,6 +159,7 @@ module SiteFuel
       # classes which implement AbstractExternalProgram need to define
       # a self.program_name method.
 
+
       # gives the location of the external program; uses the =which=
       # unix command
       def self.program_binary
@@ -163,11 +180,24 @@ module SiteFuel
         end
       end
 
+
       # Similar to Kernel#exec, but returns a string of the output
       def self.capture_output(command, *args)
         cli = command + ' ' + args.join(' ')
-        IO.popen(cli, 'r').read.chop
+
+
+        # if we want to capture stderr we need to redirect to stdout
+        if capture_stderr
+          cli << ' 2>&1'
+        end
+
+        output_string = ""
+        IO.popen(cli, 'r') do |io|
+          output_string = io.read.chop
+        end
+        output_string
       end
+
 
       # gives true if the program can be found.
       def self.program_found?
@@ -178,6 +208,7 @@ module SiteFuel
         true
       end
 
+
       # gives a condition on the compatible versions. A version is considered compatible
       # if it's greater than the given version. Eventually we'll probably need a way to
       # give a version range and allow excluding particular versions.
@@ -185,10 +216,12 @@ module SiteFuel
         '> 0.0.0'
       end
 
+
       # gives true if a binary with a compatible version exists
       def self.compatible_version?
         compatible_version_number?(program_version)
       end
+
 
       # gives true if the given version is newer.
       # TODO this should be replaced by a proper version handling library (eg.
@@ -215,6 +248,7 @@ module SiteFuel
         lhs.join(VERSION_SEPARATOR).send(method, rhs.join(VERSION_SEPARATOR))
       end
 
+
       # tests a version number against a list of compatible version specifications
       # should be made into a Version class. We could also expand the Gem::Version
       # class and use that....
@@ -239,10 +273,12 @@ module SiteFuel
         return false
       end
 
+
       # gives true if a given version number is compatible
       def self.compatible_version_number?(version_number)
         self.test_version_number(compatible_versions, version_number)
       end
+
 
       # raises the ProgramNotFound error if the program can't be found
       # See also AbstractExternalProgram.verify_compatible_version
@@ -280,16 +316,19 @@ module SiteFuel
         end
       end
 
+
       # given the output of a program gives the version number or nil
       # if not available
       def self.extract_program_version(version_output)
         version_output[/(\d+\.\d+(\.\d+)?([a-zA-Z]+)?)/]
       end
 
+
       # option for giving the version of the program
       def self.option_version
         '--version'
       end
+
 
       # gets the version of a program
       def self.program_version
@@ -298,11 +337,13 @@ module SiteFuel
         return nil
       end
 
+
       # calls an option
       def self.call_option(option_name)
         method_name = "option_"+option_name.to_s
         self.send(method_name.to_sym)
       end
+
 
       # gives the listing of declared options for the program
       def self.options
@@ -314,6 +355,7 @@ module SiteFuel
         names - excluded_option_names
       end
 
+
       # controls what happens with the output from the program
       # =capture=:: output is captured into a string and returned from #execute
       # =forward=:: output is forwarded to the terminal as normal
@@ -321,29 +363,46 @@ module SiteFuel
         :capture
       end
 
+
       # list of excluded option names
       def self.excluded_option_names
         [:default, :template]
       end
+
 
       # tests whether a given option name is allowed
       def self.allowed_option_name?(name)
         not excluded_option_names.include?(name.to_sym)
       end
 
+
       # gives the default value for an option
       def self.option_default(option_name)
+        ensure_valid_option(option_name)
         self.call_option(option_name).default
       end
 
+
       # gives the template for an option
       def self.option_template(option_name)
+        ensure_valid_option(option_name)
         self.call_option(option_name).template
       end
 
+
+      # gives true if given a known option
       def self.option?(name)
         self.options.include?(name)
       end
+
+
+      # raises UnknownOption error if the given option isn't valid
+      def self.ensure_valid_option(name)
+        if not option?(name)
+          raise UnknownOption.new(self, name)
+        end
+      end
+
 
       # declares an option for this program
       def self.option(name, template = nil, default = nil)
@@ -546,12 +605,6 @@ module SiteFuel
           exec_string << ' ' << option_string
         end
 
-        # if we want to capture stderr we need to redirect to stdout
-        if self.class.capture_stderr
-          exec_string << ' 2>&1'
-        end
-
-        puts 'Executing: '+exec_string
         info 'Executing: '+exec_string
 
         case self.class.output_handling

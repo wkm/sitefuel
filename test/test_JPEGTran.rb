@@ -27,7 +27,7 @@ class TestJPEGTran < Test::Unit::TestCase
     assert JPEGTran.option?(:input)
     assert JPEGTran.option?(:output)
 
-    assert_equal '-version', JPEGTran.option_template(:brute)
+    assert_equal '-optimize', JPEGTran.option_template(:optimize)
   end
 
   def test_lossless

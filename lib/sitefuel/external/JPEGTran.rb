@@ -48,16 +48,18 @@ module SiteFuel
       option :optimize, '-optimize'
       option :perfect, '-perfect'
 
-      option :input, '${value}'
       option :output, '-outfile ${value}'
+
+      # this option must always be the last one specified
+      option :input, '${value}'
 
 
       def self.compress_losslessly(in_file, out_file)
         self.execute :copy,
                      :optimize,
                      :perfect,
-                     :input, in_file,
-                     :output, out_file
+                     :output, out_file,
+                     :input, in_file
       end
 
     end
