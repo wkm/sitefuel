@@ -46,7 +46,11 @@ class ColumnPrinter
     self.column_widths = column_widths
     
     @output_width = output_width
-    @allow_resizing = true
+
+    # we disallow resizing since the constant checking *really* slows
+    # printing down
+    @allow_resizing = false
+    
     @minimum_column_width = 5
 
     compute_absolute_column_widths
