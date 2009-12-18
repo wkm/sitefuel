@@ -159,6 +159,7 @@ def parse_command_line(runtime)
   case commands[0].downcase
   when 'deploy'
     runtime.deploy_from = commands[1]
+    runtime.deploy_to   = commands[2]
     runtime.deploy
 
   when 'stage'
