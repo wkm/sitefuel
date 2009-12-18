@@ -24,6 +24,7 @@ module SiteFuel
   require 'sitefuel/extensions/FileComparison'
   require 'sitefuel/extensions/TerminalInfo'
   require 'sitefuel/extensions/ColumnPrinter'
+  require 'sitefuel/extensions/FileTree'
 
   # we need the AbstractProcessor symbol when we go child-class hunting
   require 'sitefuel/processors/AbstractProcessor'
@@ -256,27 +257,26 @@ module SiteFuel
       # first we have to stage the files
       stage
 
-      files = find_all_files @deploy_from
-
       return if @deploy_to == nil
       puts
       puts bold('Deploying:')
 
-      unless File.exists?(@deploy_to)
-        Dir.mkdir(@deploy_to)
-      end
+      file_tree = FileTree.new(@deploy_to)
+      
       # write out content
-      files.each do |filename|
+      @resource_processors.each_key do |filename|
         results = @resource_processors[filename]
         if results == nil
-          putc 'I'
-        else
           putc '.'
-          results.save(@deploy_to)
+        else
+          putc results.processor_symbol
+          results.save(file_tree)
         end
         STDOUT.flush
       end
+      
       puts
+      puts bold('Finished.')
     end
 
     # gives an array listing of all files on a given path
