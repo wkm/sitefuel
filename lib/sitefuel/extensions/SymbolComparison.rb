@@ -4,7 +4,8 @@
 # Copyright:: 2009, Zanoccio LLC.
 # License::   GPL version 2.0
 #
-# Defines a spaceship for symbols based off of to_s
+# Defines a spaceship for symbols based off of to_s, this let's us sort lists
+# of symbols.
 #
 
 class Symbol
