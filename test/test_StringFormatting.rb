@@ -1,8 +1,8 @@
 #
-# File::       test_StringFormatting.rb
-# Author::     wkm
-# Copyright::  2009
-# License::    GPL
+# File::      test_StringFormatting.rb
+# Author::    wkm
+# Copyright:: 2009, Zanoccio LLC.
+# License::   GPL version 2.0
 #
 # Unit tests for String#cabbrev, String#labbrev, and String#rabbrev
 # methods. The main thing these look for is off-by-one errors.
