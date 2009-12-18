@@ -77,6 +77,10 @@ module SiteFuel
         generate_string
         return self
       end
+
+      def processor_symbol
+        'S'
+      end
       
       attr_reader :document
       
