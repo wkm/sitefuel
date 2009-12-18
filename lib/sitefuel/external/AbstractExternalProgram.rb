@@ -600,7 +600,7 @@ module SiteFuel
           exec_string << ' ' << option_string
         end
 
-        info 'Executing: '+exec_string
+        info '    Executing: '+exec_string
 
         case self.class.output_handling
           when :capture
