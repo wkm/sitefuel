@@ -1,7 +1,7 @@
 #
 # File::      RHTMLProcessor.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Defines the RHTMLProcessor class. This is a lightweight wrapper

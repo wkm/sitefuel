@@ -1,7 +1,7 @@
 #
 # File::      SymbolComparison.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 #
 # Defines a spaceship for symbols based off of to_s
 #

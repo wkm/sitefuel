@@ -1,7 +1,7 @@
 #
 # File::      Silently.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Implements a silently method for executing code without warnings; intended for

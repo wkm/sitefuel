@@ -25,7 +25,7 @@
 # == Commands
 #
 # deploy::      Deploy a site using sitefuel.
-# process::     Modify an existing website inplace.
+# process::     Modify an existing website in-place.
 # stage::       Simulates a deployment without actually changing anything.
 # help::        Show this message.
 #

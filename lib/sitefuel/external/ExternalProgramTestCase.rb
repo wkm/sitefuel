@@ -1,7 +1,7 @@
 #
 # File::      ExternalProgramTestCase.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPl
 #
 # Lightweight utility that will effectively scrap

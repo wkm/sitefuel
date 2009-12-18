@@ -1,7 +1,7 @@
 #
 # File::      Rakefile
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC., Zanoccio LLC.
 # License::   GPL
 #
 # Contains tasks for building gems and running tests.
@@ -15,8 +15,8 @@ require 'rake/gempackagetask'
 spec = Gem::Specification.new do |s|
   s.name       = 'sitefuel'
   s.version    = '0.0.0b'
-  s.author     = 'wkm'
-  s.email      = 'wkm@sitefuel.org'
+  s.author     = 'wkm@zanoccio.com'
+#  s.email      = 'wkm@sitefuel.org'
   s.homepage   = 'http://sitefuel.org'
   s.platform   = Gem::Platform::RUBY
   s.summary    = 'A lightweight framework for processing, optimizing, and deploying websites'
@@ -33,8 +33,8 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README', 'RELEASE_NOTES']
 
   s.description = <<END
-SiteFuel is a program and lightweight Ruby API for processing the source code
-behind  your static and dynamic websites. SiteFuel can remove comments and
+SiteFuel is a Ruby program and lightweight API for processing the source code
+behind your static and dynamic websites. SiteFuel can remove comments and
 unneeded whitespace from your CSS, HTML, and JavaScript files (as well as
 fragments in RHTML and PHP) files. It can also losslessly compress your PNG and
 JPEG images. SiteFuel can also deploy your website from SVN or GIT. Support for
@@ -76,14 +76,14 @@ END
 =======================================================
 END
 
-  s.post_install_message = <<END
-=======================================================
-This is a test deployment of the SiteFuel gem. It is
-not intended for public consumption. Specifically, only
-the `stage` command is enabled and the documentation is
-far from complete.
-=======================================================
-END
+#  s.post_install_message = <<END
+#=======================================================
+#This is a test deployment of the SiteFuel gem. It is
+#not intended for public consumption. Specifically, only
+#the `stage` command is enabled and the documentation is
+#far from complete.
+#=======================================================
+#END
   
   # Gem dependencies
   

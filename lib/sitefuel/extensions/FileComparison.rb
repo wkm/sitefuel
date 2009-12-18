@@ -1,7 +1,7 @@
 #
 # File::      FileComparison.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Adds File.equivalent? that tries to guess whether two files are equivalent

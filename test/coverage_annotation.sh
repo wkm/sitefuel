@@ -3,7 +3,7 @@
 #
 # File::      coverage_annotation.sh
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Bash script to test coverage of the unit test suite and generate annotated

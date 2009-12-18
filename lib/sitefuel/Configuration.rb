@@ -1,7 +1,7 @@
 #
 # File::      configuration.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Load and process SiteFuel YAML configuration files
@@ -10,17 +10,14 @@
 module SiteFuel
   require 'yaml'
 
+  # exception which represents that a configuration could not be found
   class Configuration
-
-    # exception which represents that a configuration could not be found
-    class NotFound < StandardError
-    end
 
     # given a directory path will attempt to location a configuration file
     # and load it, returning a SiteFuel::Configuration class
     def self.load(path)
       unless File.exist?(path)
-        throw NotFound, path
+
       end
 
       yamlconfig = YAML::load_file(configfile)

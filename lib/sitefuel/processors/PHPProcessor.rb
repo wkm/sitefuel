@@ -1,7 +1,7 @@
 #
 # File::      PHPProcessor.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Defines a PHPProcessor class; but it's really a very lightweight alias

@@ -1,7 +1,7 @@
 #
 # File::      JavaScriptProcessor.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 

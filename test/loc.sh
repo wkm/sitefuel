@@ -3,7 +3,7 @@
 #
 # File::      loc.sh
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Simple utility for counting the number of lines of code

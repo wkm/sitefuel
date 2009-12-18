@@ -2,7 +2,7 @@
 #
 # File::      run_tests_individually.sh
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Little bash script to run each test file indivudally. Ocasionally there are

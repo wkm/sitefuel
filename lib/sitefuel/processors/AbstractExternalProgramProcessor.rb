@@ -1,7 +1,7 @@
 #
 # File::      AbstractExternalProgramProcessor.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # TODO: this abstraction assumes only one filter will ever be run on a file,

@@ -1,9 +1,4 @@
-# deployment settings for the 'simplehtml' test
-processormappings:
-  html: .html
-  css:  .css
-  png:  .png
-
+# deployment settings for the 'simplehtml' test site
 global:
   filterset: full
 
@@ -14,7 +9,7 @@ html:
 
 css:
   filterset:
-    - whitespace
+    - minify
 
 png:
   filterset:

@@ -1,7 +1,7 @@
 #
 # File::      ArrayComparisons.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Adds methods to Array for comparing with other arrays

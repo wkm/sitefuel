@@ -1,7 +1,7 @@
 #
 # File::      DynamicClassMethods.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Adds a #meta_def function to Object so we can programmatically define class

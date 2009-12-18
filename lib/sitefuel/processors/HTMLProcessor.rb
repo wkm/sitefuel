@@ -1,7 +1,7 @@
 #
 # File::      HTMLProcessor.rb
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Defines an HTMLProcessor class that is used to compress and cleanup HTML

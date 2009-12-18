@@ -2,7 +2,7 @@
 #
 # File::      load_files_individually.sh
 # Author::    wkm
-# Copyright:: 2009
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL
 #
 # Little bash script to load each file individually; this ensures the require
