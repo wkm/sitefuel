@@ -54,6 +54,8 @@ module SiteFuel
 
       # opens a resource from a file
       def open_file(filename)
+        info "#{self.class} opening #{filename}"
+
         self.document = File.read(filename)
         self.original_size = File.size(filename)
         self.resource_name = filename
@@ -63,9 +65,11 @@ module SiteFuel
 
       # opens a resource directly from a string
       def open_string(string)
+        info "#{self.class} opening in embedded mode"
+
         self.document = string
         self.original_size = string.length
-        self.resource_name = '<<in-memory string>>'
+        self.resource_name = '<<embedded string>>'
       end
 
       # generates the actual string
@@ -87,6 +91,8 @@ module SiteFuel
         File.open(file_name, 'w') do |file|
           file << @document
         end
+
+        info "Wrote document into #{file}"
       end
       
       attr_reader :document
