@@ -212,7 +212,8 @@ module SiteFuel
         end
       end
 
-      puts '='*TerminalInfo.width
+      printer.divider
+      
       puts 'Size delta:         %+5d bytes; %4.3f' %
               [
                 total_processed_size - total_original_size,
@@ -227,21 +228,26 @@ module SiteFuel
     #
     # todo: this should be computed in the staging step
     def staging_statistics
+
       puts ''
-      puts '     %s | %s  |    %s    | %s' %
-           ['processor', '# files', 'delta', 'ratio'].map{|v| bold(v)}
-      puts '    -----------+----------+-------------+-------'
+
+      printer = ColumnPrinter.new([12, 8, :span, 6], [TerminalInfo.width, 50].min)
+      printer.alignment([:left, :right, :right, :right])
+      printer.mode(:divided)
+
+      headers = %w{processor files delta ratio}.map{|v| bold(v)}
+      printer.row(*headers)
+      printer.divider
       
       @processor_statistics.keys.sort.each do |key|
-        puts '     %s|%9d |%+12d | %4.3f' %
-             [
-               key.ljust(10),
-               @processor_statistics[key][0],
-               @processor_statistics[key][2] - @processor_statistics[key][1],
-               @processor_statistics[key][2].prec_f / @processor_statistics[key][1].prec_f
-             ]
+        printer.row(
+          key,
+          @processor_statistics[key][0],
+          '%+12d'%(@processor_statistics[key][2] - @processor_statistics[key][1]),
+          '%4.3f'%(@processor_statistics[key][2].prec_f / @processor_statistics[key][1].prec_f)
+        )
       end
-      puts '    -----------+----------+-------------+-------'
+      printer.divider
       puts ''
     end
 
