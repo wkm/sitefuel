@@ -80,6 +80,7 @@ require 'sitefuel/SiteFuelLogger'
 require 'sitefuel/SiteFuelRuntime'
 
 include Term::ANSIColor
+include SiteFuel
 
 def puts_and_exit(*args)
   puts(*args)
@@ -172,7 +173,7 @@ def parse_command_line(runtime)
 end
 
 def main
-  runtime = SiteFuel::SiteFuelRuntime.new
+  runtime = SiteFuelRuntime.new
   parse_command_line(runtime)
 end
 
