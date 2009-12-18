@@ -65,6 +65,10 @@ module SiteFuel
         self.processed_size = File.size(output_filename)
         return self
       end
+
+      def processor_symbol
+        'E'
+      end
       
     end
 
