@@ -163,6 +163,10 @@ module SiteFuel
       end
     end
 
+    def section_divider(name)
+      puts "== #{name} ".ljust(TerminalInfo.width, '=')
+    end
+
 
     # implements the stage command. Staging, by itself, will give statistics on
     # the deployment; how many bytes were saved by minification; etc.
@@ -172,7 +176,7 @@ module SiteFuel
     def stage
       return nil if @deploy_from == nil
 
-      puts '== %s '.format('Staging').ljust(TerminalInfo.width, '=')
+      section_divider('Staging')
       printer = ColumnPrinter.new([5, :span, 6])
 
       # find all files under deploy_from
@@ -258,8 +262,8 @@ module SiteFuel
       stage
 
       return if @deploy_to == nil
-      puts
-      puts bold('Deploying:')
+
+      section_divider('Deploying')
 
       file_tree = FileTree.new(@deploy_to)
       
@@ -275,8 +279,9 @@ module SiteFuel
         STDOUT.flush
       end
       
-      puts
-      puts bold('Finished.')
+      puts ''
+      puts ''
+      section_divider('Finished')
     end
 
     # gives an array listing of all files on a given path
