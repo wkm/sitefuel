@@ -10,6 +10,10 @@
 
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
+require 'term/ansicolor'
+
+include Term::ANSIColor
+
 require 'test/unit'
 require 'sitefuel/extensions/StringFormatting'
 
@@ -46,6 +50,25 @@ class TestString < Test::Unit::TestCase
         yup there
           it is!
       }.align
+    )
+  end
+
+  def test_visual_length
+    assert_equal(
+      'hello world'.length,
+      'hello world'.visual_length
+    )
+
+    assert_equal(
+      'hello world'.length,
+      'hello world'.blue.visual_length
+    )
+  end
+
+  def test_visual_ljust
+    assert_equal(
+      '123'.ljust(5),
+      '123'.blue.visual_ljust(5).uncolored
     )
   end
 end
