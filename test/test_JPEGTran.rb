@@ -17,7 +17,7 @@ include SiteFuel::External
 class TestJPEGTran < Test::Unit::TestCase
   include ExternalProgramTestCase
 
-  SAMPLE_IMAGE = 'test/test_images/sample_jpg01.jpg'
+  SAMPLE_IMAGE = 'test/images/sample_jpg01.jpg'
 
   def test_options
     assert JPEGTran.option?(:version)
@@ -31,7 +31,7 @@ class TestJPEGTran < Test::Unit::TestCase
   end
 
   def test_lossless
-    new_image =  'test/test_images/tmp-sample_jpg01-lossless.jpg'
+    new_image =  'test/images/tmp-sample_jpg01-lossless.jpg'
     JPEGTran.compress_losslessly SAMPLE_IMAGE, new_image
 
 
