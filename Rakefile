@@ -1,7 +1,7 @@
 #
 # File::      Rakefile
 # Author::    wkm
-# Copyright:: 2009, Zanoccio LLC., Zanoccio LLC.
+# Copyright:: 2009, Zanoccio LLC.
 # License::   GPL version 2.0
 #
 # Contains tasks for building gems and running tests.
