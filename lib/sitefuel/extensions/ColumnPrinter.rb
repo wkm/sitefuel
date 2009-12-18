@@ -22,7 +22,6 @@ require 'sitefuel/extensions/StringFormatting'
 
 class ColumnPrinter
   # specify the width for the entire grid
-  attr_reader   :output_width
   attr_accessor :column_widths
 
   # what character should be used
@@ -88,6 +87,15 @@ class ColumnPrinter
       compute_absolute_column_widths
     else
       # don't do anything for now; TODO should raise a message
+    end
+  end
+
+
+  def output_width
+    if @output_width == :automatic
+      TerminalInfo.width
+    else
+      @output_width
     end
   end
 
@@ -161,7 +169,7 @@ class ColumnPrinter
   end
 
 
-  def output_row(*values)
+  def row(*values)
     write format_row(*values)
   end
 
@@ -183,7 +191,7 @@ class ColumnPrinter
     values.each_with_index do |cell,index|
       cell_width = @absolute_column_widths[index]
       line << horizontal_divider_piece
-      line << cell.to_s.cabbrev(cell_width).ljust(cell_width)
+      line << cell.to_s.cabbrev(cell_width).visual_ljust(cell_width)
     end
     line << horizontal_divider_piece
     line << row_divider
