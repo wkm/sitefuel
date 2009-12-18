@@ -30,7 +30,7 @@ module SiteFuel
   require 'sitefuel/processors/AbstractProcessor'
 
   # version of SiteFuel
-  VERSION = [0, 0, 1].freeze
+  VERSION = [0, 0, '1a'].freeze
 
   # a human readable version
   VERSION_TEXT = VERSION.join('.').freeze
