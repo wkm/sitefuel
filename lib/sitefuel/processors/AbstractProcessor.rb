@@ -15,6 +15,8 @@ module SiteFuel
     # raised when a method isn't implemented by a child class.
     class NotImplemented < StandardError; end
 
+
+
     # raised when attempting to run a filter that doesn't exist
     class UnknownFilter < StandardError
       attr_reader :processor, :name
@@ -30,6 +32,8 @@ module SiteFuel
       end
     end
 
+
+
     class UnknownFilterset < StandardError
       attr_reader :processor, :name
 
@@ -43,6 +47,8 @@ module SiteFuel
         [@name, @processor.class]
       end
     end
+
+
 
     # raised when multiple processors trigger off of a single file
     class MultipleApplicableProcessors < StandardError
@@ -60,14 +66,17 @@ module SiteFuel
       end
     end
 
+
+
     # defines the base functions every processor must implement to
     # interface with the sitefuel architecture
     class AbstractProcessor
 
       include SiteFuel::Logging
+      extend SiteFuel::ClassLogging
 
       # setup an AbstractProcessor
-      def initialize
+      def initialize        
         self.logger = SiteFuelLogger.instance
         @execution_list = []
         @filters = []
@@ -298,6 +307,7 @@ module SiteFuel
       def execute
         setup_filters
         @execution_list.uniq.each do |filter|
+          info "    Running filter: #{filter}"
           run_filter(filter)
         end
         finish_filters
