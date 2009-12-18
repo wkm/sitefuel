@@ -76,6 +76,11 @@ END
   runtime = SiteFuel::SiteFuelRuntime.new
   # ...
 
+ If you're installing on Ubuntu you may need to adjust
+ your $PATH environment variable for programs
+ distributed with gems to work.
+ (see http://sitefuel.org/ubuntu_installation)
+
 =======================================================
 END
   
