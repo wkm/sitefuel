@@ -94,8 +94,8 @@ module SiteFuel
             when 'WARN'
               string = yellow(string)
 
-            when 'DEBUG'
-              string = string
+            when 'INFO', 'DEBUG'
+              string = dark(string)
           end
           string
       end
@@ -124,5 +124,18 @@ module SiteFuel
 
     # adds a debugging message to the log
     def debug(*args) @logger.debug(*args); end
+  end
+
+  # module for extending classes and thus giving class methods logging
+  # capability
+  module ClassLogging
+    @@logger = SiteFuelLogger.instance
+
+    def fatal(*args) @@logger.fatal(*args); end
+    def error(*args) @@logger.error(*args); end
+    def warn(*args) @@logger.warn(*args); end
+    def info(*args) @@logger.info(*args); end
+    def debug(*args) @@logger.debug(*args); end
+    
   end
 end
