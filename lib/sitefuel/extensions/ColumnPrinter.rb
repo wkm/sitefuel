@@ -50,6 +50,25 @@ class ColumnPrinter
     @minimum_column_width = 5
 
     compute_absolute_column_widths
+    alignment(:left)
+  end
+
+
+  # sets the alignment for the columns
+  def alignment(columns)
+    case columns
+      when Symbol
+        @column_alignment = Array.new(column_count, columns)
+
+      when Array
+        @column_alignment = columns
+    end
+  end
+
+
+  # gives the number of columns in this printer
+  def column_count
+    self.column_widths.length
   end
 
 
@@ -174,6 +193,21 @@ class ColumnPrinter
   end
 
 
+  # aligns a cell based on the specification
+  def align_cell(column_index, value, width)
+    case @column_alignment[column_index]
+      when :left
+        value.visual_ljust(width)
+
+      when :right
+        value.visual_rjust(width)
+
+      when :center
+        value.visual_center(width)
+    end
+  end
+
+
   # formats a new row
   def format_row(*values)
 
@@ -191,7 +225,7 @@ class ColumnPrinter
     values.each_with_index do |cell,index|
       cell_width = @absolute_column_widths[index]
       line << horizontal_divider_piece
-      line << cell.to_s.cabbrev(cell_width).visual_ljust(cell_width)
+      line << align_cell(index, cell.to_s.cabbrev(cell_width), cell_width)
     end
     line << horizontal_divider_piece
     line << row_divider
