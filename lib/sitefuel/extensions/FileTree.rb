@@ -25,12 +25,13 @@ class FileTree
     # initialize our file tree
     refresh_tree
   end
+  
 
   def refresh_tree
     @directory_hash = {}
     @file_hash = {}
 
-    top_level_contents = Dir["#{@base_path}/*"]
+    top_level_contents = Dir[File.join(@base_path, '*')]
 
     top_level_contents.each do |handle|
       if File.directory?(handle)
@@ -51,11 +52,11 @@ class FileTree
   # creates the given directory if it doesn't exist and returns a
   # FileTree for it
   def create_directory(name)
-    res = @directory_hash[name]
+    full_name = File.join(@base_path, name)
+    res = @directory_hash[full_name]
     if res != nil
       return res
     else
-      full_name = File.join(@base_path, name)
       Dir.mkdir(full_name)
       @directory_hash[name] = FileTree.new(full_name)
     end
@@ -75,12 +76,10 @@ class FileTree
 
   # creates a path to the given file but doesn't create the actual file
   def create_path(name)
-    puts "creating path to #{name}"
     components = File.dirname(name).split(File::SEPARATOR)
+    
     tld = self
-
     components.each do |part|
-      puts "... for: #{part}"
       tld = tld.create_directory(part)
     end
   end
@@ -90,6 +89,6 @@ class FileTree
   # doesn't already exist and gives back the filename
   def get_file(name)    
     create_path(name)
-    File.open(name, 'w') {}
+    File.open(File.join(@base_path, name), 'w') {}
   end
 end
