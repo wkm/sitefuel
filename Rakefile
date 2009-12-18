@@ -14,9 +14,9 @@ require 'rake/gempackagetask'
 
 spec = Gem::Specification.new do |s|
   s.name       = 'sitefuel'
-  s.version    = '0.0.0b'
-  s.author     = 'wkm@zanoccio.com'
-#  s.email      = 'wkm@sitefuel.org'
+  s.version    = '0.1.0a'
+  s.author     = 'wkm'
+  s.email      = 'wkm@sitefuel.org'
   s.homepage   = 'http://sitefuel.org'
   s.platform   = Gem::Platform::RUBY
   s.summary    = 'A lightweight framework for processing, optimizing, and deploying websites'
