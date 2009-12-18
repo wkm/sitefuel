@@ -102,6 +102,8 @@ module SiteFuel
     end
   end
 
+
+  
   # mixin for adding logging functionality to any class, typically included
   # by every SiteFuel class
   module Logging
@@ -125,6 +127,8 @@ module SiteFuel
     # adds a debugging message to the log
     def debug(*args) @logger.debug(*args); end
   end
+
+
 
   # module for extending classes and thus giving class methods logging
   # capability
