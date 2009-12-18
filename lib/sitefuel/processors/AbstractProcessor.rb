@@ -283,13 +283,16 @@ module SiteFuel
         end
       end
 
+
       # called in #execute _before_ running the execution list of filters; note
       # that #setup_filters is only called _once_ before all of the filters are
       # batch executed. It is not called before every filter executes.
       def setup_filters; end
 
+      
       # called in #execute _after_ running the execution list of filters
       def finish_filters; end
+
 
       # runs all filters in the execution list
       def execute
@@ -303,12 +306,16 @@ module SiteFuel
       end
 
 
+      # creates a file with the given name
+      def create_file(base_file_tree)
+        base_file_tree.get_file(resource_name)
+      end
 
 
-      def save(basepath)
-        File.open(File.join(basepath, resource_name), 'w') do |fhndl|
-          fhndl.write(document.to_s)
-        end
+      # default save method. This will only create a file, the
+      # more specific abstractions need to implement the actual method
+      def save(base_file_tree)
+        create_file(base_file_tree)
       end
 
 
@@ -327,6 +334,11 @@ module SiteFuel
           add_filterset(self.class.default_filterset)
         end
         @filters_cleared = false
+      end
+
+
+      def processor_symbol
+        'A'
       end
 
     private
