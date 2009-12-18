@@ -33,6 +33,10 @@ module SiteFuel
         'External'
       end
 
+      def processor_symbol
+        'E'
+      end
+
       # processes a file using a given configuration
       def self.process_file(filename, config = {})
         proc = self.new()
@@ -66,11 +70,9 @@ module SiteFuel
         return self
       end
 
-      def processor_symbol
-        'E'
+      def save(base_file_tree)
+        File.move(output_filename, base_file_tree.get_file(resource_name))
       end
-      
     end
-
   end
 end
