@@ -39,6 +39,8 @@ module SiteFuel
 
       # processes a file using a given configuration
       def self.process_file(filename, config = {})
+        info "#{self.class} opening for #{filename}"
+
         proc = self.new()
         proc.configure(config)
         proc.set_file(filename)
@@ -71,7 +73,9 @@ module SiteFuel
       end
 
       def save(base_file_tree)
-        File.rename(output_filename, base_file_tree.get_file(resource_name))
+        final_filename = base_file_tree.get_file(resource_name)
+        File.rename(output_filename, final_filename)
+        info "Moved #{output_filename} to #{final_filename}"
       end
     end
   end
