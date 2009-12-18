@@ -84,7 +84,6 @@ module SiteFuel
 
       def save(file_tree)
         file_name = create_file(file_tree)
-        puts 'Saving into '+file_name
         File.open(file_name, 'w') do |file|
           file << @document
         end
