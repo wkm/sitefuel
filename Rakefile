@@ -24,7 +24,8 @@ spec = Gem::Specification.new do |s|
   s.executables = ['sitefuel']
   s.default_executable = 'sitefuel'
 
-  # for proper testing we need to include the .png and .jpg test images
+  # for proper testing we need to include the .png and .jpg test images, they
+  # double the size of the gem, however.
   s.files      = FileList["{bin,test,lib,docs}/**/*"].exclude(".pxm", ".rdoc", ".sh").to_a
   
   s.require_path     = 'lib'
@@ -42,10 +43,12 @@ more formats and repositories is planned for future versions.
 END
 
 
+  # Gem dependencies
   s.add_dependency('hpricot', '>= 0.8')
   s.add_dependency('jsmin',   '>= 1.0')
   s.add_dependency('cssmin',  '>= 1.0')
   s.add_dependency('haml',    '>= 2.2')
+  
   
 
   s.post_install_message = <<END
@@ -75,17 +78,6 @@ END
 
 =======================================================
 END
-
-#  s.post_install_message = <<END
-#=======================================================
-#This is a test deployment of the SiteFuel gem. It is
-#not intended for public consumption. Specifically, only
-#the `stage` command is enabled and the documentation is
-#far from complete.
-#=======================================================
-#END
-  
-  # Gem dependencies
   
 end
 
