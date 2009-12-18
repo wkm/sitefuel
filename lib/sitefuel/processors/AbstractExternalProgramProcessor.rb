@@ -71,7 +71,7 @@ module SiteFuel
       end
 
       def save(base_file_tree)
-        File.move(output_filename, base_file_tree.get_file(resource_name))
+        File.rename(output_filename, base_file_tree.get_file(resource_name))
       end
     end
   end
