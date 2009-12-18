@@ -10,13 +10,14 @@
 #  sitefuel deploy|process SOURCE [OPTIONS]
 #
 # == Introduction
-# sitefuel is a lightweight ruby framework for deploying websites directly from
-# version control. sitefuel includes support for compressing HTML and CSS as
-# well as optimizing PNG graphics. Support is planned for SASS; compressing
-# JavaScript; automatically creating sprites; and supporting more image formats.
-# (and more!)
-# 
-# TODO: add more details
+# SiteFuel is a program and lightweight Ruby API for processing the
+# source code behind your static and dynamic websites. SiteFuel can
+# remove comments and unneeded whitespace from your CSS, HTML, and
+# JavaScript files (as well as fragments in RHTML and PHP) files. It can
+# also loss-lessly compress your PNG and JPEG images. SiteFuel can also
+# deploy your website from SVN or GIT.
+#
+# Support for more formats and repositories is planned for future versions.
 #
 # * More information: http://sitefuel.org
 # * Getting started: http://sitefuel.org/getstarted
@@ -41,7 +42,7 @@
 #
 #
 # == Author
-# Zanoccio, LLC.
+# wkm, Zanoccio LLC.
 #
 # == Copyright
 # Copyright (c) 2009 Zanoccio.
@@ -75,6 +76,7 @@ end
 require 'rdoc/usage'
 require 'term/ansicolor'
 
+require 'sitefuel/SiteFuelLogger'
 require 'sitefuel/SiteFuelRuntime'
 
 include Term::ANSIColor
@@ -102,8 +104,18 @@ def parse_command_line(runtime)
     puts 'SiteFuel ' + VERSION_TEXT
   end
 
-  opts.on('--[no-]verbose', 'List actions as they are preformed') do
-     puts 'cause SiteFuel to be verbose listing actions as they are preformed'
+  opts.on('--[no-]verbose', 'List actions as they are preformed') do |be_verbose|
+    logger_instance = SiteFuelLogger.instance
+
+    if be_verbose
+      logger_instance.level = Logger::INFO
+    else
+      logger_instance.level = Logger::WARN
+    end
+  end
+
+  opts.on('--debug', 'Gives verbose debugging information') do
+    SiteFuelLogger.instance.level = Logger::DEBUG
   end
   
   opts.on('--only-list-recognized-files', 'Only list summaries for files which were changed') do
@@ -113,8 +125,12 @@ def parse_command_line(runtime)
   opts.on('-h', '--help', '-?', '--about', 'Gives help for a specific command.') do
     RDoc::usage_no_exit('Synopsis', 'Usage', 'Introduction')
     puts opts
-    RDoc::usage_no_exit('Examples', 'Author', 'Copyright', 'License')
+    RDoc::usage_no_exit('Examples', 'Author', 'Copyright')
     exit
+  end
+
+  opts.on('--license', 'Gives the license for SiteFuel.') do
+    RDOC::usage('License')
   end
 
   opts.separator ''
