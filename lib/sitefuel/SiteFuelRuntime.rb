@@ -22,6 +22,8 @@ module SiteFuel
 
   require 'sitefuel/extensions/StringFormatting'
   require 'sitefuel/extensions/FileComparison'
+  require 'sitefuel/extensions/TerminalInfo'
+  require 'sitefuel/extensions/ColumnPrinter'
 
   # we need the AbstractProcessor symbol when we go child-class hunting
   require 'sitefuel/processors/AbstractProcessor'
@@ -134,14 +136,14 @@ module SiteFuel
 
     # gives the processor to use for a given file
     def choose_processor(filename)
-      matchingprocs = processors.clone.delete_if {|proc| not proc.processes_file?(filename) }
+      matching = processors.clone.delete_if {|proc| not proc.processes_file?(filename) }
 
       case
-        when matchingprocs.length > 1
-          chosen = matchingprocs.first
-          raise Processor::MultipleApplicableProcessors.new(filename, matchingprocs, chosen)
-        when matchingprocs.length == 1
-          return matchingprocs.first
+        when matching.length > 1
+          chosen = matching.first
+          raise Processor::MultipleApplicableProcessors.new(filename, matching, chosen)
+        when matching.length == 1
+          return matching.first
         else
           return nil
       end
@@ -169,7 +171,8 @@ module SiteFuel
     def stage
       return nil if @deploy_from == nil
 
-      puts '== %s '.format('Staging').ljust(80, '=')
+      puts '== %s '.format('Staging').ljust(TerminalInfo.width, '=')
+      printer = ColumnPrinter.new([5, :span, 6])
 
       # find all files under deploy_from
       files = find_all_files @deploy_from
@@ -189,7 +192,7 @@ module SiteFuel
         processor = @resource_processors[filename]
         if processor == nil
           if only_list_recognized_files == false
-            puts '%s %s' %['--'.ljust(8), filename.cabbrev(65)]
+            printer.row('--', filename)
           end
         else
           total_original_size += processor.original_size
@@ -201,16 +204,15 @@ module SiteFuel
           stats[2] += processor.processed_size
           @processor_statistics[processor.class.processor_name] = stats
 
-          puts '%s %s %4.3f' %
-               [
-                 cyan(processor.class.processor_name.ljust(8)),
-                 filename.cabbrev(65).ljust(65),
-                 processor.processed_size.prec_f/processor.original_size.prec_f
-               ]
+          printer.row(
+            cyan(processor.class.processor_name),
+            filename,
+            '%4.3f'%(processor.processed_size.prec_f/processor.original_size.prec_f)
+          )
         end
       end
 
-      puts '='*80
+      puts '='*TerminalInfo.width
       puts 'Size delta:         %+5d bytes; %4.3f' %
               [
                 total_processed_size - total_original_size,
