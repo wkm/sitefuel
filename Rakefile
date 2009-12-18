@@ -14,7 +14,7 @@ require 'rake/gempackagetask'
 
 spec = Gem::Specification.new do |s|
   s.name       = 'sitefuel'
-  s.version    = '0.1.0'
+  s.version    = '0.0.0b'
   s.author     = 'wkm'
   s.email      = 'wkm@sitefuel.org'
   s.homepage   = 'http://sitefuel.org'
@@ -32,7 +32,14 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc         = true
   s.extra_rdoc_files = ['README', 'RELEASE_NOTES']
 
-  s.description = File.read('RELEASE_NOTES')
+  s.description = <<END
+SiteFuel is a program and lightweight Ruby API for processing the source code
+behind  your static and dynamic websites. SiteFuel can remove comments and
+unneeded whitespace from your CSS, HTML, and JavaScript files (as well as
+fragments in RHTML and PHP) files. It can also losslessly compress your PNG and
+JPEG images. SiteFuel can also deploy your website from SVN or GIT. Support for
+more formats and repositories is planned for future versions. 
+END
 
 
   s.add_dependency('hpricot', '>= 0.8')
@@ -66,6 +73,15 @@ spec = Gem::Specification.new do |s|
   runtime = SiteFuel::SiteFuelRuntime.new
   # ...
 
+=======================================================
+END
+
+  s.post_install_message = <<END
+=======================================================
+This is a test deployment of the SiteFuel gem. It is
+not intended for public consumption. Specifically, only
+the `stage` command is enabled and the documentation is
+far from complete.
 =======================================================
 END
   
