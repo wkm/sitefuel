@@ -2,7 +2,7 @@
 # File::      configuration.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL
+# License::   GPL version 2.0
 #
 # Load and process SiteFuel YAML configuration files
 #

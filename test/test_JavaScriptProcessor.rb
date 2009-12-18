@@ -1,7 +1,7 @@
 #
 # File::      test_JavaScriptProcessor.rb
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL
+# License::   GPL version 2.0
 #
 # Unit tests for the JavaScriptProcessor
 #

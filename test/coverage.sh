@@ -4,7 +4,7 @@
 # File::      coverage.sh
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL
+# License::   GPL version 2.0
 #
 # Bash script to test coverage of the unit test suite
 #

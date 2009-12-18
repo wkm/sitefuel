@@ -2,7 +2,7 @@
 # File::      AbstractExternalProgramProcessor.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL
+# License::   GPL version 2.0
 #
 # TODO: this abstraction assumes only one filter will ever be run on a file,
 # which is rather naive. Need to add support to process a file multiple times.

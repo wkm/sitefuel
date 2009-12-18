@@ -2,7 +2,7 @@
 # File::      CSSProcessor.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL
+# License::   GPL version 2.0
 #
 # Rather lightweight CSS processor; primarily intended to minify CSS, but has
 # basic support for beautifcation as well

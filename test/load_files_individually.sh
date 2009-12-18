@@ -3,7 +3,7 @@
 # File::      load_files_individually.sh
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL
+# License::   GPL version 2.0
 #
 # Little bash script to load each file individually; this ensures the require
 # statements are correct.

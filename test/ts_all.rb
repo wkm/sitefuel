@@ -4,7 +4,7 @@
 # File::      ts_all.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL
+# License::   GPL version 2.0
 #
 # The entirety test suite. Runs all tests.
 #

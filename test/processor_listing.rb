@@ -3,7 +3,7 @@
 # File::      processor_listing.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL
+# License::   GPL version 2.0
 #
 # Lists all the processors in SiteFuel with their file patterns
 #
