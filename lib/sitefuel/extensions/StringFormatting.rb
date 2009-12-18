@@ -30,9 +30,21 @@ class String
   end
 
 
-  # like #ljust but uses the apparent length
-  def visual_ljust(width, padding = " ")
+  # like #ljust but uses #visual_length for proper ANSI sequence handling
+  def visual_ljust(width, padding=" ")
     ljust(width + visual_length_delta, padding)
+  end
+
+
+  # like #rjust but uses #visual_length for proper ANSI sequence handling
+  def visual_rjust(width, padding=" ")
+    rjust(width + visual_length_delta, padding)
+  end
+
+
+  # like #center but uses #visual_length for proper ANSI sequence handling
+  def visual_center(width, padding=" ")
+    center(width + visual_length_delta, padding)
   end
 
 
