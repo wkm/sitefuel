@@ -85,10 +85,10 @@ class FileTree
   end
 
 
-  # finds the file and creates it (and all the necessary directories) if it
-  # doesn't already exist and gives back the filename
+  # finds the file if it exists, otherwise creates all the necessary
+  # parent directories for the file and gives back the file name
   def get_file(name)    
     create_path(name)
-    File.open(File.join(@base_path, name), 'w') {}
+    File.join(@base_path, name)
   end
 end

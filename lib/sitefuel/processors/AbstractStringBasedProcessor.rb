@@ -21,6 +21,10 @@ module SiteFuel
         'String'
       end
 
+      def processor_symbol
+        'S'
+      end
+
       # lightweight wrapper for opening a resource and generating the file
       def self.process_file(filename, config = {})
         proc = self.new()
@@ -78,8 +82,12 @@ module SiteFuel
         return self
       end
 
-      def processor_symbol
-        'S'
+      def save(file_tree)
+        file_name = create_file(file_tree)
+        puts 'Saving into '+file_name
+        File.open(file_name, 'w') do |file|
+          file << @document
+        end
       end
       
       attr_reader :document
