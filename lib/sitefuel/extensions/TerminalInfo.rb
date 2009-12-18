@@ -17,7 +17,7 @@ module TerminalInfo
   # the window (x) and the second parameter is the height of the window (y)
   #
   #  TerminalInfo.dimensions # => [105, 34]
-  def dimensions
+  def self.dimensions
     grab_output('stty size').split(' ').reverse.map do |val|
       val.to_i
     end
@@ -29,24 +29,24 @@ module TerminalInfo
   # =stty=
   #
   #  TerminalInfo.size # => [34, 105]
-  def size
+  def self.size
     dimensions.reverse
   end
 
   # gives the current width of the terminal window
-  def width
+  def self.width
     dimensions.first
   end
 
   # gives the current height of the terminal window
-  def height
+  def self.height
     dimensions.last
   end
 
 private
 
   # the back tick notation is annoying to read... 
-  def grab_output(command)
+  def self.grab_output(command)
     `#{command}`
   end
 
