@@ -17,6 +17,12 @@ class FileTree
       @base_path = base_path
     end
 
+    # create the directory if it doesn't exist
+    unless File.directory?(base_path)
+      Dir.mkdir(base_path)
+    end
+
+    # initialize our file tree
     refresh_tree
   end
 
@@ -67,19 +73,23 @@ class FileTree
   end
 
 
-  # finds the file and creates it (and all the necessary directories) if it
-  # doesn't already exist and gives back the filename
-  def get_file(name)
-    components = File.split(name)
+  # creates a path to the given file but doesn't create the actual file
+  def create_path(name)
+    puts "creating path to #{name}"
+    components = File.dirname(name).split(File::SEPARATOR)
     tld = self
 
-    index = 0
     components.each do |part|
-      if index < components.length-1
-        tld = tld.create_directory(part)
-      else
-        tld = tld.create_file(part)
-      end
+      puts "... for: #{part}"
+      tld = tld.create_directory(part)
     end
+  end
+
+
+  # finds the file and creates it (and all the necessary directories) if it
+  # doesn't already exist and gives back the filename
+  def get_file(name)    
+    create_path(name)
+    File.open(name, 'w') {}
   end
 end
