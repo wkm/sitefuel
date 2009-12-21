@@ -1,0 +1,30 @@
+#
+# File::      test_SVN.rb
+# Author::    wkm
+# Copyright:: 2009
+# License::   GPL
+#
+# Unit tests for the SVN version system abstraction
+#
+
+$:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+
+require 'test/unit'
+require 'sitefuel/external/SVN'
+
+include SiteFuel::External
+
+class TestSVN < Test::Unit::TestCase
+  TEST_REPOSITORIES = File.join(File.dirname(__FILE__), 'repositories', 'svn')
+
+  def test_checkout
+    dir = SVN.export File.join(TEST_REPOSITORIES, 'svn', 'testrepo1')
+    files = Dir[File.join(dir, "**/")].map do |f|
+      File.basename(f)
+    end
+
+    assert files.include? 'style.css'
+    assert files.include? 'deployment.yml'
+    assert files.include? 'index.html'
+  end
+end
