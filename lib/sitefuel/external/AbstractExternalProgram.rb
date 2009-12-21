@@ -430,6 +430,7 @@ module SiteFuel
         define_class_method(method_name.to_sym) { struct }
       end
 
+
       # organizes a list of options into a ragged array of arrays
       #
       #  organize_options(:setflag, :paramsetting, 'val1', 'val2')
@@ -495,7 +496,7 @@ module SiteFuel
 
       # creates a random string by hashing the current time into hexadecimal
       def self.random_string(length=12)
-        Digest::SHA1.hexdigest(Time.now.to_s)[0, length]
+        Digest::SHA1.hexdigest(Time.now.to_f.to_s)[0, length]
       end
 
 
