@@ -91,6 +91,5 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
     assert_equal warnings+1, SiteFuelLogger.instance.warn_count
 
     assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.htm")
-
   end
 end
