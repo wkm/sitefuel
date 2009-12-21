@@ -38,7 +38,7 @@ class TestSVN < Test::Unit::TestCase
 
     # now let's test a checkout where the repo doesn't exist...
     assert_raises(ProgramExitedWithFailure) do
-      dir = SVN.export 'file://'+File.join(TEST_REPOSITORIES, 'nonexistentrepo')
+      SVN.export 'file://'+File.join(TEST_REPOSITORIES, 'nonexistentrepo')
     end
   end
 end
