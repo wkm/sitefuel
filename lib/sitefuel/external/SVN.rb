@@ -29,7 +29,11 @@ module SiteFuel
       option :revision, '-r ${value}'
       option :output, '${value}'
 
-      def self.export(source, output, revision='HEAD')
+      def self.export(source, output=nil, revision='HEAD')
+        if output == nil
+          output = create_tmp_directory('svn')
+        end
+
         execute :export,
                 :revision, revision,
                 :source, source,
