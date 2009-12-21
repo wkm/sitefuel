@@ -4,7 +4,7 @@
 # Copyright:: 2009
 # License::   GPL
 #
-# Unit tests for the Git abstraction
+# Unit tests for the Git version system abstraction
 #
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
@@ -19,7 +19,13 @@ class TestGIT < Test::Unit::TestCase
 
   def test_checkout
     dir = GIT.shallow_clone(File.join(TEST_REPOSITORIES, 'few_files'))
+    files = Dir[File.join(dir, "**/*")]
+    files.collect! do |f|
+      File.basename(f)
+    end
 
-    puts Dir[File.join(dir, "**/*")]
+    assert files.include? 'style.css'
+    assert files.include? 'deployment.yml'
+    assert files.include? 'index.html'
   end
 end
