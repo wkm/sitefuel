@@ -41,10 +41,10 @@ Use SiteFuel to:
 == System Requirements
 
 - Ruby 1.8.6 or greater.
-- =pngcrush=: for PNG compression
-- =jpegtran=: for JPEG compression
-- =git=: for deploying sites from Git repositories
-- =svn=: for deploying sites from SVN repositories
+- =pngcrush= for PNG compression
+- =jpegtran= for JPEG compression
+- =git= for deploying sites from Git repositories
+- =svn= for deploying sites from SVN repositories
 
 SiteFuel hasn't been tested on Windows machines.
 
