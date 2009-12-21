@@ -1,8 +1,8 @@
 #
-# File::       test_SymbolComparisons.rb
-# Author::     wkm
-# Copyright::  2009
-# License::    GPL
+# File::      test_SymbolComparisons.rb
+# Author::    wkm
+# Copyright:: 2009, Zanoccio LLC.
+# License::   GPL version 2.0
 #
 # Unit tests for the spaceship method and hence sorting of symbols
 #

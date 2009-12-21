@@ -1,8 +1,8 @@
 #
-# File::       HAMLProcessor.rb
-# Author::     wkm
-# Copyright::  2009
-# License::    GPL
+# File::      HAMLProcessor.rb
+# Author::    wkm
+# Copyright:: 2009, Zanoccio LLC.
+# License::   GPL version 2.0
 #
 # processes .haml source files to generate the associated HTML
 #

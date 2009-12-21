@@ -1,8 +1,8 @@
 #
-# File::        test_SiteFuelRuntime.m
-# Author::      wkm
-# Copyright::   2009
-# License::     GPL
+# File::      test_SiteFuelRuntime.m
+# Author::    wkm
+# Copyright:: 2009, Zanoccio LLC.
+# License::   GPL version 2.0
 #
 # Unit tests for the SiteFuelRuntime class.
 #

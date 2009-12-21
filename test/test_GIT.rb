@@ -1,8 +1,8 @@
 #
 # File::      test_GIT.rb
 # Author::    wkm
-# Copyright:: 2009
-# License::   GPL
+# Copyright:: 2009, Zanoccio LLC.
+# License::   GPL version 2.0
 #
 # Unit tests for the Git version system abstraction
 #
