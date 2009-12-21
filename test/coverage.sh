@@ -9,4 +9,4 @@
 # Bash script to test coverage of the unit test suite
 #
 
-rcov --comments --only-uncovered --sort coverage -i 'sitefuel/' -x '.*' --no-html -T test_*.rb
+rcov --comments --only-uncovered --sort coverage -i 'sitefuel/' -x '.*' --no-html -T ../test/test_*.rb
