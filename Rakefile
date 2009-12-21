@@ -17,6 +17,7 @@ spec = Gem::Specification.new do |s|
   s.version    = '0.1.0a'
   s.author     = 'wkm'
   s.email      = 'wkm@sitefuel.org'
+
   s.homepage   = 'http://sitefuel.org'
   s.platform   = Gem::Platform::RUBY
   s.summary    = 'A lightweight framework for processing, optimizing, and deploying websites'
@@ -98,7 +99,7 @@ CLOBBER.include('pkg/*')
 
 
 task :install do
-  exec 'sudo gem install -t pkg/*.gem --no-ri --no-rdoc'
+  exec 'sudo gem install pkg/*.gem --no-ri --no-rdoc'
 end
 
 task :uninstall do
