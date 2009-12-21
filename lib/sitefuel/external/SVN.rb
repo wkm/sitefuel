@@ -47,7 +47,7 @@ module SiteFuel
           args << :force
         end
 
-        execute *args
+        execute(*args)
 
         output
       end
