@@ -16,6 +16,7 @@ module SiteFuel
     require 'sitefuel/extensions/DynamicClassMethods'
     require 'sitefuel/SiteFuelLogger'
 
+    require 'tmpdir'
     require 'sha1'
 
     # raised when an external program can't be found
@@ -593,10 +594,10 @@ module SiteFuel
       def requires_value?(name)
         takes_value?(name) and not has_default?(name)
       end
-        
 
-      # executes the given AbstractExternalProgram instance
-      def execute
+
+      # builds the command line for a given program instance
+      def build_command_line
         self.class.verify_compatible_version
 
         exec_string = self.class.program_binary.clone
@@ -617,8 +618,15 @@ module SiteFuel
           exec_string << ' ' << option_string
         end
 
-        info '    Executing: '+exec_string
+        exec_string
+      end
+        
 
+      # executes the given AbstractExternalProgram instance
+      def execute
+        exec_string = build_command_line
+
+        info '    Executing: '+exec_string
         case self.class.output_handling
           when :capture
             self.class.capture_output(exec_string)
