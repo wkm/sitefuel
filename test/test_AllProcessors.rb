@@ -2,7 +2,7 @@
 # File::      test_AllProcessors.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Programmatic tests run against all processors
 #

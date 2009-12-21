@@ -2,7 +2,7 @@
 # File::      TerminalInfo.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Little Ruby library for querying for various properties of
 # a terminal window.

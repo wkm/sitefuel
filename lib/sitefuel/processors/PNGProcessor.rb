@@ -2,7 +2,7 @@
 # File::      PNGProcessor.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Interfaces with the rbcrush library that's wrapped around pngcrush
 #

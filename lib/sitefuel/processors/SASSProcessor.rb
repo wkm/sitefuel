@@ -2,7 +2,7 @@
 # File::      SASSProcessor.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # processes .sass stylesheets to generate the associated CSS
 #

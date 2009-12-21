@@ -2,7 +2,7 @@
 # File::      ExternalProgramTestCase.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Lightweight utility that will effectively scrap
 # the entire test case if the program being tested doesn't exist.

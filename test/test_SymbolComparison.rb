@@ -2,7 +2,7 @@
 # File::      test_SymbolComparisons.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Unit tests for the spaceship method and hence sorting of symbols
 #

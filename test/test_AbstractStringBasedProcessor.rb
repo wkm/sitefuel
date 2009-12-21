@@ -2,7 +2,7 @@
 # File::      test_AbstractStringBasedProcessor.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Unit tests for the string-based processor abstraction
 #

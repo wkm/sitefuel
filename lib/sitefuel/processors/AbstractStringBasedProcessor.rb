@@ -2,7 +2,7 @@
 # File::      AbstractStringBasedProcessor.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Defines an abstract processor that runs by loading an entire file into
 # memory as a string. Since most files we're looking at are very small

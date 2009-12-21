@@ -2,7 +2,7 @@
 # File::      test_FileComparisons.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Unit tests for File.equivalent? class method. The method is
 # heuristic based so lots of tests are needed, although perhaps

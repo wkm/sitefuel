@@ -2,7 +2,7 @@
 # File::      Silently.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Implements a silently method for executing code without warnings; intended for
 # wrapping around require statements

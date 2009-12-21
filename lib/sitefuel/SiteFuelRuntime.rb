@@ -2,7 +2,7 @@
 # File::      SiteFuelRuntime.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Defines the primary interface class used by sitefuel to do actual work.
 # Keeping this as a class let's us abstract away the command line interface

@@ -4,7 +4,7 @@
 # File::      coverage_annotation.sh
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
-# License::   GPL version 2.0
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Bash script to test coverage of the unit test suite and generate annotated
 # HTML for the source code which isn't completely covered.
