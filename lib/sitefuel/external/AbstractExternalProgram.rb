@@ -16,6 +16,8 @@ module SiteFuel
     require 'sitefuel/extensions/DynamicClassMethods'
     require 'sitefuel/SiteFuelLogger'
 
+    require 'sha1'
+
     # raised when an external program can't be found
     class ProgramNotFound < StandardError
       attr_reader :program_name
@@ -444,7 +446,7 @@ module SiteFuel
             j = i+1
             while j < options.length
               case options[j]
-                when String
+                when String, Fixnum, Float
                   # adds this value
                   option_row << options[j]
                   j += 1
@@ -487,6 +489,21 @@ module SiteFuel
         end
 
         instance.execute
+      end
+
+
+      # creates a random string by hashing the current time into hexadecimal
+      def self.random_string(length=12)
+        Digest::SHA1.hexdigest(Time.now.to_s)[0, length]
+      end
+
+
+      # creates a temporary directory for sitefuel
+      def self.create_tmp_directory(keyword)
+        dir_name = File.join(Dir.tmpdir, "sitefuel-#{keyword}-#{random_string}")
+        Dir.mkdir(dir_name)
+
+        dir_name
       end
 
 
@@ -555,7 +572,7 @@ module SiteFuel
         
       # applies a given value into an option template
       def apply_value(option_template, value)
-        option_template.gsub('${value}', value)
+        option_template.gsub('${value}', value.to_s)
       end
         
 
