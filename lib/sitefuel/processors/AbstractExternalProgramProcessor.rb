@@ -70,6 +70,9 @@ module SiteFuel
         self.execute
         self.processed_size = File.size(output_filename)
         return self
+      rescue SiteFuel::External::ProgramExitedWithFailure => exception
+        error "When processing #{resource_name}:"
+        error exception.to_s
       end
 
       def save(base_file_tree)
