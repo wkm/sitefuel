@@ -56,6 +56,7 @@ module SiteFuel
     # only lists file which have a known processor
     attr_accessor :only_list_recognized_files
 
+
     def initialize
       @processors = SiteFuelRuntime.find_processors
       self.logger = SiteFuelLogger.instance
@@ -63,6 +64,7 @@ module SiteFuel
 
       @only_list_recognized_files = false
     end
+
 
     # gives true if the given file (typically a processor) has already been
     # loaded (by looking into $"). Unfortunately #require is easily tricked,
@@ -77,6 +79,7 @@ module SiteFuel
       
       return false
     end
+
 
     # finds all processors under processors/ and loads them. Any file matching
     # *Processor.rb will be loaded
@@ -116,13 +119,16 @@ module SiteFuel
       Processor::AbstractProcessor.find_processors
     end
 
+
     # lists the actions which are possible with this runtime.
     def actions
       [ :deploy, :stage ]
     end
 
+
     # gives the array of processors available to this runtime
     attr_reader :processors
+
 
     # adds a processor or an array of processors to the runtime
     def add_processor(proc)
@@ -135,6 +141,7 @@ module SiteFuel
           @processors << proc
       end
     end
+
 
     # gives the processor to use for a given file
     def choose_processor(filename)
@@ -150,6 +157,7 @@ module SiteFuel
           return nil
       end
     end
+
 
     # like #choose_processor but prints a message if there are clashing
     # processors and returns the first of the clashing processors.
@@ -229,6 +237,7 @@ module SiteFuel
       staging_statistics
     end
 
+
     # outputs a little grid showing the number of files of each processor
     # and the total savings
     #
@@ -256,6 +265,7 @@ module SiteFuel
       printer.divider
       puts ''
     end
+
 
     # create a deployment
     def deploy
@@ -285,6 +295,7 @@ module SiteFuel
       section_divider('Finished')
     end
 
+
     # gives an array listing of all files on a given path
     #
     # This is a very lightweight wrapper around Dir.
@@ -292,11 +303,27 @@ module SiteFuel
       Dir[File.join(path, "**/*")]
     end
 
+    
     # changes the verbosity of the runtime by adjusting the log level
     def verbosity(level = 1)
       case level
-      when 1
+        when 0
+          SiteFuelLogger.instance.level = FATAL
 
+        when 1
+          SiteFuelLogger.instance.level = ERROR
+
+        when 2
+          SiteFuelLogger.instance.level = WARN
+
+        when 3
+          SiteFuelLogger.instance.level = INFO
+
+        when 4
+          SiteFuelLogger.instance.level = DEBUG
+
+        else
+          warn "Unknown verbosity level: #{level}; ignoring."
       end
     end
   end
