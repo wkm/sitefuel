@@ -29,7 +29,7 @@ echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >
 echo 'Unit tests' >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
 
-ruby -w ./ts_all.rb >> $tmpfile
+cd ..; ruby -w ./test/ts_all.rb >> $tmpfile; cd test
 
 echo >> $tmpfile
 echo >> $tmpfile
@@ -40,7 +40,7 @@ echo >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
 echo 'Coverage' >> $tmpfile
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~' >> $tmpfile
-./coverage.sh >> $tmpfile
+cd ..; ./test/coverage.sh >> $tmpfile; cd test
 
 
 echo >> $tmpfile
