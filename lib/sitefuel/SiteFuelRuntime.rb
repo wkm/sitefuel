@@ -300,7 +300,13 @@ module SiteFuel
     #
     # This is a very lightweight wrapper around Dir.
     def find_all_files(path)
-      Dir[File.join(path, "**/*")]
+      if File.directory?(path)
+        Dir[File.join(path, "**/*")]
+      elsif File.file?(path)
+        return path
+      else
+        return []
+      end
     end
 
     
