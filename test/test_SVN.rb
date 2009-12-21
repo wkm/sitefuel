@@ -15,14 +15,14 @@ require 'sitefuel/external/SVN'
 include SiteFuel::External
 
 class TestSVN < Test::Unit::TestCase
-  TEST_REPOSITORIES = File.join(File.dirname(__FILE__), 'repositories', 'svn')
+  TEST_REPOSITORIES = File.expand_path(File.join(File.dirname(__FILE__), 'repositories', 'svn'))
 
   def test_checkout
-    dir = SVN.export File.join(TEST_REPOSITORIES, 'svn', 'testrepo1')
-    files = Dir[File.join(dir, "**/")].map do |f|
+    dir = SVN.export 'file://'+File.join(TEST_REPOSITORIES, 'testrepo1')
+    files = Dir[File.join(dir, "**/*")].map do |f|
       File.basename(f)
     end
-
+    
     assert files.include? 'style.css'
     assert files.include? 'deployment.yml'
     assert files.include? 'index.html'
