@@ -31,7 +31,7 @@ spec = Gem::Specification.new do |s|
   s.require_path     = 'lib'
   s.test_file        = 'test/ts_all.rb'
   s.has_rdoc         = true
-  s.extra_rdoc_files = ['README', 'RELEASE_NOTES']
+  s.extra_rdoc_files = ['README.rdoc', 'RELEASE_NOTES.rdoc']
 
   s.description = <<END
 SiteFuel is a Ruby program and lightweight API for processing the source code
