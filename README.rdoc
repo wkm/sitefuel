@@ -1,9 +1,9 @@
 ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
  
  
-<center>SiteFuel</center>
-<center>http://sitefuel.org</center>
-<center>v0.1.0 (alpha release)</center>
+= SiteFuel
+====== http://sitefuel.org
+====== v0.1.0 (alpha release)
  
 
 ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
