@@ -106,3 +106,8 @@ task :uninstall do
 end
 
 task :reinstall => [:uninstall, :gem, :install]
+
+
+task :doc do
+  exec 'rdoc -U -d -a -S -N -p --include .'
+end
