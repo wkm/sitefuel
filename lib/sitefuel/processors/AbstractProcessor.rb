@@ -12,6 +12,7 @@ module SiteFuel
   module Processor
 
     require 'sitefuel/SiteFuelLogger'
+    require 'sitefuel/processors/Configurable'
 
     # raised when a method isn't implemented by a child class.
     class NotImplemented < StandardError; end
@@ -76,6 +77,8 @@ module SiteFuel
       include SiteFuel::Logging
       extend SiteFuel::ClassLogging
 
+      include Configurable
+
       # setup an AbstractProcessor
       def initialize        
         self.logger = SiteFuelLogger.instance
@@ -122,6 +125,12 @@ module SiteFuel
       # gives the display name for the processor
       def self.processor_name
         self.to_s.sub(/.*\b(.*)Processor/, '\1')
+      end
+
+      # gives the symbol of the processor; used when showing deployment
+      # progress
+      def processor_symbol
+        'A'
       end
 
       
@@ -329,61 +338,53 @@ module SiteFuel
         create_file(base_file_tree)
       end
 
+    protected
+      #
+      # Configuration Support
+      #
 
-      #
-      # CONFIGURATION SUPPORT
-      #
-      def configure(config)
+      def pre_configuration
         @filters_cleared = false
-        unless config == nil  or  config == {}
-          config.each_pair do |k, v|
-            set_configuration(k, v)
-          end
-        end
+      end
 
-        if !@filters_cleared && execution_list.empty?
+      def post_configuration
+        if !@filters_cleared and execution_list.empty?
           add_filterset(self.class.default_filterset)
         end
-        @filters_cleared = false
+        @filters_cleared = true
       end
 
 
-      def processor_symbol
-        'A'
-      end
-
-    private
-      def config_resource_name(value)
-        @resource_name = value
-      end
-
-      def config_filters(value)
+      # ensures the filters have been cleared during this
+      # configuration phase. Preforms the #clear_filters if they haven't
+      def ensure_cleared_filters
         if not @filters_cleared
           clear_filters
           @filters_cleared = true
         end
-
-        case value
-          when Array
-            value.each { |v| add_filter(v) }
-          when Symbol, String
-            add_filter(value)
-        end
       end
 
-      def config_filtersets
 
+      # sets the name for the resource that is being processed
+      def configure_resource_name(value)
+        @resource_name = value
       end
 
-      def set_configuration(key, value)
-        case key
 
-          else
-            raise UnknownConfigurationOption(self.class, key, value)
-        end
+      # adds filters to this processor
+      def configure_filters(*values)
+        ensure_cleared_filters
+        values.each { |v| add_filter(v) }
       end
 
-    protected
+
+      # adds filtersets to this processor
+      def configure_filtersets(*values)
+        ensure_cleared_filters
+        values.each { |v| add_filterset(v) }
+      end
+
+      
       # gives write-access to children classes
       attr_writer :original_size
       attr_writer :processed_size
