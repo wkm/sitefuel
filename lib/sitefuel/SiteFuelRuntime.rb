@@ -14,6 +14,7 @@
 module SiteFuel
 
   require 'optparse'
+
   require 'term/ansicolor'
 
   include Term::ANSIColor
