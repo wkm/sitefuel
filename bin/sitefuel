@@ -2,14 +2,6 @@
 
 # == Synopsis
 #
-# A lightweight ruby framework for processing and deploying websites, either
-# from
-#
-# == Usage
-#
-#  sitefuel deploy|process SOURCE [OPTIONS]
-#
-# == Introduction
 # SiteFuel is a program and lightweight Ruby API for processing the
 # source code behind your static and dynamic websites. SiteFuel can
 # remove comments and unneeded whitespace from your CSS, HTML, and
@@ -17,29 +9,64 @@
 # also loss-lessly compress your PNG and JPEG images. SiteFuel can also
 # deploy your website from SVN or GIT.
 #
-# Support for more formats and repositories is planned for future versions.
+# Support for more file formats and repositories is planned for future
+# versions.
 #
-# * More information: http://sitefuel.org
-# * Getting started: http://sitefuel.org/getstarted
-# * Documentation: http://sitefuel.org/documentation
 #
-# == Commands
+# == Usage
 #
-# deploy::      Deploy a site using sitefuel.
-# process::     Modify an existing website in-place.
-# stage::       Simulates a deployment without actually changing anything.
-# help::        Show this message.
+#  sitefuel <command> [--driver=file|svn|git] <source> [<output>]
+#           [--debug] [--verbose] [--help] [--license]
+#
+# === <command>
+# Possible commands are:
+# stage::     Simulate a deployment of a site.
+# deploy::    Deploy a site using SiteFuel.
+# help::      Show this message.
+#
+# === <driver>
+# SiteFuel can typically guess what driver to use, but you can explicitly
+# specify:
+#
+# file::  deploy a directory
+# svn::   use with Subversion repositories
+# git::   use with Git repositories
+#
+# === <source>
+# Specify the source SiteFuel is deploying from. This should accept all
+# protocols supported by enabled drivers. Eg.
+#
+# For svn:
+#  svn+ssh://user@sitefuel.org/svn/web/sitefuel-main
+#
+# For git:
+#  ssh://user@sitefuel.org/...
+#
+# === <output>
+# Specify the directory into which SiteFuel is to deploy. Currently SiteFuel can
+# only deploy into the file system.
+#
+# === --debug
+# Enables all messages including debugging. This will give you a blow by blow
+# account of what SiteFuel is doing.
+#
+# === --verbose
+# Enables most messages. This will give you a relatively detailed account of
+# how SiteFuel is deploying your site.
+#
 #
 # == Examples
 # Process an already deployed site:
-#  sitefuel process /var/www/
+#  sitefuel deploy /var/www/sitefuel /var/www/sitefuel-compacted
 #
 # Deploy a site from SVN:
 #  sitefuel deploy svn+ssh://sitefuel.org/svn/tags/21 /var/www/
 #
-# Specify a non-default deployment file:
-#  sitefuel process /var/www/ -c customdeployment.yml
+# == Links
 #
+# * More information: http://sitefuel.org
+# * Getting started: http://sitefuel.org/getstarted
+# * Documentation: http://sitefuel.org/documentation
 #
 # == Author
 # wkm, Zanoccio LLC.
@@ -52,7 +79,7 @@
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
-#
+#                                          # stage::
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
