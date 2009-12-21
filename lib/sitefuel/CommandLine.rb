@@ -98,17 +98,17 @@ module SiteFuel
       puts_and_exit opts if commands[0].downcase == 'help'
 
       case commands[0].downcase
-      when 'deploy'
-        runtime.deploy_from = commands[1]
-        runtime.deploy_to   = commands[2]
-        runtime.deploy
+        when 'deploy'
+          runtime.deploy_from = commands[1]
+          runtime.deploy_to   = commands[2]
+          runtime.deploy
 
-      when 'stage'
-        runtime.deploy_from = commands[1]
-        runtime.stage
+        when 'stage'
+          runtime.deploy_from = commands[1]
+          runtime.stage
 
-      else
-        puts_and_exit "unknown command: '#{commands[0]}'", $HELP_HINT_LINE
+        else
+          puts_and_exit "unknown command: '#{commands[0]}'", $HELP_HINT_LINE
       end
     end
   end
