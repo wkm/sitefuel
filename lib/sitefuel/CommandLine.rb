@@ -14,6 +14,8 @@ module SiteFuel
     require 'rdoc/usage'
     require 'term/ansicolor'
 
+    require 'sitefuel/License'
+
     include Term::ANSIColor
 
     def self.puts_and_exit(*args)
@@ -31,7 +33,7 @@ module SiteFuel
 
       # the banner text comes from the header comment for this file
 
-      opts.on('-oARG', '-o=ARG', '-o PLACE', '--output=ARG', '--output PLACE', String,
+      opts.on('-o PLACE', '--output=ARG', '--output PLACE', String,
               'Where to put a deployed site') do |out|
         runtime.deploy_to = out
       end
@@ -69,7 +71,7 @@ module SiteFuel
       end
 
       opts.on('--license', 'Gives the license for SiteFuel.') do
-        RDOC::usage('License')
+        puts_and_exit SiteFuel::LICENSE
       end
 
       opts.separator ''
