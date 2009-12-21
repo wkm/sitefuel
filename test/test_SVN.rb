@@ -14,6 +14,14 @@ require 'sitefuel/external/SVN'
 
 include SiteFuel::External
 
+# just for testing we capture stderr since the negative tests
+# get rather verbose
+class SVN
+  def self.capture_stderr
+    true
+  end
+end
+
 class TestSVN < Test::Unit::TestCase
   TEST_REPOSITORIES = File.expand_path(File.join(File.dirname(__FILE__), 'repositories', 'svn'))
 
@@ -26,5 +34,11 @@ class TestSVN < Test::Unit::TestCase
     assert files.include? 'style.css'
     assert files.include? 'deployment.yml'
     assert files.include? 'index.html'
+
+
+    # now let's test a checkout where the repo doesn't exist...
+    assert_raises(ProgramExitedWithFailure) do
+      dir = SVN.export 'file://'+File.join(TEST_REPOSITORIES, 'nonexistentrepo')
+    end
   end
 end
