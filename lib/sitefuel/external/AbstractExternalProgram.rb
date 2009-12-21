@@ -134,6 +134,24 @@ module SiteFuel
 
 
 
+    # raised when a program exits with a return code other than
+    # 0, generally indicating some sort of failure.
+    class ProgramExitedWithFailure < StandardError
+      attr_reader :program, :command_line, :return_code
+      def initialize(program, command_line, return_code)
+        @program = program
+        @command_line = command_line
+        @return_code = return_code
+      end
+
+      def to_s
+        "Program %s exited with %d when evaluating:\n%s" %
+        [program, return_code, command_line]
+      end
+    end
+
+
+
 
 
 
@@ -628,12 +646,22 @@ module SiteFuel
         exec_string = build_command_line
 
         info '    Executing: '+exec_string
-        case self.class.output_handling
+        output_handler = self.class.output_handling
+        case output_handler
           when :capture
-            self.class.capture_output(exec_string)
+            output_string = self.class.capture_output(exec_string)
 
           when :forward
-            exec(exec_string)
+            output_string = exec(exec_string)
+
+          else
+            raise "Unknown output handler: #{output_handler}"
+        end
+
+        if $?.success?
+          return output_string
+        else
+          raise ProgramExitedWithFailure.new(self.class, exec_string, $?.to_i)
         end
       end
 
