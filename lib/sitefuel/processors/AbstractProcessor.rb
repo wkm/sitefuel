@@ -2,6 +2,7 @@
 # File::      AbstractProcessor.rb
 # Author::    wkm
 # Copyright:: 2009, Zanoccio LLC.
+# License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Defines an AbstractProcessor class that gives the interface implemented by
 # specific processors.
@@ -352,37 +353,30 @@ module SiteFuel
       end
 
     private
+      def config_resource_name(value)
+        @resource_name = value
+      end
+
+      def config_filters(value)
+        if not @filters_cleared
+          clear_filters
+          @filters_cleared = true
+        end
+
+        case value
+          when Array
+            value.each { |v| add_filter(v) }
+          when Symbol, String
+            add_filter(value)
+        end
+      end
+
+      def config_filtersets
+
+      end
+
       def set_configuration(key, value)
         case key
-          when :resource_name
-            @resource_name = value
-
-
-          when :filters
-            if not @filters_cleared
-              clear_filters
-              @filters_cleared = true
-            end
-
-            case value
-              when Array
-                value.each { |v| add_filter(v) }
-              when Symbol, String
-                add_filter(value)
-            end
-
-          when :filtersets
-            if not @filters_cleared
-              clear_filters
-              @filters_cleared = true
-            end
-
-            case value
-              when Array
-                value.each { |v| add_filterset(v) }
-              when Symbol, String
-                add_filterset(value)
-            end
 
           else
             raise UnknownConfigurationOption(self.class, key, value)
