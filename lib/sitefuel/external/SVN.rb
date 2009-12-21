@@ -24,20 +24,32 @@ module SiteFuel
       end
       
 
-      option :source, '${source}'
+      option :source, '${value}'
       option :export, 'export'
       option :revision, '-r ${value}'
       option :output, '${value}'
+      option :force, '--force'
 
       def self.export(source, output=nil, revision='HEAD')
+        use_force = false
+
         if output == nil
           output = create_tmp_directory('svn')
+          use_force = true
         end
 
-        execute :export,
+        args = [:export,
                 :revision, revision,
                 :source, source,
-                :output, output
+                :output, output]
+
+        if use_force
+          args << :force
+        end
+
+        execute *args
+
+        output
       end
 
     end
