@@ -10,8 +10,6 @@
 module SiteFuel
   module External
 
-    require 'tmpdir'
-
     require 'sitefuel/external/AbstractExternalProgram'
 
     # defines a wrapper around the Git version control system
