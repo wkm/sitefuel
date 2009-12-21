@@ -1,7 +1,7 @@
  
 = SiteFuel
-=== http://sitefuel.org
-=== v0.1.0 (alpha release)
+==== http://sitefuel.org
+==== v0.1.0 (alpha release)
  
 
 --------------------------------------------------------------------------------
