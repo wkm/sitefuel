@@ -1,17 +1,19 @@
 # deployment settings for the 'simplehtml' test site
-global:
-  filterset: full
-
-html:
-  filterset:
-    - whitespace
+HTML:
+  filtersets:
+    # this will fix up dashes, quotes, etc.
     - beautifytext
 
-css:
-  filterset:
-    - minify
+    # it's very important we crush the whitespace after
+    # beautifying
+    - whitespace
 
-png:
-  filterset:
+CSS:
+  filtersets:
+    # let's not do anything to the CSS
+    - ignore
+
+PNG:
+  filters:
     # try very hard to get smaller PNGs:
-    - bruteforce
+    - brute

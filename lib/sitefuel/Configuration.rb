@@ -18,13 +18,15 @@ module SiteFuel
 
     # given a directory path will attempt to location a configuration file
     # and load it, returning a SiteFuel::Configuration class
-    def self.load(path, filename = 'deployment.yml')
+    def self.find_configuration(path, filename = 'deployment.yml')
       files = Dir["**/"+filename]
 
       if files.length < 0
         warn('No deployment configuration file found. Using defaults.')
         return
       end
+
+
 
       config_file = files.
 
