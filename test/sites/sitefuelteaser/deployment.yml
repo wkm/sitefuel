@@ -1,0 +1,13 @@
+# this is basically a bog standard deployment
+
+HTML:
+  filtersets:
+    - whitespace
+
+CSS:
+  filtersets:
+    - minify
+
+PNG:
+  filtersets:
+    - quick
