@@ -23,21 +23,23 @@ module SiteFuel
       exit
     end
   
-    $HELP_HINT_LINE = "type \'#{$0} help\' for usage"
+    $HELP_HINT_LINE = "type '#{$0} help' for usage"
+
+    @option_parser = nil
 
     # parse command line arguments and configure a SiteFuelRuntime
     def self.parse_command_line(runtime)
 
       #### BUILD THE OPTIONS PARSER
-      opts = OptionParser.new
+      @option_parser = OptionParser.new
 
       # the banner text comes from the header comment for this file
 
-      opts.on('-o PLACE', '--output=ARG', '--output PLACE', String,
+      @option_parser.on('-o PLACE', '--output=ARG', '--output PLACE', String,
               'Where to put a deployed site') do |out|
         runtime.deploy_to = out
       end
-      opts.on('-v', '--version', 'Gives the version of sitefuel') do
+      @option_parser.on('-v', '--version', 'Gives the version of sitefuel') do
         puts_and_exit 'SiteFuel ' + VERSION_TEXT
       end
 
@@ -45,7 +47,7 @@ module SiteFuel
       # Verbosity options
       #
 
-      opts.on('--[no-]verbose', 'List actions as they are preformed') do |be_verbose|
+      @option_parser.on('--[no-]verbose', 'List actions as they are preformed') do |be_verbose|
         if be_verbose
           # fatal, error, warnings, and info
           runtime.verbosity(3)
@@ -55,33 +57,51 @@ module SiteFuel
         end
       end
 
-      opts.on('--debug', 'Gives verbose debugging information') do
+      @option_parser.on('--debug', 'Gives verbose debugging information') do
         runtime.verbosity(4)
       end
 
-      opts.on('--only-list-recognized-files', 'Only list summaries for files which were changed') do
+      @option_parser.on('--abort-errors', '[default] Abort deployment if there are errors') do
+        runtime.abort_on_errors = true
+      end
+
+      @option_parser.on('--ignore-errors', 'Deploy even if there are errors') do
+        runtime.abort_on_errors = false
+        runtime.abort_on_warnings = false
+      end
+
+      @option_parser.on('--abort-warnings', 'Abort deployment if there are warnings') do
+        runtime.abort_on_warnings = true
+        runtime.abort_on_errors = true
+      end
+
+      @option_parser.on('--ignore-warnings', '[default] Deploy even if there are warnings') do
+        runtime.abort_on_warnings = true
+      end
+
+      @option_parser.on('--only-list-recognized-files', 'Only list summaries for files which were changed') do
         runtime.only_list_recognized_files = true
       end
 
-      opts.on('-h', '--help', '-?', '--about', 'Gives help for a specific command.') do
+      @option_parser.on('-h', '--help', '-?', '--about', 'Gives help for a specific command.') do
         RDoc::usage_no_exit('Synopsis', 'Usage', 'Introduction')
-        puts opts
+        puts @option_parser
         RDoc::usage_no_exit('Examples', 'Author', 'Copyright')
         exit
       end
 
-      opts.on('--license', 'Gives the license for SiteFuel.') do
+      @option_parser.on('--license', 'Gives the license for SiteFuel.') do
         puts_and_exit SiteFuel::LICENSE
       end
 
-      opts.separator ''
-      opts.separator 'Specific options for a command can be seen with: '
-      opts.separator '    COMMAND --help'
+      @option_parser.separator ''
+      @option_parser.separator 'Specific options for a command can be seen with: '
+      @option_parser.separator '    COMMAND --help'
 
 
       #### ATTEMPT TO PARSE THE COMMAND LINE
       begin
-        commands = opts.parse(*ARGV)
+        commands = @option_parser.parse(*ARGV)
       rescue OptionParser::InvalidOption => iopt
         puts iopt
         puts_and_exit $HELP_HINT_LINE
@@ -95,7 +115,7 @@ module SiteFuel
       # note that --help will have already been intercepted but 'help' still needs
       # special treatment
       puts_and_exit 'no command given', $HELP_HINT_LINE if commands.length < 1
-      puts_and_exit opts if commands[0].downcase == 'help'
+      puts_and_exit @option_parser if commands[0].downcase == 'help'
 
       case commands[0].downcase
         when 'deploy'
