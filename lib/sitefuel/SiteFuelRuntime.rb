@@ -56,6 +56,12 @@ module SiteFuel
     # only lists file which have a known processor
     attr_accessor :only_list_recognized_files
 
+    # whether a deployment should be aborted due to errors
+    attr_accessor :abort_on_errors
+
+    # whether a deployment should be aborted due to warnings
+    attr_accessor :abort_on_warnings
+
 
     def initialize
       @processors = SiteFuelRuntime.find_processors
@@ -63,6 +69,9 @@ module SiteFuel
       SiteFuelLogger.instance.log_style = :clean
 
       @only_list_recognized_files = false
+
+      @abort_on_errors = true
+      @abort_on_warnings = false
     end
 
 
@@ -267,10 +276,27 @@ module SiteFuel
     end
 
 
+    def check_messages
+      error_count = SiteFuelLogger.instance.error_count
+      if @abort_on_errors and error_count > 0
+        fatal "Aborting due to errors. Use --force to deploy anyway."
+        exit(-1)
+      end
+
+      warn_count = SiteFuelLogger.instance.error_count
+      if @abort_on_warnings and warn_count > 0
+        fatal "Aborting due to warnings. Use --ignore-warnings to deploy anyway."
+        exit(-1)
+      end
+    end
+
+
     # create a deployment
     def deploy
       # first we have to stage the files
       stage
+
+      check_messages
 
       return if @deploy_to == nil
 
@@ -289,10 +315,15 @@ module SiteFuel
         end
         STDOUT.flush
       end
-      
+
+
+      finish
+    end
+
+    def finish
       puts ''
       puts ''
-      section_divider('Finished')
+      section_divider('Finishing')
     end
 
 
