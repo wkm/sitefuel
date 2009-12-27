@@ -92,4 +92,34 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
 
     assert_equal Processor::HTMLProcessor, @runtime.choose_processor("foo.htm")
   end
+
+
+  def test_repository_system_classification
+    assert_equal :git, @runtime.classify_repository_system('ssh://host/path/repo.git')
+    assert_equal :git, @runtime.classify_repository_system('SSH://host/path/repo.git')
+    assert_equal :git, @runtime.classify_repository_system('git://host/path/repo')
+    assert_equal :git, @runtime.classify_repository_system('GIT://host/path/repo')
+    assert_equal :git, @runtime.classify_repository_system('rsync://host/path/repo')
+    assert_equal :git, @runtime.classify_repository_system('RSYNC://host/path/repo')
+
+
+    assert_equal :svn, @runtime.classify_repository_system('svn+ssh://host/path/repo')
+    assert_equal :svn, @runtime.classify_repository_system('SVN+ssh://host/path/repo')
+    assert_equal :svn, @runtime.classify_repository_system('SVN://host/path/repo')
+    assert_equal :svn, @runtime.classify_repository_system('svn://host/path/repo')
+
+    # if it ends with .git, it's GIT
+    assert_equal :git, @runtime.classify_repository_system('host/path/repo.git')
+    assert_equal :git, @runtime.classify_repository_system('http://host/path/repo.git')
+    assert_equal :git, @runtime.classify_repository_system('https://host/path/repo.git')
+
+    # these shouldn't be classified, or are ambiguous
+    assert_raises(UnknownVersioningSystem) do
+      @runtime.classify_repository_system('http://host/repo')
+    end
+    assert_raises(UnknownVersioningSystem) do
+      @runtime.classify_repository_system('https://host/repo')
+    end
+
+  end
 end
