@@ -44,7 +44,7 @@ module SiteFuel
     end
 
     def to_s
-      "Couldn't derive versioning system from #{pull_source}\n"+
+      "Couldn't derive versioning system from #{source}\n"+
       "Use --scm=(git|svn) option to force."
     end
   end
@@ -217,6 +217,9 @@ module SiteFuel
              /^svn\+ssh:\/\/.*$/i,
              /file:\/\/.*$/i
           :svn
+
+        when /^([-.a-zA-Z0-9\/])*$/i
+          :filesystem
 
         else
           raise UnknownVersioningSystem.new(pull_source)

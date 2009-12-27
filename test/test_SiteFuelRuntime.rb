@@ -113,6 +113,13 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
     assert_equal :git, @runtime.classify_repository_system('http://host/path/repo.git')
     assert_equal :git, @runtime.classify_repository_system('https://host/path/repo.git')
 
+    # vanilla file system deployments
+    assert_equal :filesystem, @runtime.classify_repository_system('./dir')
+    assert_equal :filesystem, @runtime.classify_repository_system('/var/www/dir')
+    assert_equal :filesystem, @runtime.classify_repository_system('dir/')
+    assert_equal :filesystem, @runtime.classify_repository_system('../.dir/')
+    assert_equal :filesystem, @runtime.classify_repository_system('../.dir/somehandle')
+
     # these shouldn't be classified, or are ambiguous
     assert_raises(UnknownVersioningSystem) do
       @runtime.classify_repository_system('http://host/repo')
