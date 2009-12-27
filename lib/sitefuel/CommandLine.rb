@@ -102,8 +102,8 @@ module SiteFuel
       #### ATTEMPT TO PARSE THE COMMAND LINE
       begin
         commands = @option_parser.parse(*ARGV)
-      rescue OptionParser::InvalidOption => iopt
-        puts iopt
+      rescue OptionParser::InvalidOption => invalid_option
+        puts invalid_option
         puts_and_exit $HELP_HINT_LINE
       rescue => exception
         # TODO: add better handling for the various exceptions (unnecessary
