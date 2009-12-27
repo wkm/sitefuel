@@ -35,6 +35,19 @@ module SiteFuel
 
   # a human readable version
   VERSION_TEXT = VERSION.join('.').freeze
+
+
+  class UnknownVersioningSystem < StandardError
+    attr_reader :source
+    def initialize(source)
+      @source = source
+    end
+
+    def to_s
+      "Couldn't derive versioning system from #{pull_source}\n"+
+      "Use --scm=(git|svn) option to force."
+    end
+  end
   
 
   class SiteFuelRuntime
@@ -186,12 +199,56 @@ module SiteFuel
     end
 
 
+    # decides what repository system to use (SVN or Git) based on the
+    # pull source given (eg. ssh://... is typically git; svn+ssh://... is SVN,
+    # etc.)
+    def classify_repository_system(pull_source)
+
+      # note that http:// and https:// repositories, in general could be
+      # anything.
+      case pull_source
+        when /^git:\/\/.*$/i,
+             /^ssh:\/\/.*$/i,
+             /^rsync:\/\/.*$/i,
+             /^.*\.git$/i
+          :git
+
+        when /^svn:\/\/.*$/i,
+             /^svn\+ssh:\/\/.*$/i,
+             /file:\/\/.*$/i
+          :svn
+
+        else
+          raise UnknownVersioningSystem.new(pull_source)
+      end
+    end                               
+
+    def classify_repository_system!(pull_source)
+      classify_repository_system(pull_source)
+    rescue UnknownVersioningSystem => exception
+      fatal(exception.to_s)
+      exit(-1)
+    end
+
+
+    # pulls files out of a given repository or file system
+    def pull
+      repository_system = classify_repository_system(@deploy_from)
+      puts "USING #{repository_system} "
+
+
+
+    end
+
+
     # implements the stage command. Staging, by itself, will give statistics on
     # the deployment; how many bytes were saved by minification; etc.
     #
     # However, #stage when part of #deploy will go and create the requisite files
     # in a temporary directory
     def stage
+      pull
+
       return nil if @deploy_from == nil
 
       section_divider('Staging')
