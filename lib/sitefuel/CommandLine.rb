@@ -43,6 +43,11 @@ module SiteFuel
         puts_and_exit 'SiteFuel ' + VERSION_TEXT
       end
 
+      @option_parser.on('--scm=ARG', '--scm PLACE', String,
+                        'What SCM to use (git, svn, or filesystem)') do |out|
+        runtime.scm_system = out
+      end
+
       #
       # Verbosity options
       #
