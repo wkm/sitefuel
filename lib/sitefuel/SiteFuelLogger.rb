@@ -40,6 +40,7 @@ module SiteFuel
     # clean:: gives a clean logging output intended for human use
     attr_accessor :log_style
 
+
     def initialize(filename = STDOUT)
       super(filename)
       
@@ -54,30 +55,36 @@ module SiteFuel
       @progname = 'SiteFuel'
     end
 
+
     def fatal(*args)
       @fatal_count += 1
       super(*args)
     end
+
 
     def error(*args)
       @error_count += 1
       super(*args)
     end
 
+
     def warn(*args)
       @warn_count += 1
       super(*args)
     end
+
 
     def info(*args)
       @info_count += 1
       super(*args)
     end
 
+
     def debug(*args)
       @debug_count += 1
       super(*args)
     end
+
 
     # implement our own #add so we can have cleaner logs
     def format_message(severity, date_time, program_name, msg)
@@ -112,18 +119,23 @@ module SiteFuel
       @logger = logger
     end
 
+
     # adds a fatal error to the log
     def fatal(*args) @logger.fatal(*args); end
-    
+
+
     # adds an error to the log
     def error(*args) @logger.error(*args); end
+
 
     # adds a warning to the log
     def warn(*args) @logger.warn(*args); end
 
+
     # adds an info message to the log
     def info(*args) @logger.info(*args); end
 
+    
     # adds a debugging message to the log
     def debug(*args) @logger.debug(*args); end
   end
