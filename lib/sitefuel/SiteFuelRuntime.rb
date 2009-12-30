@@ -215,7 +215,7 @@ module SiteFuel
 
         when /^svn:\/\/.*$/i,
              /^svn\+ssh:\/\/.*$/i,
-             /file:\/\/.*$/i
+             /^file:\/\/.*$/i
           :svn
 
         when /^([-.a-zA-Z0-9\/])*$/i

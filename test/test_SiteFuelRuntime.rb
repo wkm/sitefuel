@@ -107,6 +107,8 @@ class TestSiteFuelRuntime < Test::Unit::TestCase
     assert_equal :svn, @runtime.classify_repository_system('SVN+ssh://host/path/repo')
     assert_equal :svn, @runtime.classify_repository_system('SVN://host/path/repo')
     assert_equal :svn, @runtime.classify_repository_system('svn://host/path/repo')
+    assert_equal :svn, @runtime.classify_repository_system('FILE://path/repo')
+    assert_equal :svn, @runtime.classify_repository_system('file:///path/repo')
 
     # if it ends with .git, it's GIT
     assert_equal :git, @runtime.classify_repository_system('host/path/repo.git')
