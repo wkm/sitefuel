@@ -237,7 +237,7 @@ module SiteFuel
     # pulls files out of a given repository or file system
     def pull
       repository_system = classify_repository_system(@deploy_from)
-      puts "USING #{repository_system} "
+      info "Using #{repository_system} version control to access #{@deploy_from}"
 
 
 
@@ -405,19 +405,19 @@ module SiteFuel
     def verbosity(level = 1)
       case level
         when 0
-          SiteFuelLogger.instance.level = FATAL
+          SiteFuelLogger.instance.level = Logger::FATAL
 
         when 1
-          SiteFuelLogger.instance.level = ERROR
+          SiteFuelLogger.instance.level = Logger::ERROR
 
         when 2
-          SiteFuelLogger.instance.level = WARN
+          SiteFuelLogger.instance.level = Logger::WARN
 
         when 3
-          SiteFuelLogger.instance.level = INFO
+          SiteFuelLogger.instance.level = Logger::INFO
 
         when 4
-          SiteFuelLogger.instance.level = DEBUG
+          SiteFuelLogger.instance.level = Logger::DEBUG
 
         else
           warn "Unknown verbosity level: #{level}; ignoring."
