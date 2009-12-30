@@ -30,6 +30,9 @@ module SiteFuel
   # we need the AbstractProcessor symbol when we go child-class hunting
   require 'sitefuel/processors/AbstractProcessor'
 
+  require 'sitefuel/external/SVN'
+  require 'sitefuel/external/GIT'
+
   # version of SiteFuel
   VERSION = [0, 1, '0a'].freeze
 
@@ -60,6 +63,12 @@ module SiteFuel
     # what is the source *from* which we are deploying
     attr_accessor :deploy_from
 
+    # what is the staging directory
+    attr_reader :staging_directory
+
+    # what is the scm system
+    attr_accessor :scm_system
+
     # what is the source *to* which we are deploying
     attr_accessor :deploy_to
 
@@ -85,6 +94,8 @@ module SiteFuel
 
       @abort_on_errors = true
       @abort_on_warnings = false
+
+      @scm_system = nil
     end
 
 
@@ -236,11 +247,35 @@ module SiteFuel
 
     # pulls files out of a given repository or file system
     def pull
-      repository_system = classify_repository_system(@deploy_from)
-      info "Using #{repository_system} version control to access #{@deploy_from}"
+      if @scm_system == nil
+        @scm_system = classify_repository_system!(@deploy_from)
+        info "Using #{@scm_system} version control to access #{@deploy_from}"
+      end
 
+      # TODO this should be modularized; but in general there should be a
+      # 'discoverable' class that automates creation of plugins
 
+      case @scm_system.to_sym
+        when :svn
+          @staging_directory = External::SVN.export(@deploy_from)
 
+        when :git
+          @staging_directory = External::GIT.shallow_clone(@deploy_from)
+
+        when :filesystem
+          # kind of dangerous because it can override the source files; it's
+          # assumed every processor will not override the original.
+          @staging_directory = @deploy_from
+
+        else
+          fatal "Unknown SCM system: #{@scm_system}"
+          exit(-1)
+      end
+
+      info "Pulled files for staging into #{@staging_directory}"
+
+    rescue External::ProgramExitedWithFailure => exception
+      fatal "Couldn't pull files from SCM:\n#{exception}"
     end
 
 
@@ -252,13 +287,13 @@ module SiteFuel
     def stage
       pull
 
-      return nil if @deploy_from == nil
+      return nil if @staging_directory == nil
 
       section_divider('Staging')
       printer = ColumnPrinter.new([5, :span, 6])
 
       # find all files under deploy_from
-      files = find_all_files @deploy_from
+      files = find_all_files @staging_directory
 
       total_original_size = 0
       total_processed_size = 0
