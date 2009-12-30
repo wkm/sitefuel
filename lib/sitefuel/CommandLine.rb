@@ -108,7 +108,9 @@ module SiteFuel
       rescue => exception
         # TODO: add better handling for the various exceptions (unnecessary
         #       argument, missing argument, etc.)
+
         puts_and_exit "couldn't parse command line: #{exception}", $HELP_HINT_LINE
+#        puts exception.backtrace.join("\n")
       end
 
 
