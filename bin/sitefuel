@@ -28,7 +28,7 @@
 # SiteFuel can typically guess what driver to use, but you can explicitly
 # specify:
 #
-# file::  deploy a directory
+# filesystem::  deploy a directory
 # svn::   use with Subversion repositories
 # git::   use with Git repositories
 #
