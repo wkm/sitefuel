@@ -15,13 +15,17 @@
 #
 # == Usage
 #
-#  sitefuel <command> [--driver=file|svn|git] <source> [<output>]
-#           [--debug] [--verbose] [--help] [--license]
+#  sitefuel <command> [--scm=file|svn|git] <source> [<output>] [--debug] \
+#           [--verbose]
+#           [--help]
+#           [--license]
 #
 # === <command>
 # Possible commands are:
+# pull:       Pulls a website from an SCM into a temporary directory.
 # stage::     Simulate a deployment of a site.
 # deploy::    Deploy a site using SiteFuel.
+# process::   Deploy a website in-place. Not recommended.
 # help::      Show this message.
 #
 # === <driver>
@@ -29,8 +33,8 @@
 # specify:
 #
 # filesystem::  deploy a directory
-# svn::   use with Subversion repositories
-# git::   use with Git repositories
+# svn::         use with Subversion repositories
+# git::         use with Git repositories
 #
 # === <source>
 # Specify the source SiteFuel is deploying from. This should accept all
