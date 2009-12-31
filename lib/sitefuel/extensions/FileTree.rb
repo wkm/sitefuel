@@ -10,8 +10,9 @@
 
 class FileTree
 
-  def initialize(base_path = :automatic)
-    if base_path == :automatic
+  # creates a new FileTree data structure for a given path
+  def initialize(base_path = nil)
+    if base_path == nil
       @base_path = Dir.pwd
     else
       @base_path = base_path
@@ -27,6 +28,7 @@ class FileTree
   end
   
 
+  # rebuilds the FileTree given the #base_path
   def refresh_tree
     @directory_hash = {}
     @file_hash = {}
