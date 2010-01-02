@@ -27,7 +27,7 @@ spec = Gem::Specification.new do |s|
 
   # for proper testing we need to include the .png and .jpg test images, they
   # double the size of the gem, however.
-  s.files      = FileList["{bin,test,lib}/**/*"].exclude(".pxm", ".rdoc", ".sh").to_a
+  s.files      = FileList["{bin,test,lib}/**/*"].exclude(".psd", ".pxm", ".rdoc", ".sh").to_a
   
   s.require_path     = 'lib'
   s.test_file        = 'test/ts_all.rb'
