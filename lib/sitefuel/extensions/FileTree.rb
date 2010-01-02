@@ -54,6 +54,10 @@ class FileTree
   # creates the given directory if it doesn't exist and returns a
   # FileTree for it
   def create_directory(name)
+    return if name == nil
+    return if name == '.'
+    return if name == '..'
+
     full_name = File.join(@base_path, name)
     res = @directory_hash[full_name]
     if res != nil
