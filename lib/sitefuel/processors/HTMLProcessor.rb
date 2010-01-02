@@ -96,13 +96,16 @@ module SiteFuel
         ]
       end
 
+
       def self.default_filterset
         :minify
       end
 
+
       def self.filterset_minify
         [:whitespace, :minify_javascript, :minify_styles]
       end
+
 
       def self.filterset_beautify
         [:beautify_quotes, :beautify_dashes, :beautify_arrows, :beautify_symbols]
@@ -118,12 +121,14 @@ module SiteFuel
         @htmlstruc = Nokogiri::HTML.fragment(document)
       end
 
+
       # after all the filters are run dump the HTML as a string and do a
       # tiny bit of post processing
       def finish_filters
         # do a last minute, ugly +br+ cleanup
-        @document = @htmlstruc.to_s.gsub('<br />', '<br>')
+        @document = @htmlstruc.to_s
       end
+
 
       def traverse(patterns = TEXTUAL_TAGS_FILTER, &block)
         @htmlstruc.xpath(patterns).each do |tag|
@@ -132,6 +137,7 @@ module SiteFuel
           end
         end
       end
+
 
       # strips excess whitespace in most HTML tags. Notably, +pre+ tags are
       # left alone.
@@ -145,6 +151,7 @@ module SiteFuel
         end
       end
 
+
       # minifies embedded JavaScript code using the JavaScriptProcessor
       def filter_minify_javascript
         # TODO check the language attribute to make sure it's javascript
@@ -156,6 +163,7 @@ module SiteFuel
         end
       end
 
+
       # minifies embedded CSS styles using the CSSProcessor
       def filter_minify_styles
         traverse('style') do |_,txt|
@@ -166,10 +174,12 @@ module SiteFuel
         end
       end
 
+
       # cleans up double and single quotes in textual objects
       # <pre>"hello world"  =>  &#8220; hello world&#8221;</pre>
       def filter_beautify_quotes
         traverse do |_,txt|
+          puts "At: #{txt.raw_content}"
           txt.raw_content = txt.raw_content.
             # apostrophes
             gsub(/(\S)'(s)/i,   '\1%s\2' % SINGLE_QUOTE_CLOSE).
@@ -180,8 +190,13 @@ module SiteFuel
 
             # single quotes
             gsub(/'(\S.*?\S)'/, '%s\1%s' % [SINGLE_QUOTE_OPEN, SINGLE_QUOTE_CLOSE])
+
+          puts "... became: #{txt.raw_content}"
+          puts "... or: #{txt.content}"
+          puts "... document: #{@htmlstruc}"
         end
       end
+
 
       # cleans up the various dash forms:
       # <pre>12--13  =>  12&#8211;13</pre>
@@ -203,6 +218,7 @@ module SiteFuel
         end
       end
 
+
       # convert basic arrow forms to unicode characters
       def filter_beautify_arrows
         traverse do |_,txt|
@@ -216,11 +232,13 @@ module SiteFuel
         end
       end
 
+
       # converts 'x' signs between numbers into the unicode symbol
       def filter_beautify_math
 
       end
 
+      
       # convert a few shorthands like (c), (tm) to their unicode symbols
       def filter_beautify_symbols
         traverse do |_,txt|
