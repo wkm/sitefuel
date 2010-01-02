@@ -16,6 +16,7 @@ module SiteFuel
   require 'optparse'
 
   require 'term/ansicolor'
+  require 'fileutils'
 
   include Term::ANSIColor
 
@@ -281,6 +282,22 @@ module SiteFuel
     end
 
 
+
+    # given a file name will remove the staging directory from it and give
+    # just the base name for the resource
+    def get_base_resource_name(filename)
+      filename.gsub(Regexp.new('^'+Regexp.escape(@staging_directory)), '')
+    end
+
+
+    # given a source file name will remove the staging directory and give the
+    # fully qualified fully qualified name to which this resource is being
+    # deployed
+    def get_full_deployed_name(filename)
+      File.join(@deploy_to, get_base_resource_name(filename))
+    end
+
+
     # implements the stage command. Staging, by itself, will give statistics on
     # the deployment; how many bytes were saved by minification; etc.
     #
@@ -306,7 +323,8 @@ module SiteFuel
         if processor == nil
           @resource_processors[filename] = nil
         else
-          @resource_processors[filename] = processor.process_file(filename)
+          resource_name = get_base_resource_name(filename)
+          @resource_processors[filename] = processor.process_file(filename, :resource_name => resource_name)
         end
         
         processor = @resource_processors[filename]
@@ -406,6 +424,11 @@ module SiteFuel
         results = @resource_processors[filename]
         if results == nil
           putc '.'
+
+          # copy the file over
+          file_destination = get_full_deployed_name(filename)
+          info("Copying #{filename} to #{file_destination}")
+          FileUtils.copy(filename, file_destination)
         else
           putc results.processor_symbol
           results.save(file_tree)
