@@ -22,6 +22,17 @@ class Nokogiri::XML::Node
   end
 end
 
+class Nokogiri::XML::Text
+  def raw_content
+    self.content
+  end
+
+  # expose #native_content
+  def raw_content=(text)
+    self.native_content = text
+  end
+end
+
 
 module SiteFuel
   module Processor
@@ -104,7 +115,7 @@ module SiteFuel
 
       # before any filters are run parse the document with nokogiri
       def setup_filters
-        @htmlstruc = Nokogiri::XML.fragment(document)
+        @htmlstruc = Nokogiri::HTML.fragment(document)
       end
 
       # after all the filters are run dump the HTML as a string and do a
@@ -126,10 +137,10 @@ module SiteFuel
       # left alone.
       def filter_whitespace
         @htmlstruc.traverse_text do |txt|
-          if /\A\s+\z/ =~ txt.content then
-            txt.content = ''
+          if /\A\s+\z/ =~ txt.raw_content then
+            txt.raw_content = ''
           else
-            txt.content = txt.content.gsub(/\s+/m, ' ')
+            txt.raw_content = txt.raw_content.gsub(/\s+/m, ' ')
           end
         end
       end
@@ -137,9 +148,9 @@ module SiteFuel
       # minifies embedded JavaScript code using the JavaScriptProcessor
       def filter_minify_javascript
         # TODO check the language attribute to make sure it's javascript
-        traverse('script') do |tag,txt|
-          txt.content = JavaScriptProcessor.process_string(
-                  txt.content,
+        traverse('script') do |_,txt|
+          txt.raw_content = JavaScriptProcessor.process_string(
+                  txt.raw_content,
                   {:resource_name => resource_name+'<embedded_JS>'}
           )
         end
@@ -147,9 +158,9 @@ module SiteFuel
 
       # minifies embedded CSS styles using the CSSProcessor
       def filter_minify_styles
-        traverse('style') do |tag,txt|
-          txt.content = CSSProcessor.process_string(
-                  txt.content,
+        traverse('style') do |_,txt|
+          txt.raw_content = CSSProcessor.process_string(
+                  txt.raw_content,
                   :resource_name => resource_name+'<embedded_CSS>'
           )
         end
@@ -158,8 +169,8 @@ module SiteFuel
       # cleans up double and single quotes in textual objects
       # <pre>"hello world"  =>  &#8220; hello world&#8221;</pre>
       def filter_beautify_quotes
-        traverse do |tag,txt|
-          txt.content = txt.content.
+        traverse do |_,txt|
+          txt.raw_content = txt.raw_content.
             # apostrophes
             gsub(/(\S)'(s)/i,   '\1%s\2' % SINGLE_QUOTE_CLOSE).
             gsub(/(\Ss)'(\s)/i, '\1%s\2'   % SINGLE_QUOTE_CLOSE).
@@ -176,8 +187,8 @@ module SiteFuel
       # <pre>12--13  =>  12&#8211;13</pre>
       # <pre>the car---it was red---was destroyed  =>  ...&#8212;it was red&#8212;...</pre>
       def filter_beautify_dashes
-        traverse do |tag,txt|
-          txt.content = txt.content.
+        traverse do |_,txt|
+          txt.raw_content = txt.raw_content.
             # between two numbers we have an en dash
             # this would be a bit cleaner with (negative) lookbehind
             gsub(/(\d)--(\d)/,        "\\1#{EN_DASH}\\2").
@@ -194,14 +205,14 @@ module SiteFuel
 
       # convert basic arrow forms to unicode characters
       def filter_beautify_arrows
-        traverse do |tag,txt|
-          txt.content = txt.content.
-            gsub(/(\s|\b)-->(\s|\b)/, "\\1#{ARROW_RIGHTWARD}\\2").
-            gsub(/(\s|\b)<--(\s|\b)/, "\\1#{ARROW_LEFTWARD}\\2").
-            gsub(/(\s|\b)<->(\s|\b)/, "\\1#{ARROW_LEFTRIGHT}\\2").
-            gsub(/(\s|\b)==>(\s|\b)/, "\\1#{ARROW_DOUBLE_RIGHTWARD}\\2").
-            gsub(/(\s|\b)<==(\s|\b)/, "\\1#{ARROW_DOUBLE_LEFTWARD}\\2").
-            gsub(/(\s|\b)<=>(\s|\b)/, "\\1#{ARROW_DOUBLE_LEFTRIGHT}\\2")
+        traverse do |_,txt|
+          txt.raw_content = txt.raw_content.
+            gsub(/(\s|\b)--&gt;(\s|\b)/, "\\1#{ARROW_RIGHTWARD}\\2").
+            gsub(/(\s|\b)&lt;--(\s|\b)/, "\\1#{ARROW_LEFTWARD}\\2").
+            gsub(/(\s|\b)&lt;-&gt;(\s|\b)/, "\\1#{ARROW_LEFTRIGHT}\\2").
+            gsub(/(\s|\b)==&gt;(\s|\b)/, "\\1#{ARROW_DOUBLE_RIGHTWARD}\\2").
+            gsub(/(\s|\b)&lt;==(\s|\b)/, "\\1#{ARROW_DOUBLE_LEFTWARD}\\2").
+            gsub(/(\s|\b)&lt;=&gt;(\s|\b)/, "\\1#{ARROW_DOUBLE_LEFTRIGHT}\\2")
         end
       end
 
@@ -212,8 +223,8 @@ module SiteFuel
 
       # convert a few shorthands like (c), (tm) to their unicode symbols
       def filter_beautify_symbols
-        traverse do |tag,txt|
-          txt.content = txt.content.
+        traverse do |_,txt|
+          txt.raw_content = txt.raw_content.
             gsub(/\(tm\)/i, TRADEMARK).
             gsub(/\(c\)/i,  COPYRIGHT).
             gsub(/\(r\)/i,  REGISTERED).
