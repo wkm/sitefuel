@@ -84,6 +84,8 @@ module SiteFuel
         self.logger = SiteFuelLogger.instance
         @execution_list = []
         @filters = []
+
+        @resource_name = nil
       end
 
 
@@ -317,7 +319,7 @@ module SiteFuel
       def execute
         setup_filters
         @execution_list.uniq.each do |filter|
-          info "    Running filter: #{filter}"
+          info "\t\tRunning filter: #{filter}"
           run_filter(filter)
         end
         finish_filters
