@@ -247,6 +247,8 @@ module SiteFuel
 
     # pulls files out of a given repository or file system
     def pull
+      section_divider 'Pulling'
+
       if @scm_system == nil
         @scm_system = classify_repository_system!(@deploy_from)
         info "Using #{@scm_system} version control to access #{@deploy_from}"
@@ -418,7 +420,7 @@ module SiteFuel
     def finish
       puts ''
       puts ''
-      section_divider('Finishing')
+      section_divider('Finished')
     end
 
 
