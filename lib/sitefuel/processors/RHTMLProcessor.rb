@@ -18,7 +18,6 @@ module SiteFuel
         ['.rhtml', '.erb']
       end
 
-
     end
 
   end

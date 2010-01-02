@@ -5,13 +5,13 @@
 # License::   GPL version 2.0 (see LICENSE.rb)
 #
 # Defines an HTMLProcessor class that is used to compress and cleanup HTML
-# files for deployment with sitefuel. Uses hpricot to process the HTML.
+# files for deployment with sitefuel. Uses nokogiri to process the HTML.
 #
 
 module SiteFuel
   module Processor
 
-    require 'hpricot'
+    require 'nokogiri'
 
     require 'sitefuel/processors/AbstractStringBasedProcessor'
     require 'sitefuel/processors/CSSProcessor'
@@ -66,6 +66,9 @@ module SiteFuel
         [
           # plain html
           ".html", ".htm"
+
+          # other basically-HTML formats like RHTML have their own
+          # lightweight processor which inherit HTMLProcessor.
         ]
       end
 
@@ -86,9 +89,9 @@ module SiteFuel
       # FILTERS
       #
 
-      # before any filters are run parse the document with hpricot
+      # before any filters are run parse the document with nokogiri
       def setup_filters
-        @htmlstruc = Hpricot.parse(document)
+        @htmlstruc = Nokogiri::HTML.parse(document)
       end
 
       # after all the filters are run dump the HTML as a string and do a
@@ -99,11 +102,13 @@ module SiteFuel
       end
 
       def traverse(patterns = TEXTUAL_TAGS_FILTER, &block)
-        (@htmlstruc/patterns).each do |tag|
-          tag.traverse_text do |txt|
-            block.call(tag.pathname, txt)
-          end
-        end
+#        (@htmlstruc/patterns).each do |tag|
+#          tag.traverse_text do |txt|
+#            block.call(tag.pathname, txt)
+#          end
+#        end
+
+        puts @htmlstruc/patterns
       end
 
       # strips excess whitespace in most HTML tags. Notably, +pre+ tags are
