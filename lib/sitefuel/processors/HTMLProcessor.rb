@@ -8,10 +8,23 @@
 # files for deployment with sitefuel. Uses nokogiri to process the HTML.
 #
 
+
+require 'nokogiri'
+
+class Nokogiri::XML::Node
+  # implements the #traverse_text method from hpricot
+  def traverse_text(&block)
+    children.each do |node|
+      if node.text?
+        block.call(node)
+      end
+    end
+  end
+end
+
+
 module SiteFuel
   module Processor
-
-    require 'nokogiri'
 
     require 'sitefuel/processors/AbstractStringBasedProcessor'
     require 'sitefuel/processors/CSSProcessor'
@@ -104,7 +117,7 @@ module SiteFuel
       def traverse(patterns = TEXTUAL_TAGS_FILTER, &block)
         @htmlstruc.xpath(patterns).each do |tag|
           tag.traverse_text do |txt|
-            block.call(tag.pathname, txt)
+            block.call(tag.path, txt)
           end
         end
       end
