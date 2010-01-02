@@ -42,7 +42,7 @@ class TestHTMLProcessor < Test::Unit::TestCase
   def test_beautify_quotes
     assert_equal(
       %q{<p>&#8220;Really?&#8221; Alice asked.<br>&#8220;Yes. Just yesterday.&#8221; said Bob.</p>},
-      
+
       HTMLProcessor.filter_string(
         :beautify_quotes,
         %q{<p>"Really?" Alice asked.<br>"Yes. Just yesterday." said Bob.}
@@ -104,7 +104,7 @@ class TestHTMLProcessor < Test::Unit::TestCase
 
       HTMLProcessor.filter_string(
         :beautify_arrows,
-        %q{<p>a --> b <-- c <-> d</p>}
+        %q{<p>a --&gt; b &lt;-- c &lt;-&gt; d</p>}
       )
     )
 
