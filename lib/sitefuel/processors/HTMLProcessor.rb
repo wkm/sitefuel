@@ -91,7 +91,7 @@ module SiteFuel
 
       # before any filters are run parse the document with nokogiri
       def setup_filters
-        @htmlstruc = Nokogiri::HTML.parse(document)
+        @htmlstruc = Nokogiri::XML.fragment(document)
       end
 
       # after all the filters are run dump the HTML as a string and do a
@@ -102,13 +102,11 @@ module SiteFuel
       end
 
       def traverse(patterns = TEXTUAL_TAGS_FILTER, &block)
-#        (@htmlstruc/patterns).each do |tag|
-#          tag.traverse_text do |txt|
-#            block.call(tag.pathname, txt)
-#          end
-#        end
-
-        puts @htmlstruc/patterns
+        @htmlstruc.xpath(patterns).each do |tag|
+          tag.traverse_text do |txt|
+            block.call(tag.pathname, txt)
+          end
+        end
       end
 
       # strips excess whitespace in most HTML tags. Notably, +pre+ tags are
