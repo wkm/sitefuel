@@ -34,7 +34,7 @@ module SiteFuel
   require 'sitefuel/external/GIT'
 
   # version of SiteFuel
-  VERSION = [0, 1, '0a'].freeze
+  VERSION = [0, 1, '0b'].freeze
 
   # a human readable version
   VERSION_TEXT = VERSION.join('.').freeze
