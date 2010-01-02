@@ -101,7 +101,7 @@ class TestHTMLProcessor < Test::Unit::TestCase
   def test_beautify_arrows
     assert_equal(
       %q{<p>a &#8594; b &#8592; c &#8596; d</p>},
-
+                                                              
       HTMLProcessor.filter_string(
         :beautify_arrows,
         %q{<p>a --&gt; b &lt;-- c &lt;-&gt; d</p>}
