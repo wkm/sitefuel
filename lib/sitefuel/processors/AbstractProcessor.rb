@@ -324,7 +324,7 @@ module SiteFuel
         end
         finish_filters
       rescue => exception
-        error 'from %s:%s: %s' % [self.class, resource_name, exception]
+        error 'from %s:%s: %s: %s' % [self.class, resource_name, exception.class, exception]
         error "Stack trace:\n#{exception.backtrace.join("\n")}"
       end
 
