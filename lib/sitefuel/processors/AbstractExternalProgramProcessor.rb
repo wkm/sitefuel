@@ -48,8 +48,18 @@ module SiteFuel
       end
 
       # sets the file used by this processor
-      def set_file(filename)
-        self.resource_name = filename
+      def set_file(filename, resource_name=nil)
+        case
+          when (resource_name == nil and @resource_name == nil)
+            @resource_name = filename
+
+          when @resource_name != nil
+            # just leave @resource_name be
+
+          else
+            @resource_name = resource_name
+        end
+        
         self.original_size = File.size(filename)
 
         return self
