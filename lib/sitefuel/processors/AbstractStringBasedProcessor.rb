@@ -53,12 +53,24 @@ module SiteFuel
       end
 
       # opens a resource from a file
-      def open_file(filename)
+      def open_file(filename, resource_name = nil)
         info "#{self.class} opening #{filename}"
 
         self.document = File.read(filename)
         self.original_size = File.size(filename)
-        self.resource_name = filename
+
+        case
+          when (resource_name == nil and @resource_name == nil)
+            @resource_name = filename
+
+          when @resource_name != nil
+            # just leave @resource_name be
+
+          else
+            @resource_name = resource_name            
+        end
+
+        debug "\t\tOpened with resource name: '#{@resource_name}'"
 
         return self
       end
