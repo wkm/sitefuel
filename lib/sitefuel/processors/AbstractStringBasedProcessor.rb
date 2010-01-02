@@ -92,7 +92,7 @@ module SiteFuel
           file << @document
         end
 
-        info "Wrote document into #{file}"
+        info "Wrote document into #{file_name}"
       end
       
       attr_reader :document
