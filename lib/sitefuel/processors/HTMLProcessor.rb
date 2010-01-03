@@ -37,8 +37,11 @@ module SiteFuel
     require 'sitefuel/processors/JavaScriptProcessor'
 
     class HTMLProcessor < AbstractStringBasedProcessor
-
-      HTML_DOCUMENT            = Nokogiri::HTML.parse("", nil, "ASCII")
+      HTML_PARSE_OPTIONS       = Nokogiri::XML::ParseOptions::NOERROR |
+                                 Nokogiri::XML::ParseOptions::NOWARNING |
+                                 Nokogiri::XML::ParseOptions::NONET |
+                                 Nokogiri::XML::ParseOptions::RECOVER
+      HTML_DOCUMENT            = Nokogiri::HTML.parse("", nil, "ASCII", HTML_PARSE_OPTIONS)
 
       #
       # HTML ENTITIES
