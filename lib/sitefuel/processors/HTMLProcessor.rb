@@ -22,17 +22,12 @@ class Nokogiri::XML::Node
   end
 end
 
-class Nokogiri::XML::Text
-  def raw_content
-    self.content
-  end
-
-  # expose #native_content
-  def raw_content=(text)
-    self.native_content = text
+class Fixnum
+  # gives the UTF-8 encoded charcter corresponding to this unicode number
+  def utf8
+    [self].pack('U*')
   end
 end
-
 
 module SiteFuel
   module Processor
@@ -43,36 +38,38 @@ module SiteFuel
 
     class HTMLProcessor < AbstractStringBasedProcessor
 
+      HTML_DOCUMENT            = Nokogiri::HTML.parse("", nil, "ASCII")
+
       #
       # HTML ENTITIES
       #
 
       # quotes
-      SINGLE_QUOTE_OPEN        = '&#8216;'.freeze
-      SINGLE_QUOTE_CLOSE       = '&#8217;'.freeze
-      DOUBLE_QUOTE_OPEN        = '&#8220;'.freeze
-      DOUBLE_QUOTE_CLOSE       = '&#8221;'.freeze
+      SINGLE_QUOTE_OPEN        = 8216.utf8.freeze
+      SINGLE_QUOTE_CLOSE       = 8217.utf8.freeze
+      DOUBLE_QUOTE_OPEN        = 8220.utf8.freeze
+      DOUBLE_QUOTE_CLOSE       = 8221.utf8.freeze
 
       # dashes
-      EN_DASH                  = '&#8211;'.freeze
-      EM_DASH                  = '&#8212;'.freeze
+      EN_DASH                  = 8211.utf8.freeze
+      EM_DASH                  = 8212.utf8.freeze
 
       # signs
-      ELLIPSIS                 = '&#8230;'.freeze
-      COPYRIGHT                = '&#169;'.freeze
-      TRADEMARK                = '&#8482;'.freeze
-      REGISTERED               = '&#174;'.freeze
+      ELLIPSIS                 = 8230.utf8.freeze
+      COPYRIGHT                =  169.utf8.freeze
+      TRADEMARK                = 8482.utf8.freeze
+      REGISTERED               =  174.utf8.freeze
 
       # arrows
-      ARROW_LEFTWARD           = '&#8592;'.freeze
-      ARROW_RIGHTWARD          = '&#8594;'.freeze
-      ARROW_LEFTRIGHT          = '&#8596;'.freeze
-      ARROW_DOUBLE_LEFTWARD    = '&#8656;'.freeze
-      ARROW_DOUBLE_RIGHTWARD   = '&#8658;'.freeze
-      ARROW_DOUBLE_LEFTRIGHT   = '&#8660;'.freeze
+      ARROW_LEFTWARD           = 8592.utf8.freeze
+      ARROW_RIGHTWARD          = 8594.utf8.freeze
+      ARROW_LEFTRIGHT          = 8596.utf8.freeze
+      ARROW_DOUBLE_LEFTWARD    = 8656.utf8.freeze
+      ARROW_DOUBLE_RIGHTWARD   = 8658.utf8.freeze
+      ARROW_DOUBLE_LEFTRIGHT   = 8660.utf8.freeze
 
       # math operators
-      MULTIPLICATION_SIGN      = '&#215;'.freeze
+      MULTIPLICATION_SIGN      =  215.utf8.freeze
 
 
       # list of tags which have proper text items inside them
@@ -111,14 +108,15 @@ module SiteFuel
         [:beautify_quotes, :beautify_dashes, :beautify_arrows, :beautify_symbols]
       end
 
-
       #
       # FILTERS
       #
 
       # before any filters are run parse the document with nokogiri
       def setup_filters
-        @htmlstruc = Nokogiri::HTML.fragment(document)
+        # use HTML_DOCUMENT to set the encoding to ASCII; this needs to be
+        # robustified to deal with non-ASCII encodings, however.
+        @htmlstruc = Nokogiri::HTML::DocumentFragment.new(HTML_DOCUMENT, document)
       end
 
 
@@ -156,7 +154,7 @@ module SiteFuel
       def filter_minify_javascript
         # TODO check the language attribute to make sure it's javascript
         traverse('script') do |_,txt|
-          txt.raw_content = JavaScriptProcessor.process_string(
+          txt.content = JavaScriptProcessor.process_string(
                   txt.raw_content,
                   {:resource_name => resource_name+'<embedded_JS>'}
           )
@@ -167,7 +165,7 @@ module SiteFuel
       # minifies embedded CSS styles using the CSSProcessor
       def filter_minify_styles
         traverse('style') do |_,txt|
-          txt.raw_content = CSSProcessor.process_string(
+          txt.content = CSSProcessor.process_string(
                   txt.raw_content,
                   :resource_name => resource_name+'<embedded_CSS>'
           )
@@ -179,8 +177,7 @@ module SiteFuel
       # <pre>"hello world"  =>  &#8220; hello world&#8221;</pre>
       def filter_beautify_quotes
         traverse do |_,txt|
-          puts "At: #{txt.raw_content}"
-          txt.raw_content = txt.raw_content.
+          txt.content = txt.content.
             # apostrophes
             gsub(/(\S)'(s)/i,   '\1%s\2' % SINGLE_QUOTE_CLOSE).
             gsub(/(\Ss)'(\s)/i, '\1%s\2'   % SINGLE_QUOTE_CLOSE).
@@ -190,10 +187,6 @@ module SiteFuel
 
             # single quotes
             gsub(/'(\S.*?\S)'/, '%s\1%s' % [SINGLE_QUOTE_OPEN, SINGLE_QUOTE_CLOSE])
-
-          puts "... became: #{txt.raw_content}"
-          puts "... or: #{txt.content}"
-          puts "... document: #{@htmlstruc}"
         end
       end
 
@@ -203,7 +196,7 @@ module SiteFuel
       # <pre>the car---it was red---was destroyed  =>  ...&#8212;it was red&#8212;...</pre>
       def filter_beautify_dashes
         traverse do |_,txt|
-          txt.raw_content = txt.raw_content.
+          txt.content = txt.content.
             # between two numbers we have an en dash
             # this would be a bit cleaner with (negative) lookbehind
             gsub(/(\d)--(\d)/,        "\\1#{EN_DASH}\\2").
@@ -222,7 +215,7 @@ module SiteFuel
       # convert basic arrow forms to unicode characters
       def filter_beautify_arrows
         traverse do |_,txt|
-          txt.raw_content = txt.raw_content.
+          txt.content = txt.content.
             gsub(/(\s|\b)--&gt;(\s|\b)/, "\\1#{ARROW_RIGHTWARD}\\2").
             gsub(/(\s|\b)&lt;--(\s|\b)/, "\\1#{ARROW_LEFTWARD}\\2").
             gsub(/(\s|\b)&lt;-&gt;(\s|\b)/, "\\1#{ARROW_LEFTRIGHT}\\2").
@@ -242,7 +235,7 @@ module SiteFuel
       # convert a few shorthands like (c), (tm) to their unicode symbols
       def filter_beautify_symbols
         traverse do |_,txt|
-          txt.raw_content = txt.raw_content.
+          txt.content = txt.content.
             gsub(/\(tm\)/i, TRADEMARK).
             gsub(/\(c\)/i,  COPYRIGHT).
             gsub(/\(r\)/i,  REGISTERED).
