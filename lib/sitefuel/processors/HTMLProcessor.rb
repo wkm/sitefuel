@@ -11,7 +11,7 @@
 module SiteFuel
   module Processor
 
-    require 'hpricot'
+    require 'rexml/document'
 
     require 'sitefuel/processors/AbstractStringBasedProcessor'
     require 'sitefuel/processors/CSSProcessor'
@@ -88,7 +88,7 @@ module SiteFuel
 
       # before any filters are run parse the document with hpricot
       def setup_filters
-        @htmlstruc = Hpricot.parse(document)
+        @htmlstruc = REXML::Document.new(document)
       end
 
       # after all the filters are run dump the HTML as a string and do a
