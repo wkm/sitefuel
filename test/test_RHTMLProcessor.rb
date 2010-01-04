@@ -45,7 +45,9 @@ class TestRHTMLProcessor < Test::Unit::TestCase
         }
       )
     )
+  end
 
+  def test_rhtml_assignment
     assert_equal(
       "<html> <%= page.title %> </html>",
 

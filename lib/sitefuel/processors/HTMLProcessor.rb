@@ -123,9 +123,9 @@ module SiteFuel
       def extract_embedded_code(document)
         code_blocks = []
         index = -1
-        new_document = document.gsub(/<%.*?%>/) do |block|
-          code_blocks << block
+        new_document = document.gsub(/<%(=)?.*?%>/) do |block|
           index += 1
+          code_blocks << block
           to_code_block_id(index)
         end
 
@@ -134,12 +134,10 @@ module SiteFuel
 
 
       def apply_embedded_code(document, code_blocks)
-        puts "Received:\n#{document}"
         doc = document.gsub(/\$##SFCB::(\d+)\$/) do |block|
           index = $1.to_i
           code_blocks[index]
         end
-        puts "Generated:\n#{doc}"
         doc
       end
 
