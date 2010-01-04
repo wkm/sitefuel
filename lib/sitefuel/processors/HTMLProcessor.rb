@@ -115,19 +115,49 @@ module SiteFuel
       # FILTERS
       #
 
+      def to_code_block_id(index)
+        "$##SFCB::#{index}$"
+      end
+
+
+      def extract_embedded_code(document)
+        code_blocks = []
+        index = -1
+        new_document = document.gsub(/<%.*?%>/) do |block|
+          code_blocks << block
+          index += 1
+          to_code_block_id(index)
+        end
+
+        [code_blocks, new_document]
+      end
+
+
+      def apply_embedded_code(document, code_blocks)
+        puts "Received:\n#{document}"
+        doc = document.gsub(/\$##SFCB::(\d+)\$/) do |block|
+          index = $1.to_i
+          code_blocks[index]
+        end
+        puts "Generated:\n#{doc}"
+        doc
+      end
+
+
       # before any filters are run parse the document with nokogiri
       def setup_filters
+        @code_blocks, cleaned_code = extract_embedded_code(document)
+
         # use HTML_DOCUMENT to set the encoding to ASCII; this needs to be
         # robustified to deal with non-ASCII encodings, however.
-        @htmlstruc = Nokogiri::HTML::DocumentFragment.new(HTML_DOCUMENT, document)
+        @htmlstruc = Nokogiri::HTML::DocumentFragment.new(HTML_DOCUMENT, cleaned_code)
       end
 
 
       # after all the filters are run dump the HTML as a string and do a
       # tiny bit of post processing
       def finish_filters
-        # do a last minute, ugly +br+ cleanup
-        @document = @htmlstruc.to_s
+        @document = apply_embedded_code(@htmlstruc.to_s, @code_blocks)
       end
 
 
