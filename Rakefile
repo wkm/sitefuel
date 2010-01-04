@@ -14,7 +14,7 @@ require 'rake/gempackagetask'
 
 spec = Gem::Specification.new do |s|
   s.name       = 'sitefuel'
-  s.version    = '0.1.0'
+  s.version    = '0.1.5a'
   s.author     = 'wkm'
   s.email      = 'wkm@sitefuel.org'
 
