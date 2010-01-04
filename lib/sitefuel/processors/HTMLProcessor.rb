@@ -123,7 +123,7 @@ module SiteFuel
       def extract_embedded_code(document)
         code_blocks = []
         index = -1
-        new_document = document.gsub(/<%(=)?.*?%>/) do |block|
+        new_document = document.gsub(/(<%(=)?.*?%>)|(<\?(php)?.*?\?>)/) do |block|
           index += 1
           code_blocks << block
           to_code_block_id(index)
